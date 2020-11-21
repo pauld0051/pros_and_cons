@@ -1,6 +1,6 @@
 # Pros and Cons - A social media phenomena
 
-[![Pros and Cons Logo](https://raw.githubusercontent.com/pauld0051/pros_and_cons//master/assets/images/logo_192x1920.png)](https://pauld0051.github.io/pros_and_cons/index.html)
+[![Pros and Cons Logo](https://raw.githubusercontent.com/pauld0051/pros_and_cons//master/assets/images/logo_192x192.png)](https://pauld0051.github.io/pros_and_cons/index.html)
 
 Site: <https://pauld0051.github.io/pros_and_cons/>
 

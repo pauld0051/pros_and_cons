@@ -2,7 +2,7 @@
 
 [![Pros and Cons Logo](https://raw.githubusercontent.com/pauld0051/pros_and_cons//master/assets/images/logo_192x1920.png)](https://pauld0051.github.io/pros_and_cons/index.html)
 
-Site: https://pauld0051.github.io/pros_and_cons/
+Site: <https://pauld0051.github.io/pros_and_cons/>
 
 Initial commit - A social media based website requesting user input for particular scenarios where a pro or con outcome can be asserted.
 
@@ -18,7 +18,7 @@ Initial commit - A social media based website requesting user input for particul
 
 **February 2020:** The initialisation files now _do not_ auto-delete. They will remain in your project. You can safely ignore them. They just make sure that your workspace is configured correctly each time you open it. It will also prevent the Gitpod configuration popup from appearing.
 
-**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <a href="https://github.com/Eventyret/vscode-bcdn" target="_blank">README.md file at the official repo</a> for more options.
+**December 2019:** Added Eventyret's Bootstrap 4 extension. Type `!bscdn` in a HTML file to add the Bootstrap boilerplate. Check out the <https://github.com/Eventyret/vscode-bcdn>README.md file at the official repo</a> for more options.
 
 --------
 

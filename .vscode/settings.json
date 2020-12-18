@@ -5,6 +5,10 @@
         "FXNAQ",
         "Fontawesome",
         "browsehappy",
-        "ravlb"
+        "bson",
+        "objectid",
+        "pymongo",
+        "ravlb",
+        "werkzeug"
     ]
 }

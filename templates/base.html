@@ -38,10 +38,10 @@
             <a href="#" data-target="mobile-links" class="sidenav-trigger right"><i
                     class="fas fa-bars"></i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home"></i></span></a></li>
-                <li><a href="#"><i class="fas fa-user"></i></a></li>
-                <li><a href="#"><i class="fas fa-question"></i></a></li>
-                <li><a href="#"><i class="fas fa-check"></i></a></li>
+                <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home tooltipped" data-position="bottom" data-tooltip="Home"></i></span></a></li>
+                <li><a href="#"><i class="fas fa-user tooltipped" data-position="bottom" data-tooltip="Profile"></i></a></li>
+                <li><a href="#"><i class="fas fa-question tooltipped" data-position="bottom" data-tooltip="Your Questions"></i></a></li>
+                <li><a href="#"><i class="fas fa-check tooltipped" data-position="bottom" data-tooltip="New Questions""></i></a></li>
                 <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
                             class="fas fa-caret-down"></i></a></li>
             </ul>
@@ -50,10 +50,11 @@
 
     <!-- Mobile Sidebar -->
     <ul class="sidenav" id="mobile-links">
-        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home"></i></span></a></li>
-        <li><a href="#"><i class="fas fa-user"></i></a></li>
-        <li><a href="#"><i class="fas fa-question"></i></a></li>
-        <li><a href="#"><i class="fas fa-check"></i></a></li>
+        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home tooltipped" data-position="right"
+                     data-tooltip="Home"></i></span></a></li>
+        <li><a href="#"><i class="fas fa-user tooltipped" data-position="right" data-tooltip="Profile"></i></a></li>
+        <li><a href="#"><i class="fas fa-question tooltipped" data-position="right" data-tooltip="Your Questions"></i></a></li>
+        <li><a href="#"><i class="fas fa-check tooltipped" data-position="right" data-tooltip="New Questions""></i></a></li>
         <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i class="fas fa-caret-down"></i></a></li>
     </ul>
 </header>

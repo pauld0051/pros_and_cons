@@ -12,6 +12,9 @@
     height: 64px;
 }
 
-ul.dropdown-content li i span {
-    color: #000;
+.round-button {
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    size: 24px;
+    ;
 }

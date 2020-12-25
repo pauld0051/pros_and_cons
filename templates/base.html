@@ -31,18 +31,25 @@
         <li class="divider"></li>
         <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
     </ul>
-    <nav class="nav-extended text-shadow light-blue lighten-4">
+    <nav class="nav-extended text-shadow light-blue lighten-1">
         <!-- Main Top NavBar-->
         <div class="nav-wrapper">
             <a href="{{ url_for('get_questions') }}" class="brand-logo"><img src="static/images/pros_and_cons_logo.png" alt="Pros and Cons Logo"></a>
             <a href="#" data-target="mobile-links" class="sidenav-trigger right"><i
                     class="fas fa-bars"></i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home tooltipped" data-position="bottom" data-tooltip="Home"></i></span></a></li>
-                <li><a href="#"><i class="fas fa-user tooltipped" data-position="bottom" data-tooltip="Profile"></i></a></li>
-                <li><a href="#"><i class="fas fa-question tooltipped" data-position="bottom" data-tooltip="Your Questions"></i></a></li>
-                <li><a href="#"><i class="fas fa-check tooltipped" data-position="bottom" data-tooltip="New Questions""></i></a></li>
-                <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
+                <li><a class="btn-floating btn-large waves-effect waves-light red" href="{{ url_for('get_questions') }}"><i
+                            class="fas fa-home tooltipped" data-position="bottom" data-tooltip="Home"></i></span></a>
+                </li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red" href="#"><i
+                            class="fas fa-user tooltipped" data-position="bottom" data-tooltip="Profile"></i></a></li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red" href="#"><i
+                            class="fas fa-question tooltipped" data-position="bottom"
+                            data-tooltip="Your Questions"></i></a></li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red" href="#"><i
+                            class="fas fa-check tooltipped" data-position="bottom" data-tooltip="New Questions"></i></a>
+                </li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
                             class="fas fa-caret-down"></i></a></li>
             </ul>
         </div>
@@ -54,7 +61,7 @@
                      data-tooltip="Home"></i></span></a></li>
         <li><a href="#"><i class="fas fa-user tooltipped" data-position="right" data-tooltip="Profile"></i></a></li>
         <li><a href="#"><i class="fas fa-question tooltipped" data-position="right" data-tooltip="Your Questions"></i></a></li>
-        <li><a href="#"><i class="fas fa-check tooltipped" data-position="right" data-tooltip="New Questions""></i></a></li>
+        <li><a href="#"><i class="fas fa-check tooltipped" data-position="right" data-tooltip="New Questions"></i></a></li>
         <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i class="fas fa-caret-down"></i></a></li>
     </ul>
 </header>

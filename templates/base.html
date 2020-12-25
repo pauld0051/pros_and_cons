@@ -17,37 +17,44 @@
 </head>
 
 <header>
+    <!-- Dropdown Structure Mobile-->
+    <ul id="dropdown_nav" class="dropdown-content">
+        <li><a href="#">Friends</a></li>
+        <li><a href="#">Help</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Logout</a></li>
+    </ul>
+    <!-- Dropdown Structure Desktop-->
+    <ul id="dropdown_nav_desktop" class="dropdown-content">
+        <li><a href="#">Friends</a></li>
+        <li><a href="#">Help</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Logout</a></li>
+    </ul>
     <nav class="nav-extended text-shadow light-blue lighten-4">
         <!-- Main Top NavBar-->
-        <div class="nav-wrapper grey-text text-darken-4">
-            <a href="#!" class="brand-logo"><img src="static/images/pros_and_cons_logo.png" alt="Pros and Cons Logo"></a>
+        <div class="nav-wrapper">
+            <a href="{{ url_for('get_questions') }}" class="brand-logo"><img src="static/images/pros_and_cons_logo.png" alt="Pros and Cons Logo"></a>
             <a href="#" data-target="mobile-links" class="sidenav-trigger right"><i
-                    class="fas fa-bars grey-text text-darken-4"></i></a>
+                    class="fas fa-bars"></i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a href="#"><span class="grey-text text-darken-4">Home</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Profile</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">New Question</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Answer Questions</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Your Questions</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Logout</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Login</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Register</span></a></li>
-                <li><a href="#"><span class="grey-text text-darken-4">Help</span></a></li>
+                <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home"></i></span></a></li>
+                <li><a href="#"><i class="fas fa-user"></i></a></li>
+                <li><a href="#"><i class="fas fa-question"></i></a></li>
+                <li><a href="#"><i class="fas fa-check"></i></a></li>
+                <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
+                            class="fas fa-caret-down"></i></a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Mobile Sidebar -->
     <ul class="sidenav" id="mobile-links">
-        <li><a href="#"><span class="grey-text text-darken-4">Home</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Profile</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">New Question</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Answer Questions</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Your Questions</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Logout</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Login</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Register</span></a></li>
-        <li><a href="#"><span class="grey-text text-darken-4">Help</span></a></li>
+        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home"></i></span></a></li>
+        <li><a href="#"><i class="fas fa-user"></i></a></li>
+        <li><a href="#"><i class="fas fa-question"></i></a></li>
+        <li><a href="#"><i class="fas fa-check"></i></a></li>
+        <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i class="fas fa-caret-down"></i></a></li>
     </ul>
 </header>
 

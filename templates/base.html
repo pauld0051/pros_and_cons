@@ -31,25 +31,25 @@
         <li class="divider"></li>
         <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
     </ul>
-    <nav class="nav-extended text-shadow light-blue lighten-1">
+    <nav class="nav-extended text-shadow teal lighten-5">
         <!-- Main Top NavBar-->
         <div class="nav-wrapper">
             <a href="{{ url_for('get_questions') }}" class="brand-logo"><img src="static/images/pros_and_cons_logo.png" alt="Pros and Cons Logo"></a>
             <a href="#" data-target="mobile-links" class="sidenav-trigger right"><i
                     class="fas fa-bars"></i></a>
             <ul class="right hide-on-med-and-down">
-                <li><a class="btn-floating btn-large waves-effect waves-light red" href="{{ url_for('get_questions') }}"><i
+                <li><a class="btn-floating btn-large waves-effect waves-light red lighten-1 grow" href="{{ url_for('get_questions') }}"><i
                             class="fas fa-home tooltipped" data-position="bottom" data-tooltip="Home"></i></span></a>
                 </li>
-                <li><a class="btn-floating btn-large waves-effect waves-light red" href="#"><i
+                <li><a class="btn-floating btn-large waves-effect waves-light red lighten-1 grow" href="#"><i
                             class="fas fa-user tooltipped" data-position="bottom" data-tooltip="Profile"></i></a></li>
-                <li><a class="btn-floating btn-large waves-effect waves-light red" href="#"><i
-                            class="fas fa-question tooltipped" data-position="bottom"
-                            data-tooltip="Your Questions"></i></a></li>
-                <li><a class="btn-floating btn-large waves-effect waves-light red" href="#"><i
-                            class="fas fa-check tooltipped" data-position="bottom" data-tooltip="New Questions"></i></a>
-                </li>
-                <li><a class="btn-floating btn-large waves-effect waves-light red dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
+                <li><a class="btn-floating btn-large waves-effect waves-light red lighten-1 grow" href="#"><i
+                            class="fas fa-question tooltipped" data-position="bottom" data-tooltip="Your Questions"></i></a></li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red lighten-1 grow" href="#"><i
+                            class="fas fa-check tooltipped" data-position="bottom" data-tooltip="New Questions"></i></a></li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red lighten-1 grow" href="{{ url_for('register') }}"><i
+                            class="fas fa-user-plus tooltipped" data-position="bottom" data-tooltip="Register"></i></a></li>
+                <li><a class="btn-floating btn-large waves-effect waves-light red lighten-1 grow dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
                             class="fas fa-caret-down"></i></a></li>
             </ul>
         </div>
@@ -57,11 +57,11 @@
 
     <!-- Mobile Sidebar -->
     <ul class="sidenav" id="mobile-links">
-        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home tooltipped" data-position="right"
-                     data-tooltip="Home"></i></span></a></li>
-        <li><a href="#"><i class="fas fa-user tooltipped" data-position="right" data-tooltip="Profile"></i></a></li>
-        <li><a href="#"><i class="fas fa-question tooltipped" data-position="right" data-tooltip="Your Questions"></i></a></li>
-        <li><a href="#"><i class="fas fa-check tooltipped" data-position="right" data-tooltip="New Questions"></i></a></li>
+        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home" ></i><span>  Home</span></a></li>
+        <li><a href="#"><i class="fas fa-user"></i><span>  Profile</span></a></li>
+        <li><a href="#"><i class="fas fa-question"></i><span>  Your Questions</span></a></li>
+        <li><a href="#"><i class="fas fa-check"></i><span>  New Questions</span></a></li>
+        <li><a href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i><span>  Register</span></a></li>
         <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i class="fas fa-caret-down"></i></a></li>
     </ul>
 </header>

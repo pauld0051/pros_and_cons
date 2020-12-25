@@ -1,5 +1,1 @@
-{% extends "base.html" %} {% block content %}
-
-<h2>I'm extending the base template!</h2>
-
-{% for question in questions %} {{ question.question_title }}<br> {{ question.question_text }}<br> {{ question.answer_pro }}<br> {{ question.answer_con }}<br> {% endfor %} {% endblock %}
+{% extends "base.html" %} {% block content %} {% for question in questions %} {{ question.question_title }}<br> {{ question.question_text }}<br> {{ question.answer_pro }}<br> {{ question.answer_con }}<br> {% endfor %} {% endblock %}

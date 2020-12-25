@@ -1,3 +1,16 @@
 /* site wide CSS */
 
 @import url('https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap');
+
+/* Navbar */
+
+.text-shadow {
+    text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5);
+}
+
+
+/* Logo size - need to add @media query to this for mobile devices */
+
+.nav-extended .nav-wrapper .brand-logo img {
+    height: 64px;
+}

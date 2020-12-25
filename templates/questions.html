@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %} {% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pros and Cons Questions</title>
-</head>
+<h2>I'm extending the base template!</h2>
 
-<body>
-    {% for question in questions %} {{ question.question_title }}<br> {{ question.question_text }}<br> {% endfor %}
-</body>
-
-</html>
+{% for question in questions %} {{ question.question_title }}<br> {{ question.question_text }}<br> {{ question.answer_pro }}<br> {{ question.answer_con }}<br> {% endfor %} {% endblock %}

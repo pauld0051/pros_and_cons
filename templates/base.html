@@ -19,24 +19,24 @@
 <header>
     <!-- Dropdown Structure Mobile-->
     <ul id="dropdown_nav" class="dropdown-content">
-        <li><a href="#"><i class="fas fa-user-friends"></i><span>  Friends</span></a></li>
-        <li><a href="#"><i class="fas fa-question-circle"></i><span> Help</span></a></li>
+        <li><a href="#"><i class="fas fa-user-friends grey-text text-darken-4"></i><span> Friends</span></a></li>
+        <li><a href="#"><i class="fas fa-question-circle grey-text text-darken-4"></i><span> Help</span></a></li>
         <li class="divider"></li>
-        <li><a href="#"><i class="fas fa-sign-out-alt"></i><span> Logout</span></a></li>
+        <li><a href="#"><i class="fas fa-sign-out-alt grey-text text-darken-4"></i><span> Logout</span></a></li>
     </ul>
     <!-- Dropdown Structure Desktop-->
     <ul id="dropdown_nav_desktop" class="dropdown-content">
-        <li><a href="#"><i class="fas fa-user-friends"></i><span>Friends</span></a></li>
-        <li><a href="#"><i class="fas fa-question-circle"></i><span>Help</span></a></li>
+        <li><a href="#"><i class="fas fa-user-friends grey-text text-darken-4"></i><span>Friends</span></a></li>
+        <li><a href="#"><i class="fas fa-question-circle grey-text text-darken-4"></i><span>Help</span></a></li>
         <li class="divider"></li>
-        <li><a href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+        <li><a href="#"><i class="fas fa-sign-out-alt grey-text text-darken-4"></i><span>Logout</span></a></li>
     </ul>
     <nav class="nav-extended teal lighten-5">
         <!-- Main Top NavBar-->
         <div class="nav-wrapper">
             <a href="{{ url_for('get_questions') }}" class="brand-logo"><img src="static/images/pros_and_cons_logo.png" alt="Pros and Cons Logo"></a>
             <a href="#" data-target="mobile-links" class="sidenav-trigger right"><i
-                    class="fas fa-bars"></i></a>
+                    class="fas fa-bars grey-text text-darken-4"></i></a>
             <ul class="right hide-on-med-and-down">
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('get_questions') }}"><i
                             class="fas fa-home tooltipped grey-text text-darken-4" data-position="bottom"
@@ -54,6 +54,9 @@
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('register') }}"><i
                             class="fas fa-user-plus tooltipped grey-text text-darken-4" data-position="bottom"
                             data-tooltip="Register"></i></a></li>
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('login') }}"><i
+                                        class="fas fa-power-off tooltipped grey-text text-darken-4"
+                                        data-position="bottom" data-tooltip="Login"></i></a></li>
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
                             class="fas fa-caret-down grey-text text-darken-4"></i></a></li>
             </ul>
@@ -62,12 +65,15 @@
 
     <!-- Mobile Sidebar -->
     <ul class="sidenav" id="mobile-links">
-        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home" ></i><span>  Home</span></a></li>
-        <li><a href="#"><i class="fas fa-user"></i><span>  Profile</span></a></li>
-        <li><a href="#"><i class="fas fa-question"></i><span>  Your Questions</span></a></li>
-        <li><a href="#"><i class="fas fa-check"></i><span>  New Questions</span></a></li>
-        <li><a href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i><span>  Register</span></a></li>
-        <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i class="fas fa-caret-down"></i></a></li>
+        <li><a href="{{ url_for('get_questions') }}"><i class="fas fa-home grey-text text-darken-4"></i><span>
+                    Home</span></a></li>
+        <li><a href="#"><i class="fas fa-user grey-text text-darken-4"></i><span> Profile</span></a></li>
+        <li><a href="#"><i class="fas fa-question grey-text text-darken-4"></i><span> Your Questions</span></a></li>
+        <li><a href="#"><i class="fas fa-check grey-text text-darken-4"></i><span> New Questions</span></a></li>
+        <li><a href="{{ url_for('register') }}"><i class="fas fa-user-plus grey-text text-darken-4"></i><span>
+                    Register</span></a></li>
+        <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i
+                    class="fas fa-caret-down grey-text text-darken-4"></i></a></li>
     </ul>
 </header>
 
@@ -77,7 +83,7 @@
         <!-- flash messages -->
         {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
         <div class="row flashes">
-            <h4 class="light-blue lighten-4 center-align">{{ message }}</h4>
+            <h4 class="center-align">{{ message }}</h4>
         </div>
         {% endfor %} {% endif %} {% endwith %}
     </section>

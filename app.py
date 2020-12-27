@@ -111,6 +111,18 @@ def add_question():
 
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
 def edit_question(question_id):
+    if request.method == "POST":
+        is_friends = "on" if request.form.get("is_friends") else "off"
+        submit = {
+            "question_title": request.form.get("question_title"),
+            "question_text": request.form.get("question_text"),
+            "is_friends": is_friends,
+            "created_by": session["user"]
+        }
+
+        mongo.db.questions.update({"_id": ObjectId(question_id)}, submit)
+        flash("Question Successfully Edited")
+
     question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     return render_template("edit_question.html", question=question)
 

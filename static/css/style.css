@@ -45,13 +45,6 @@
 }
 
 
-/* Question display for friends or global icon */
-
-.right-side {
-    text-align: right;
-}
-
-
 /* switch colour for question input */
 
 .switch label input[type=checkbox]:checked+.lever {

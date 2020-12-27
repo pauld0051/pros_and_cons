@@ -5,11 +5,8 @@
     <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
-            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i><strong>{{question.question_title }}</strong> {% if question.is_friends == "on" %}
-            <div class="container right-side"><i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i></div>
-            {% else %}
-            <div class="container right-side"><i class="fas fa-globe-americas blue-text text-darken-3 tooltipped right" data-position="bottom" data-tooltip="Anyone can view this"></i></div>
-            {% endif %}
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>{{question.question_title }}</strong> 
         </div>
         <div class="collapsible-body teal lighten-4">
             <!-- Question Text-->
@@ -28,9 +25,6 @@
                                 {{ question.answer_pro }}
                             </p>
                         </div>
-                        <div class="card-action">
-                            <p><em>user: {{ question.created_by }}</em></p>
-                        </div>
                     </div>
                 </div>
                 <div class="col s12 m6">
@@ -42,13 +36,17 @@
                                 {{ question.answer_con }}
                             </p>
                         </div>
-                        <div class="card-action">
-                            <a href="#">This is a link</a>
-                            <a href="#">This is a link</a>
-                        </div>
                     </div>
                 </div>
             </div>
+            <div class="row"> <p><em>Question asked by: {{ question.created_by }}</em></p></div>
+            <div class="row">{% if question.is_friends == "on" %}
+                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" 
+                data-position="bottom" data-tooltip="Only your friends can view this"></i>
+            {% else %}
+            <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" 
+                data-position="bottom" data-tooltip="Anyone can view this"></i></div>
+                {% endif %}
         </div>
     </li>
     {% endfor %}

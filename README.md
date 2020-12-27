@@ -22,4 +22,8 @@ Initial commit - A social media based website requesting user input for particul
 
 --------
 
+**Known bugs:**
+
+1. Materialize navbar links "flash" on click. This occurs in Firefox and appears to be due to either hardware acceleration or an extension installed on Firefox. During development Firefox was started in safemode which removed the issue completely. Some users may therefore experience the flashing when clicking links on the navigation pane at the top of the screen.
+
 Happy coding!

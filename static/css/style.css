@@ -54,3 +54,16 @@
 .switch label input[type=checkbox]:checked+.lever:after {
     background-color: #ef5350;
 }
+
+/* Collapsible headers */
+
+.collapsible-header strong {
+    font-weight: 600;
+    margin-left: 12px;
+}
+
+/* Button sizes on question panels */
+
+.button-size {
+    width: 74px;
+}

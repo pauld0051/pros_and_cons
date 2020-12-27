@@ -109,6 +109,13 @@ def add_question():
     return render_template("add_question.html")
 
 
+@app.route("/edit_question/<question_id>", methods=["GET", "POST"])
+def edit_question(question_id):
+    question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+    return render_template("edit_question.html", question=question)
+
+
+
 @app.route("/logout")
 def logout():
     # remove user from session cookie

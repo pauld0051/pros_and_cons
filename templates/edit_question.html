@@ -1,11 +1,15 @@
 {% extends "base.html" %} {% block content %}
 
-<h3 class="blue-text text-darken-3 center-align">Edit Task</h3>
+<h3 class="blue-text text-darken-3 center-align">Edit Question</h3>
 
 <div class="row card-panel grey lighten-5">
-  <form class="col s12" method="POST" action="{{ url_for('edit_question', question_id=question._id) }}">
+  <form
+    class="col s12"
+    method="POST"
+    action="{{ url_for('edit_question', question_id=question._id) }}"
+  >
     <div class="row">
-        <!-- Add title -->
+      <!-- Add title -->
       <div class="input-field col s12">
         <i
           class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -19,13 +23,14 @@
           maxlength="50"
           type="text"
           class="validate"
+          value="{{ question.question_title }}"
           required
         />
         <label for="question_title">Question Title</label>
       </div>
     </div>
     <div class="row">
-        <!-- Add text -->
+      <!-- Add text -->
       <div class="input-field col s12">
         <i
           class="fas fa-comment prefix blue-text text-darken-3 tooltipped"
@@ -36,10 +41,12 @@
           id="question_text"
           name="question_text"
           minlength="5"
-          maxlength="255"
+          maxlength="1500"
           class="materialize-textarea validate"
           required
-        ></textarea>
+        >
+{{- question.question_text -}}</textarea
+        >
         <label for="question_text">Question Description</label>
       </div>
     </div>
@@ -53,7 +60,11 @@
             data-tooltip="Click so only friends can see and answer this question"
           ></i>
           <label for="is_friends">
+            {% if question.is_friends == "on" %}
+            <input type="checkbox" id="is_friends" name="is_friends" checked />
+            {% else %}
             <input type="checkbox" id="is_friends" name="is_friends" />
+            {% endif %}
             <span class="lever"></span>
             Friends only
           </label>
@@ -61,8 +72,12 @@
       </div>
     </div>
     <div class="row">
-        <!-- Submit button-->
+      <!-- Submit edit button-->
       <div class="col s12 center-align">
+           <!-- cancel button -->
+           <a href="{{ url_for('get_questions') }}" class="btn-large red">
+            Cancel <i class="fas fa-times-circle right"></i>
+        </a>
         <button
           class="btn-large blue darken-3 waves-effect waves-light"
           type="submit"

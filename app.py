@@ -91,6 +91,11 @@ def profile(username):
     return redirect(url_for("login"))
 
 
+@app.route("/add_question")
+def add_question():
+    return render_template("add_question.html")
+
+
 @app.route("/logout")
 def logout():
     # remove user from session cookie

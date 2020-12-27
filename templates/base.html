@@ -47,8 +47,8 @@
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('profile', username=session['user']) }}"><i
                             class="fas fa-user tooltipped grey-text text-darken-4" data-position="bottom"
                             data-tooltip="Profile"></i></a></li>
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="#"><i class="fas fa-question tooltipped grey-text text-darken-4" data-position="bottom"
-                            data-tooltip="Your Questions"></i></a></li>
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('add_question') }}"><i class="fas fa-question tooltipped grey-text text-darken-4" data-position="bottom"
+                            data-tooltip="Ask Questions"></i></a></li>
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="#"><i class="fas fa-check tooltipped grey-text text-darken-4" data-position="bottom"
                             data-tooltip="New Questions"></i></a></li>
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
@@ -70,7 +70,7 @@
                     Home</span></a></li>
         <li><a href="{{ url_for('profile', username=session['user']) }}"><i
                     class="fas fa-user grey-text text-darken-4"></i><span> Profile</span></a></li>
-        <li><a href="#"><i class="fas fa-question grey-text text-darken-4"></i><span> Your Questions</span></a></li>
+        <li><a href="{{ url_for('add_question') }}"><i class="fas fa-question grey-text text-darken-4"></i><span> Ask Questions</span></a></li>
         <li><a href="#"><i class="fas fa-check grey-text text-darken-4"></i><span> New Questions</span></a></li>
         <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i
                     class="fas fa-caret-down grey-text text-darken-4"></i></a></li>

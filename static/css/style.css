@@ -43,3 +43,7 @@
 .grow:hover {
     transform: scale(1.07);
 }
+
+.right-side {
+    text-align: right;
+}

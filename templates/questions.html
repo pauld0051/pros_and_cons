@@ -1,62 +1,57 @@
-{% extends "base.html" %} {% block content %} {% for question in questions %}
-{{question.question_title }}<br />
-{{ question.question_text }}<br />
-{{ question.answer_pro }}<br />
-{{ question.answer_con }}<br />
-{{ question.is_friends }}<br />
-{% endfor %} 
+{% extends "base.html" %} {% block content %}
 
 <ul class="collapsible">
+    {% for question in questions %}
   <li>
     <div class="collapsible-header teal lighten-5">
-      <i class="fas fa-question-circle blue-text text-darken-3"></i>First
+        <!-- Question Title-->
+      <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i><strong>{{question.question_title }}</strong>
+      {% if question.is_friends == "on" %}
+          <div class="container right-side"><i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i></div>
+          {% else %}
+          <div class="container right-side"><i class="fas fa-globe-americas blue-text text-darken-3 tooltipped right" data-position="bottom" data-tooltip="Anyone can view this"></i></div>
+          {% endif %}
     </div>
     <div class="collapsible-body teal lighten-4">
-        <div class="row"><div class="col s12 grey lighten-5"><p>This is a row for more text</p></div></div>
-        <div class="row teal lighten-4">
-            <div class="col s12 m6">
-                <!-- Pro card -->
-                <div class="card grey lighten-5">
-                  <div class="card-content grey-text text-darken-4">
-                    <span class="card-title center-align">Pros</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">This is a link</a>
-                    <a href="#">This is a link</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col s12 m6">
-                  <!-- Con card -->
-                <div class="card grey lighten-5">
-                  <div class="card-content grey-text text-darken-4">
-                    <span class="card-title center-align">Cons</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">This is a link</a>
-                    <a href="#">This is a link</a>
-                  </div>
-                </div>
-              </div>    
+        <!-- Question Text-->    
+        <div class="row">
+        <div class="col s12 grey lighten-5 z-depth-1">
+          <p>{{ question.question_text }}</p>
         </div>
-         
+      </div>
+      <div class="row teal lighten-4">
+        <div class="col s12 m6">
+          <!-- Pro card -->
+          <div class="card grey lighten-5">
+            <div class="card-content grey-text text-darken-4">
+              <span class="card-title center-align">Pros</span>
+              <p>
+                {{ question.answer_pro }}
+              </p>
+            </div>
+            <div class="card-action">
+              <a href="#">Maybe a link here?</a>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <!-- Con card -->
+          <div class="card grey lighten-5">
+            <div class="card-content grey-text text-darken-4">
+              <span class="card-title center-align">Cons</span>
+              <p>
+                {{ question.answer_con }}
+              </p>
+            </div>
+            <div class="card-action">
+              <a href="#">This is a link</a>
+              <a href="#">This is a link</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </li>
-  <li>
-    <div class="collapsible-header teal lighten-5">
-      <i class="fas fa-question-circle blue-text text-darken-3"></i>Second
-    </div>
-    <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-  </li>
-  <li>
-    <div class="collapsible-header teal lighten-5">
-      <i class="fas fa-question-circle blue-text text-darken-3"></i>Third
-    </div>
-    <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-  </li>
+  {% endfor %}
 </ul>
 {% endblock %}

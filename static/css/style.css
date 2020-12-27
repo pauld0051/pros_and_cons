@@ -44,19 +44,20 @@
     transform: scale(1.07);
 }
 
+
 /* Question display for friends or global icon */
 
 .right-side {
     text-align: right;
 }
 
+
 /* switch colour for question input */
 
 .switch label input[type=checkbox]:checked+.lever {
     background-color: #ef5350;
-  }
-  
-  .switch label input[type=checkbox]:checked+.lever:after {
-    background-color:#ef5350;
-  }
+}
 
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: #ef5350;
+}

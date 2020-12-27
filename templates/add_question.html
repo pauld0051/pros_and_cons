@@ -3,37 +3,76 @@
 <h3 class="blue-text text-darken-3 center-align">Add a question</h3>
 
 <div class="row card-panel grey lighten-5">
-    <form class="col s12" method="POST" action="">
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Add a title to your question"></i>
-                <input id="question_title" name="question_title" minlength="5" maxlength="50"
-                    type="text" class="validate" required>
-                <label for="question_title">Question Title</label>
-            </div>
+  <form class="col s12" method="POST" action="">
+    <div class="row">
+        <!-- Add title -->
+      <div class="input-field col s12">
+        <i
+          class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
+          data-position="bottom"
+          data-tooltip="Add a title to your question"
+        ></i>
+        <input
+          id="question_title"
+          name="question_title"
+          minlength="5"
+          maxlength="50"
+          type="text"
+          class="validate"
+          required
+        />
+        <label for="question_title">Question Title</label>
+      </div>
+    </div>
+    <div class="row">
+        <!-- Add text -->
+      <div class="input-field col s12">
+        <i
+          class="fas fa-comment prefix blue-text text-darken-3 tooltipped"
+          data-position="bottom"
+          data-tooltip="Give your question a description"
+        ></i>
+        <textarea
+          id="question_text"
+          name="question_text"
+          minlength="5"
+          maxlength="255"
+          class="materialize-textarea validate"
+          required
+        ></textarea>
+        <label for="question_text">Question Description</label>
+      </div>
+    </div>
+    <!-- is_friends switch -->
+    <div class="row">
+      <div class="input-field col s12">
+        <div class="switch">
+          <i
+            class="fas fa-exclamation-circle prefix blue-text text-darken-3 tooltipped"
+            data-position="bottom"
+            data-tooltip="Click so only friends can see and answer this question"
+          ></i>
+          <label for="is_friends">
+            <input type="checkbox" id="is_friends" name="is_friends" />
+            <span class="lever"></span>
+            Friends only
+          </label>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="fas fa-comment prefix blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Give your question a description"></i>
-                <textarea id="question_text" name="question_text" minlength="5"
-                    maxlength="255" class="materialize-textarea validate" required></textarea>
-                <label for="question_text">Question Description</label>
-            </div>
-        </div>
-        <!-- is_friends switch -->
-        <div class="row">
-            <div class="input-field col s12">
-                <div class="switch">
-                    <i class="fas fa-exclamation-circle prefix blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Click so only friends can see and answer this question"></i>
-                    <label for="is_friends">
-                        <input type="checkbox" id="is_friends" name="is_friends">
-                        <span class="lever"></span>
-                        Friends only
-                    </label>
-                </div>
-            </div>
-        </div>
-    </form>
+      </div>
+    </div>
+    <div class="row">
+        <!-- Submit button-->
+      <div class="col s12 center-align">
+        <button
+          class="btn-large blue darken-3 waves-effect waves-light"
+          type="submit"
+        >
+          Submit
+          <i class="fas fa-paper-plane right"></i>
+        </button>
+      </div>
+    </div>
+  </form>
 </div>
 
 {% endblock %}

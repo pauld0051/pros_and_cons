@@ -2,56 +2,55 @@
 
 <ul class="collapsible">
     {% for question in questions %}
-  <li>
-    <div class="collapsible-header teal lighten-5">
-        <!-- Question Title-->
-      <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i><strong>{{question.question_title }}</strong>
-      {% if question.is_friends == "on" %}
-          <div class="container right-side"><i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i></div>
-          {% else %}
-          <div class="container right-side"><i class="fas fa-globe-americas blue-text text-darken-3 tooltipped right" data-position="bottom" data-tooltip="Anyone can view this"></i></div>
-          {% endif %}
-    </div>
-    <div class="collapsible-body teal lighten-4">
-        <!-- Question Text-->    
-        <div class="row">
-        <div class="col s12 grey lighten-5 z-depth-1">
-          <p>{{ question.question_text }}</p>
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <!-- Question Title-->
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i><strong>{{question.question_title }}</strong> {% if question.is_friends == "on" %}
+            <div class="container right-side"><i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i></div>
+            {% else %}
+            <div class="container right-side"><i class="fas fa-globe-americas blue-text text-darken-3 tooltipped right" data-position="bottom" data-tooltip="Anyone can view this"></i></div>
+            {% endif %}
         </div>
-      </div>
-      <div class="row teal lighten-4">
-        <div class="col s12 m6">
-          <!-- Pro card -->
-          <div class="card grey lighten-5">
-            <div class="card-content grey-text text-darken-4">
-              <span class="card-title center-align">Pros</span>
-              <p>
-                {{ question.answer_pro }}
-              </p>
+        <div class="collapsible-body teal lighten-4">
+            <!-- Question Text-->
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>{{ question.question_text }}</p>
+                </div>
             </div>
-            <div class="card-action">
-              <a href="#">Maybe a link here?</a>
+            <div class="row teal lighten-4">
+                <div class="col s12 m6">
+                    <!-- Pro card -->
+                    <div class="card grey lighten-5">
+                        <div class="card-content grey-text text-darken-4">
+                            <span class="card-title center-align">Pros</span>
+                            <p>
+                                {{ question.answer_pro }}
+                            </p>
+                        </div>
+                        <div class="card-action">
+                            <p><em>user: {{ question.created_by }}</em></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <!-- Con card -->
+                    <div class="card grey lighten-5">
+                        <div class="card-content grey-text text-darken-4">
+                            <span class="card-title center-align">Cons</span>
+                            <p>
+                                {{ question.answer_con }}
+                            </p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#">This is a link</a>
+                            <a href="#">This is a link</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="col s12 m6">
-          <!-- Con card -->
-          <div class="card grey lighten-5">
-            <div class="card-content grey-text text-darken-4">
-              <span class="card-title center-align">Cons</span>
-              <p>
-                {{ question.answer_con }}
-              </p>
-            </div>
-            <div class="card-action">
-              <a href="#">This is a link</a>
-              <a href="#">This is a link</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </li>
-  {% endfor %}
+    </li>
+    {% endfor %}
 </ul>
 {% endblock %}

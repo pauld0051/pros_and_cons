@@ -41,8 +41,10 @@
                     class="fas fa-bars grey-text text-darken-4"></i></a>
             <ul class="right hide-on-med-and-down">
                 {% if session.user %}
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('get_questions') }}"><i class="fas fa-home tooltipped grey-text text-darken-4"
-                            data-position="bottom" data-tooltip="Home"></i></span></a>
+                <li>
+                    <a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('get_questions') }}">
+                        <i class="fas fa-home tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Home"></i></span>
+                    </a>
                 </li>
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('profile', username=session['user']) }}"><i
                             class="fas fa-user tooltipped grey-text text-darken-4" data-position="bottom"

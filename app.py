@@ -91,8 +91,21 @@ def profile(username):
     return redirect(url_for("login"))
 
 
-@app.route("/add_question")
+@app.route("/add_question", methods=["GET", "POST"])
 def add_question():
+    if request.method == "POST":
+        is_friends = "on" if request.form.get("is_friends") else "off"
+        question = {
+            "question_title": request.form.get("question_title"),
+            "question_text": request.form.get("question_text"),
+            "is_friends": is_friends,
+            "created_by": session["user"]
+        }
+
+        mongo.db.questions.insert_one(question)
+        flash("Question Successfully Added")
+        return redirect(url_for("get_questions"))
+
     return render_template("add_question.html")
 
 

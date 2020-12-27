@@ -41,28 +41,23 @@
                     class="fas fa-bars grey-text text-darken-4"></i></a>
             <ul class="right hide-on-med-and-down">
                 {% if session.user %}
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('get_questions') }}"><i
-                            class="fas fa-home tooltipped grey-text text-darken-4" data-position="bottom"
-                            data-tooltip="Home"></i></span></a>
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('get_questions') }}"><i class="fas fa-home tooltipped grey-text text-darken-4"
+                            data-position="bottom" data-tooltip="Home"></i></span></a>
                 </li>
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('profile', username=session['user']) }}"><i
                             class="fas fa-user tooltipped grey-text text-darken-4" data-position="bottom"
                             data-tooltip="Profile"></i></a></li>
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="#"><i
-                            class="fas fa-question tooltipped grey-text text-darken-4" data-position="bottom"
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="#"><i class="fas fa-question tooltipped grey-text text-darken-4" data-position="bottom"
                             data-tooltip="Your Questions"></i></a></li>
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="#"><i
-                            class="fas fa-check tooltipped grey-text text-darken-4" data-position="bottom"
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="#"><i class="fas fa-check tooltipped grey-text text-darken-4" data-position="bottom"
                             data-tooltip="New Questions"></i></a></li>
                 <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow dropdown-trigger" href="#" data-target="dropdown_nav_desktop"><i
                             class="fas fa-caret-down grey-text text-darken-4"></i></a></li>
                 {% else %}
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('register') }}"><i
-                            class="fas fa-user-plus tooltipped grey-text text-darken-4" data-position="bottom"
-                            data-tooltip="Register"></i></a></li>
-                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('login') }}"><i
-                                        class="fas fa-power-off tooltipped grey-text text-darken-4"
-                                        data-position="bottom" data-tooltip="Login"></i></a></li>
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('register') }}"><i class="fas fa-user-plus tooltipped grey-text text-darken-4"
+                            data-position="bottom" data-tooltip="Register"></i></a></li>
+                <li><a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('login') }}"><i class="fas fa-power-off tooltipped grey-text text-darken-4"
+                            data-position="bottom" data-tooltip="Login"></i></a></li>
                 {% endif %}
             </ul>
         </div>
@@ -80,8 +75,10 @@
         <li><a class="dropdown-trigger" href="#" data-target="dropdown_nav"><i
                     class="fas fa-caret-down grey-text text-darken-4"></i></a></li>
         {% else %}
-        <li><a href="{{ url_for('register') }}"><i class="fas fa-user-plus grey-text text-darken-4"></i><span>Register</span></a></li>
-        <li><a href="{{ url_for('login') }}"><i class="fas fa-power-off grey-text text-darken-4"></i><span>Login</span></a></li>
+        <li><a href="{{ url_for('register') }}"><i
+                    class="fas fa-user-plus grey-text text-darken-4"></i><span>Register</span></a></li>
+        <li><a href="{{ url_for('login') }}"><i
+                    class="fas fa-power-off grey-text text-darken-4"></i><span>Login</span></a></li>
         {% endif %}
     </ul>
 </header>

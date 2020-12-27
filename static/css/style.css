@@ -1,36 +1,45 @@
-            /* site wide CSS */
-            
-            @import url('https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap');
-            /* Navbar */
-            
-            .no-shadow {
-                box-shadow: none !important;
-            }
-            /* logo fixed size for mobile devices */
-            
-            @media only screen and (max-width: 768px) {
-                .logo-size {
-                    margin-top: 1px;
-                    margin-left: 12px;
-                    max-height: 54px;
-                    width: auto;
-                }
-            }
-            
-            @media only screen and (min-width: 768px) {
-                .logo-size {
-                    margin-top: 0.5px;
-                    margin-left: 12px;
-                    max-height: 61px;
-                    width: auto;
-                }
-            }
-            /* Button growth */
-            
-            .grow {
-                transition: all .2s ease-in-out;
-            }
-            
-            .grow:hover {
-                transform: scale(1.07);
-            }
+/* site wide CSS */
+
+@import url("https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap");
+
+/* Navbar */
+
+.icons-background {
+    background-color: transparent;
+}
+
+.no-shadow {
+    box-shadow: none !important;
+}
+
+
+/* logo fixed size for mobile devices */
+
+@media only screen and (max-width: 768px) {
+    .logo-size {
+        margin-top: 1px;
+        margin-left: 12px;
+        max-height: 54px;
+        width: auto;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .logo-size {
+        margin-top: 0.5px;
+        margin-left: 12px;
+        max-height: 61px;
+        width: auto;
+    }
+}
+
+
+/* Button growth */
+
+.grow {
+    transition: all 0.2s ease-in-out;
+}
+
+.grow:hover {
+    transform: scale(1.07);
+}

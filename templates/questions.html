@@ -1,1 +1,28 @@
-{% extends "base.html" %} {% block content %} {% for question in questions %} {{ question.question_title }}<br> {{ question.question_text }}<br> {{ question.answer_pro }}<br> {{ question.answer_con }}<br> {% endfor %} {% endblock %}
+{% extends "base.html" %} {% block content %} {% for question in questions %}
+{{question.question_title }}<br />
+{{ question.question_text }}<br />
+{{ question.answer_pro }}<br />
+{{ question.answer_con }}<br />
+{{ question.is_friends }}<br />
+{% endfor %} 
+<ul class="collapsible">
+  <li>
+    <div class="collapsible-header teal lighten-5">
+      <i class="fas fa-question-circle blue-text text-darken-4"></i>First
+    </div>
+    <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+  </li>
+  <li>
+    <div class="collapsible-header teal lighten-5">
+      <i class="fas fa-question-circle blue-text text-darken-4"></i>Second
+    </div>
+    <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+  </li>
+  <li>
+    <div class="collapsible-header teal lighten-5">
+      <i class="fas fa-question-circle blue-text text-darken-4"></i>Third
+    </div>
+    <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+  </li>
+</ul>
+{% endblock %}

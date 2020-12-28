@@ -26,6 +26,13 @@ def get_questions():
     return render_template("questions.html", questions=questions)
 
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    query = request.form.get("query")
+    questions = list(mongo.db.questions.find({"$text": {"$search": query}}))    
+    return render_template("questions.html", questions=questions)
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -140,8 +147,6 @@ def logout():
     flash("You have been logged out")
     session.pop("user")
     return redirect(url_for("login"))
-
-
 
 
 if __name__ == "__main__":

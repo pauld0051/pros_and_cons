@@ -115,7 +115,7 @@ def add_question():
             "question_text": request.form.get("question_text"),
             "is_friends": is_friends,
             "created_by": session["user"],
-            "added_on": datetime.now()
+            "added_on": datetime.now().strftime("%d %b %Y %H:%M")
         }
 
         mongo.db.questions.insert_one(question)

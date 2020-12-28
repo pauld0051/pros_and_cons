@@ -29,7 +29,7 @@ def get_questions():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
-    questions = list(mongo.db.questions.find({"$text": {"$search": query}}))    
+    questions = mongo.db.questions.find({"$text": {"$search": query}})     
     return render_template("questions.html", questions=questions)
 
 

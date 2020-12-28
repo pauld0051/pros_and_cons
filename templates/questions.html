@@ -20,7 +20,20 @@
         </div>
     </form>
 </div>
+
+<!-- Show only user's questions on checkbox -->
+
+
+<p>
+    <label>
+        <input type="checkbox" id="user_content"/>
+        <span>Your questions only</span>
+      </label>
+</p>
+
+
 {% if questions.count() > 0 %}
+
 <ul class="collapsible">
     {% for question in questions %}
     <li>
@@ -57,49 +70,36 @@
                 </div>
             </div>
             <div class="row">
-                <p><em>Question asked by: {{ question.created_by }}</em></p>
+                <p><em>Question asked by: {{ question.created_by }} on {{ question.added_on }}</em></p>
             </div>
             <div class="row">
                 {% if question.is_friends == "on" %}
-                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> 
-                {% else %}
-                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> 
-                {% endif %} 
-                {% if session.user|lower == question.created_by|lower or session.user == "admin" %}
+                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> {% else %}
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == "admin" %}
                 <div class="right">
-                    <a href="" 
-                    class="btn-small button-size green accent-4 tooltipped" 
-                    data-position="bottom" 
-                    data-tooltip="Close question for any more commenting">
+                    <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                     Finish</a>
-                    <a href="{{ url_for('edit_question', question_id=question._id) }}" 
-                    class="btn-small button-size light-blue lighten-1 tooltipped" 
-                    data-position="bottom" 
-                    data-tooltip="Edit your question">
+                    <a href="{{ url_for('edit_question', question_id=question._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
                     Edit</a>
-                    <button data-target="{{ question._id }}" 
-                    class="btn-small button-size red darken-4 tooltipped modal-trigger" 
-                    data-position="bottom" 
-                    data-tooltip="Delete your question">
+                    <button data-target="{{ question._id }}" class="btn-small button-size red darken-4 tooltipped modal-trigger" data-position="bottom" data-tooltip="Delete your question">
                     Delete</button>
                 </div>
                 {% endif %}
             </div>
     </li>
-<!-- Modal for Deleting Questions -->
-<div id="{{ question._id }}" class="modal">
-    <div class="modal-content">
-      <h4>Warning - You're about to delete your question!</h4>
-      <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
+    <!-- Modal for Deleting Questions -->
+    <div id="{{ question._id }}" class="modal">
+        <div class="modal-content">
+            <h4>Warning - You're about to delete your question!</h4>
+            <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
+            <a href="{{ url_for('delete_question', question_id=question._id) }}" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</a>
+        </div>
     </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
-      <a href="{{ url_for('delete_question', question_id=question._id) }}" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</a>
-    </div>
-  </div>
-{% endfor %}
+    {% endfor %}
 </ul>
 {% else %}
 <h3 class="red-text text-darken-3 center-align">No Questions found matching that search</h3>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

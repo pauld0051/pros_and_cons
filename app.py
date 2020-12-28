@@ -6,6 +6,7 @@ from flask import (
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 if os.path.exists("env.py"):
     import env
 
@@ -29,6 +30,13 @@ def get_questions():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
+    questions = mongo.db.questions.find({"$text": {"$search": query}})     
+    return render_template("questions.html", questions=questions)
+
+
+@app.route("/filter_user", methods=["GET", "POST"])
+def filter_user():
+    filter = request.form.get("filter")
     questions = mongo.db.questions.find({"$text": {"$search": query}})     
     return render_template("questions.html", questions=questions)
 
@@ -86,7 +94,6 @@ def login():
 
     return render_template("login.html")
 
-
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     # grab the session user's username from db
@@ -107,7 +114,8 @@ def add_question():
             "question_title": request.form.get("question_title"),
             "question_text": request.form.get("question_text"),
             "is_friends": is_friends,
-            "created_by": session["user"]
+            "created_by": session["user"],
+            "added_on": datetime.now()
         }
 
         mongo.db.questions.insert_one(question)

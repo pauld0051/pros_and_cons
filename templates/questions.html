@@ -70,7 +70,10 @@
                 </div>
             </div>
             <div class="row">
-                <p><em>Question asked by: {{ question.created_by }} on {{ question.added_on }}</em></p>
+                <span><em>Question asked by: {{ question.created_by }} 
+                    {% if question.added_on is not none %} and was added on: {{ question.added_on }}
+                    {% else %} and was edited on: {{ question.edited_on }} {% endif %}</em></span><br> 
+                   
             </div>
             <div class="row">
                 {% if question.is_friends == "on" %}

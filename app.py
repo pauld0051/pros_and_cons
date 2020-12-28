@@ -133,7 +133,9 @@ def edit_question(question_id):
             "question_title": request.form.get("question_title"),
             "question_text": request.form.get("question_text"),
             "is_friends": is_friends,
-            "created_by": session["user"]
+            "created_by": session["user"],
+            "added_on": request.form.get("added_on"),
+            "edited_on": datetime.now().strftime("%d %b %Y %H:%M")
         }
 
         mongo.db.questions.update({"_id": ObjectId(question_id)}, submit)

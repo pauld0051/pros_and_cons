@@ -4,4 +4,5 @@ $(document).ready(function() {
     $(".dropdown-trigger").dropdown({ hover: false, 'coverTrigger': false, 'closeOnClick': true });
     $('.tooltipped').tooltip();
     $('.collapsible').collapsible();
+    $('.modal').modal();
 });

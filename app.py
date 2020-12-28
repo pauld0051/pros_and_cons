@@ -1,4 +1,5 @@
 import os
+import ctypes
 from flask import (
     Flask, flash, render_template, 
     redirect, request, session, url_for)
@@ -127,6 +128,11 @@ def edit_question(question_id):
     return render_template("edit_question.html", question=question)
 
 
+@app.route("/delete_question/<question_id>")
+def delete_question(question_id):
+    mongo.db.questions.remove({"_id": ObjectId(question_id)})
+    flash("Question Successfully Deleted")
+    return redirect(url_for("get_questions"))
 
 @app.route("/logout")
 def logout():

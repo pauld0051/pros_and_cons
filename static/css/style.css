@@ -67,3 +67,9 @@
 .button-size {
     width: 74px;
 }
+
+/* Prevent Materialize Textarea cutting off the bottom of lower case g, j and y */
+
+#question_text {
+    line-height: 24px;
+}

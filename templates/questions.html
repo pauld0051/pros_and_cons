@@ -44,7 +44,8 @@
             <div class="row">
                 {% if question.is_friends == "on" %}
                 <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> {% else %}
-                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower %}
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} 
+                {% if session.user|lower == question.created_by|lower or session.user|lower == "admin" %}
                 <div class="right">
                     <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">Finish</a>
                     <a href="{{ url_for('edit_question', question_id=question._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">Edit</a>

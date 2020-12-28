@@ -23,17 +23,33 @@
 
 <!-- Show only user's questions on checkbox -->
 
-
-<p>
+<div class="row">
+<span>
     <label>
         <input type="checkbox" id="user_content"/>
         <span>Your questions only</span>
       </label>
-</p>
+</span>
 
+ <!-- Dropdown Trigger for sorting -->
+ <a class='dropdown-trigger btn right' href='#' data-target='sort'>Sort <i class="fas fa-angle-down"></i></a>
 
+ <!-- Dropdown Structure -->
+ <ul id='sort' class='dropdown-content'>
+   <li><a href="#!">Latest</a></li>
+   <li><a href="#!">Newest</a></li>
+   <li><a href="#!">Oldest</a></li>
+   <li><a href="#!">Name</a></li>
+   <li><a href="#!">Popular</a></li>
+   <li><a href="#!">Unanswered</a></li>
+   <li><a href="#!">Random</a></li>
+ </ul>
+</div>
+
+<!-- Search function if returning results -->
 {% if questions.count() > 0 %}
 
+<!-- All questions unsorted -->
 <ul class="collapsible">
     {% for question in questions %}
     <li>

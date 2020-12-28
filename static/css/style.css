@@ -73,3 +73,8 @@
 #question_text {
     line-height: 24px;
 }
+
+/* Dropdown sorter increase width */
+.dropdown-content {
+    width: 128px !important;
+}

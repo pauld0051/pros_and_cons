@@ -39,6 +39,7 @@
    <li><a href="#!">Latest</a></li>
    <li><a href="#!">Newest</a></li>
    <li><a href="#!">Oldest</a></li>
+   <li><a href="#!">Friends</a></li>
    <li><a href="#!">Name</a></li>
    <li><a href="#!">Popular</a></li>
    <li><a href="#!">Unanswered</a></li>
@@ -87,8 +88,8 @@
             </div>
             <div class="row">
                 <span><em>Question asked by: {{ question.created_by }} 
-                    {% if question.added_on is not none %} and was added on: {{ question.added_on }}
-                    {% else %} and was edited on: {{ question.edited_on }} {% endif %}</em></span><br> 
+                    {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
+                    {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br> 
                    
             </div>
             <div class="row">

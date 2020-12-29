@@ -23,7 +23,7 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_questions")
 def get_questions():
-    questions = mongo.db.questions.find()
+    questions = mongo.db.questions.find().sort([("added_on", -1), ("edited_on", -1)])
     return render_template("questions.html", questions=questions)
 
 
@@ -130,15 +130,15 @@ def edit_question(question_id):
     if request.method == "POST":
         is_friends = "on" if request.form.get("is_friends") else "off"
         submit = {
-            "question_title": request.form.get("question_title"),
-            "question_text": request.form.get("question_text"),
-            "is_friends": is_friends,
-            "created_by": session["user"],
-            "added_on": request.form.get("added_on"),
-            "edited_on": datetime.now().strftime("%d %b %Y %H:%M")
-        }
+            "$set": {
+                "question_title": request.form.get("question_title"),
+                "question_text": request.form.get("question_text"),
+                "is_friends": is_friends,
+                "edited_on": datetime.now().strftime("%d %b %Y %H:%M")
+                }
+        }    
 
-        mongo.db.questions.update({"_id": ObjectId(question_id)}, submit)
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)}, submit)
         flash("Question Successfully Edited")
 
     question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})

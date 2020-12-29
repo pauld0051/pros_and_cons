@@ -40,6 +40,15 @@ def filters():
     return render_template("questions.html", questions=questions)
 
 
+@app.route("/filter_name", methods=["GET", "POST"])
+def filter_name():
+    names = session["user"]
+    questions = mongo.db.questions.find(
+        {"created_by": session["user"]})
+    return render_template("filter_name.html", questions=questions)
+
+
+
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")

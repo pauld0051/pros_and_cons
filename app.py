@@ -23,20 +23,26 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_questions")
 def get_questions():
-    questions = mongo.db.questions.find().sort([("added_on", -1), ("edited_on", -1)])
+    questions = mongo.db.questions.find().sort("added_on", -1)
+    return render_template("questions.html", questions=questions)
+
+
+@app.route("/filters", methods=["GET", "POST"])
+def filters():
+    sort = request.form.get("sort", "latest")
+    if sort == "oldest":
+        questions = mongo.db.questions.find().sort("added_on", 1)
+    if sort == "latest":
+        questions = mongo.db.questions.find().sort("added_on", -1)
+    if sort == "names":
+        questions = mongo.db.questions.find().sort("created_by", 1)        
+    
     return render_template("questions.html", questions=questions)
 
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
-    questions = mongo.db.questions.find({"$text": {"$search": query}})     
-    return render_template("questions.html", questions=questions)
-
-
-@app.route("/filter_user", methods=["GET", "POST"])
-def filter_user():
-    filter = request.form.get("filter")
     questions = mongo.db.questions.find({"$text": {"$search": query}})     
     return render_template("questions.html", questions=questions)
 
@@ -115,7 +121,7 @@ def add_question():
             "question_text": request.form.get("question_text"),
             "is_friends": is_friends,
             "created_by": session["user"],
-            "added_on": datetime.now().strftime("%d %b %Y %H:%M")
+            "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S")
         }
 
         mongo.db.questions.insert_one(question)
@@ -134,7 +140,7 @@ def edit_question(question_id):
                 "question_title": request.form.get("question_title"),
                 "question_text": request.form.get("question_text"),
                 "is_friends": is_friends,
-                "edited_on": datetime.now().strftime("%d %b %Y %H:%M")
+                "edited_on": datetime.now().strftime("%d %b %Y %H:%M.%S")
                 }
         }    
 

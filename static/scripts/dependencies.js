@@ -5,4 +5,5 @@ $(document).ready(function() {
     $('.tooltipped').tooltip();
     $('.collapsible').collapsible();
     $('.modal').modal();
+    $('select').formSelect();
 });

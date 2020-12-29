@@ -24,17 +24,17 @@
 <!-- Show only user's questions on checkbox -->
 <!-- Add if checked then be on filter_name.html but if unchecked be on questions.html -->
 <div class="row">
-    <form action="{{ url_for('filter_name') }}" method="POST">
+    <form action="{{ url_for('get_questions') }}">
     <span>
     <label>
         <input type="checkbox" id="user_content"/>
-        <span>Your questions only</span>
+        <span>All questions</span>
     </label>
     <button class="btn btn-small" type="submit">Sort Now</button>
     </span>
 </form>
 
-    <form action="{{ url_for('filters') }}" method="POST">
+    <form action="{{ url_for('filters_name') }}" method="POST">
     <div class="input-field col s1 right">
         <select name="sort">
           <option value="latest">Latest</option>

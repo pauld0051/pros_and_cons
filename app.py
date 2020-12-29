@@ -48,6 +48,19 @@ def filter_name():
     return render_template("filter_name.html", questions=questions)
 
 
+@app.route("/filters_name", methods=["GET", "POST"])
+def filters_name():
+    sort = request.form.get("sort", "latest")
+    if sort == "oldest":
+        questions = mongo.db.questions.find({"created_by": session["user"]}).sort("added_on", 1)
+    if sort == "latest":
+        questions = mongo.db.questions.find({"created_by": session["user"]}).sort("added_on", -1)
+    if sort == "names":
+        questions = mongo.db.questions.find({"created_by": session["user"]}).sort("created_by", 1)        
+    
+    return render_template("filter_name.html", questions=questions)
+
+
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
@@ -160,11 +173,20 @@ def edit_question(question_id):
     return render_template("edit_question.html", question=question)
 
 
+@app.route("/edit_profile", methods=["GET", "POST"])
+def edit_profile():
+    
+    return render_template("edit_profile.html")
+
+
+
+
 @app.route("/delete_question/<question_id>")
 def delete_question(question_id):
     mongo.db.questions.remove({"_id": ObjectId(question_id)})
     flash("Question Successfully Deleted")
     return redirect(url_for("get_questions"))
+
 
 @app.route("/logout")
 def logout():

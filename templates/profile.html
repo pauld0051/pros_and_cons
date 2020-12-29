@@ -4,10 +4,36 @@
     <div class="col s12 m8 offset-m2">
         <div class="card-panel">
             <h3 class="center-align light-blue-text text-darken 4">
-                {{ username }}'s Profile
+                {{ username }}'s Profile <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
             </h3>
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col s2">
+        <div class="card-panel card-size">
+            <span class="left-align light-blue-text text-darken 4">
+                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m8">
+            <div class="card-panel teal">
+                <div class="white-text">
+                    <p>Name</p>
+                    <p>City</p>
+                    <p>Country</p>
+                    <p>Birthday</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
 
 {% endblock %}

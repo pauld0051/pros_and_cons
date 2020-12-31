@@ -82,7 +82,14 @@ def register():
 
         register = {
             "username": request.form.get("username").lower(),
-            "password": generate_password_hash(request.form.get("password"))
+            "password": generate_password_hash(request.form.get("password")),
+            "fname": request.form.get("fname"),
+            "lname": request.form.get("lname"),
+            "bday": request.form.get("bday"),
+            "city": request.form.get("city"),
+            "country": request.form.get("country"),
+            "sex": request.form.get("sex"),
+
         }
         mongo.db.users.insert_one(register)
 
@@ -173,10 +180,11 @@ def edit_question(question_id):
     return render_template("edit_question.html", question=question)
 
 
-@app.route("/edit_profile", methods=["GET", "POST"])
+@app.route("/edit_profile")
 def edit_profile():
-    
+   
     return render_template("edit_profile.html")
+
 
 
 

@@ -6,5 +6,11 @@ $(document).ready(function() {
     $('.collapsible').collapsible();
     $('.modal').modal();
     $('select').formSelect();
-    $('.datepicker').datepicker();
+    $('.datepicker').datepicker({
+        format: "dd mmmm, yyyy",
+        yearRange: 99,
+        showClearBtn: true,
+        i18n: {
+            done: "Select"
+    }});
 });

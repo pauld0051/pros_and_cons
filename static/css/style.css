@@ -33,6 +33,7 @@
     }
 }
 
+
 /* Profile Pic Size for mobile and desktop devices */
 
 @media only screen and (max-width: 768px) {
@@ -64,6 +65,7 @@
     font-size: 22px;
 }
 
+
 /* Button growth */
 
 .grow {
@@ -85,6 +87,7 @@
     background-color: #ef5350;
 }
 
+
 /* Collapsible headers */
 
 .collapsible-header strong {
@@ -92,11 +95,13 @@
     margin-left: 12px;
 }
 
+
 /* Button sizes on question panels */
 
 .button-size {
     width: 74px;
 }
+
 
 /* Prevent Materialize Textarea cutting off the bottom of lower case g, j and y */
 
@@ -104,7 +109,32 @@
     line-height: 24px;
 }
 
+
 /* Dropdown sorter increase width */
+
 .dropdown-content {
     width: 128px !important;
+}
+
+/* Datepicker */
+
+.datepicker-date-display {
+    background-color: #039be5;
+}
+   
+   .datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done {
+    color: #039be5;
+}
+   
+   .datepicker-table td.is-today {
+    color: #039be5;
+}
+   
+   .datepicker-table td.is-selected {
+    background-color: #039be5;
+    color: #039be5;
+}
+
+   button.datepicker-day-button {
+       color: #424242;
 }

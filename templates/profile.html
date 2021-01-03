@@ -2,9 +2,9 @@
 
 <div class="row">
     <div class="col s12 m8 offset-m2">
-        <div class="card-panel">
-            <h3 class="center-align light-blue-text text-darken 4">
-                {{ username }}'s Profile <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
+        <div class="card-panel grey lighten-5">
+            <h3 class="center-align light-blue-text text-darken-4">
+                {{ username }}'s Profile
             </h3>
         </div>
     </div>
@@ -12,21 +12,27 @@
 
 <div class="row">
     <div class="col s2">
-        <div class="card-panel card-size">
+        <div class="card-panel card-size grey lighten-5">
             <span class="left-align light-blue-text text-darken 4">
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
+                {% if profile.sex is defined %} 
+                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/non-ninary.png') }}" alt="Profile Pic">
+                {% else %}
+                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                {% endif %}
             </span>
         </div>
     </div>
 
     <div class="row">
         <div class="col s12 m8">
-            <div class="card-panel teal">
-                <div class="white-text">
-                    <p>Name</p>
-                    <p>City</p>
-                    <p>Country</p>
-                    <p>Birthday</p>
+            <div class="card-panel grey lighten-5">
+                <div class="light-blue-text text-darken-4">
+                    <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
+                    <p>Name: {% if profile.fname is defined %} {{ fname }} {% else %} - {% endif %} 
+                        {% if profile.lname is defined %} {{ lname }} {% else %} - {% endif %} </p>
+                    <p>City: {% if profile.city is defined %} {{ city }} {% else %} - {% endif %} </p>
+                    <p>Country: {% if profile.country is defined %} {{ country }} {% else %} - {% endif %}</p>
+                    <p>Birthday: {% if profile.bday is defined %} {{ bday }} {% else %} - {% endif %}</p>
                 </div>
             </div>
         </div>

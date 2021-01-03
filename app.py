@@ -134,9 +134,11 @@ def profile(username):
     # grab the session user's username from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
+    
+    
 
     if session["user"]:
-        return render_template("profile.html", username=username)
+        return render_template("profile.html", username=username, profile=profile)
 
     return redirect(url_for("login"))
 
@@ -184,9 +186,6 @@ def edit_question(question_id):
 def edit_profile():
    
     return render_template("edit_profile.html")
-
-
-
 
 
 @app.route("/delete_question/<question_id>")

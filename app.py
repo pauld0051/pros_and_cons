@@ -128,6 +128,7 @@ def login():
             return redirect(url_for("login"))
 
     return render_template("login.html")
+    
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
@@ -135,8 +136,6 @@ def profile(username):
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
     
-    
-
     if session["user"]:
         return render_template("profile.html", username=username, profile=profile)
 
@@ -182,10 +181,32 @@ def edit_question(question_id):
     return render_template("edit_question.html", question=question)
 
 
-@app.route("/edit_profile")
+@app.route("/edit_profile/", methods=["GET", "POST"])
 def edit_profile():
-   
-    return render_template("edit_profile.html")
+    user = session["user"] or None
+    if user: 
+        user_profile = mongo.db.users.find_one({"username": user})
+        users_id = user_profile["_id"]
+
+        if request.method == "POST":
+            submit = {
+                "$set": {
+                    "fname": request.form.get("fname"),
+                    "lname": request.form.get("lname"),
+                    "sex": request.form.get("sex"),
+                    "city": request.form.get("city"),
+                    "country": request.form.get("country"),
+                    "bday": request.form.get("bday")
+                }
+            }
+
+            mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
+            flash("Profile Successfully Edited")
+
+            return render_template("edit_profile.html", user=user_profile)
+    
+        else:
+            return render_template("profile.html", profile=user)
 
 
 @app.route("/delete_question/<question_id>")

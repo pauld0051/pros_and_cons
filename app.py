@@ -191,11 +191,12 @@ def edit_profile():
         users_id = user_profile["_id"]
 
         if request.method == "POST":
+            sex = request.form['sex']
             submit = {
                 "$set": {
                     "fname": request.form.get("fname"),
                     "lname": request.form.get("lname"),
-                    "sex": request.form.get("sex"),
+                    "sex": sex,
                     "city": request.form.get("city"),
                     "country": request.form.get("country"),
                     "bday": request.form.get("bday")

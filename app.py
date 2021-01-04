@@ -132,12 +132,14 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
+    user = session["user"] or None
     # grab the session user's username from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
+    user_profile = mongo.db.users.find_one({"username": user})
     
     if session["user"]:
-        return render_template("profile.html", username=username, profile=profile)
+        return render_template("profile.html", username=username, profile=user_profile)
 
     return redirect(url_for("login"))
 
@@ -203,10 +205,12 @@ def edit_profile():
             mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
             flash("Profile Successfully Edited")
 
-            return render_template("edit_profile.html", user=user_profile)
+            return render_template("edit_profile.html", profile=user_profile)
     
         else:
-            return render_template("profile.html", profile=user)
+            return render_template("edit_profile.html", profile=user_profile)
+        
+    return redirect(url_for("login"))
 
 
 @app.route("/delete_question/<question_id>")

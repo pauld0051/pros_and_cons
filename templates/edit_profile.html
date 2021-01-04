@@ -4,12 +4,11 @@
     <div class="col s12 m8 offset-m2">
         <div class="card-panel grey lighten-5">
             <h3 class="center-align light-blue-text text-darken 4">
-                { profile.username } Edit Your Profile
+                {{ profile.username }} - Edit Your Profile
             </h3>
         </div>
     </div>
 </div>
-<h3>Surely this is something</h3>
 <div class="row">
     <div class="col s2">
         <div class="card-panel grey lighten-5 card-size">
@@ -30,35 +29,35 @@
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="far fa-user prefix light-blue-text text-darken-1"></i>
-                                    <input id="fname" name="fname" type="text" class="validate" minlength="3" maxlength="25">
+                                    <input id="fname" name="fname" type="text" class="validate" minlength="3" maxlength="25" value="{{ profile.fname }}">
                                     <label for="fname">First Name</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="far fa-user prefix light-blue-text text-darken-1"></i>
-                                    <input id="lname" name="lname" type="text" class="validate" minlength="2" maxlength="25">
+                                    <input id="lname" name="lname" type="text" class="validate" minlength="2" maxlength="25" value="{{ profile.lname }}">
                                     <label for="lname">Last Name</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i>
-                                    <input id="bday" name="bday" type="text" class="datepicker validate">
+                                    <input id="bday" name="bday" type="text" class="datepicker validate" value="{{ profile.bday }}">
                                     <label for="bday">Birthdate</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="fas fa-map-signs prefix light-blue-text text-darken-1"></i>
-                                    <input id="city" name="city" type="text" class="validate" minlength="2" maxlength="50">
+                                    <input id="city" name="city" type="text" class="validate" minlength="2" maxlength="50" value="{{ profile.city }}">
                                     <label for="city">City</label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
-                                    <input id="country" name="country" type="text" class="validate" minlength="2" maxlength="50">
+                                    <input id="country" name="country" type="text" class="validate" minlength="2" maxlength="50" value="{{ profile.country }}">
                                     <label for="country">Country</label>
                                 </div>
                             </div>

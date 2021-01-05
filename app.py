@@ -87,7 +87,7 @@ def register():
             "fname": request.form.get("fname"),
             "lname": request.form.get("lname"),
             "bday": request.form.get("bday"),
-            "city": request.form.get("city"),
+            "state": request.form.get("state"),
             "country": request.form.get("country"),
             "sex": request.form.get("sex"),
 

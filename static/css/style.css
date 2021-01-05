@@ -142,3 +142,9 @@
 button.datepicker-day-button {
     color: #424242;
 }
+
+/* Country Picker */
+
+div.country-picker > select {
+    width: 400px !important;
+}

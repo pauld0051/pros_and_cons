@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %}
-
+<script src="{{ url_for ( 'static', filename='scripts/country.js' ) }} "></script>
 <div class="row">
     <div class="col s12 m8 offset-m2">
         <div class="card-panel grey lighten-5">
@@ -33,7 +33,7 @@
             <div class="card-panel grey lighten-5">
                 <div class="white-text">
                     <form class="col s12" method="POST" action="{{ url_for('edit_profile') }}">
-                    <div class="row">
+                        <div class="row">
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="far fa-user prefix light-blue-text text-darken-1"></i>
@@ -55,53 +55,52 @@
                                     <label for="bday">Birthdate</label>
                                 </div>
                             </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6 m8">
-                            <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
-                            <select name="country" id="country">
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6 m8 country-picker">
+                                <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
+                                <select name="country" id="country" ref="country">
                                 {% for country in countries %}
                                 <option value="{{ country.name }}">{{ country.name }}</option>
                                 {% endfor %}
                             </select>
-                            <select name="state" id="state">
+                                <select name="state" id="state">
                                
-                                <option value=""> country.state </option>
-                                {
+                                <option value="">state (coming soon) </option>
                             </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col sm-2"><span>
+                        <div class="row">
+                            <div class="col sm-2"><span>
                                 <label>
                                     <input class="with-gap" name="sex" id="female" value="female" type="radio" />
                                     <span>Female</span>
-                            </label>
-                            </span>
-                        </div>
-                        <div class="col sm-2"><span>
+                                </label>
+                                </span>
+                            </div>
+                            <div class="col sm-2"><span>
                                 <label>
                                     <input class="with-gap" name="sex" id="male" value="male" type="radio" />
                                     <span>male</span>
-                            </label>
-                            </span>
-                        </div>
-                        <div class="col sm-2"><span>
+                                </label>
+                                </span>
+                            </div>
+                            <div class="col sm-2"><span>
                                 <label>
                                     <input class="with-gap" name="sex" id="non-binary" value="non-binary" type="radio" />
                                     <span>non-binary</span>
-                            </label>
-                            </span>
-                        </div>
-                        <div class="col sm-2"><span>
+                                </label>
+                                </span>
+                            </div>
+                            <div class="col sm-2"><span>
                                 <label>
                                     <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" checked />
                                     <span>Prefer not to say</span>
-                            </label>
-                            </span>
+                                </label>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <button class="btn red" type="submit">Submit</button>
+                        <button class="btn red" type="submit">Submit</button>
                     </form><br>
                     <small class="grey-text text-darken-3">Note: All these fields are optional, you are not required to
                         fill in any details. At Pros and Cons, we will never share your information with anyone. Ever!
@@ -112,5 +111,7 @@
         </div>
     </div>
 </div>
+<p id="demo" onclick="myFunction()">Click me to change my HTML content (innerHTML).</p>
+<p id="demo2"></p>
 
 {% endblock %}

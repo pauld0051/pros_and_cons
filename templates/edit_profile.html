@@ -22,7 +22,7 @@
                 {% elif profile.sex =="no-say" %}
                 <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% else %}
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_picsquestion-mark.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% endif %}
             </span>
         </div>
@@ -55,21 +55,18 @@
                                     <label for="bday">Birthdate</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="input-field col s6 m8">
-                                    <i class="fas fa-map-signs prefix light-blue-text text-darken-1"></i>
-                                    <input id="city" name="city" type="text" class="validate" minlength="2" maxlength="50" value="{{ profile.city }}">
-                                    <label for="city">City</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s6 m8">
-                                    <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
-                                    <input id="country" name="country" type="text" class="validate" minlength="2" maxlength="50" value="{{ profile.country }}">
-                                    <label for="country">Country</label>
-                                </div>
-                            </div>
-                    
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6 m8">
+                            <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
+                            <select name="country" class="countries order-alpha" id="countryId">
+                                <option value="">Select Country</option>
+                            </select>
+                            <select name="state" class="states order-alpha" id="stateId">
+                                <option value="">Select State</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col sm-2"><span>
                                 <label>
@@ -111,7 +108,6 @@
         </div>
     </div>
 </div>
-
-
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
+<script src="//geodata.solutions/includes/countrystate.js"></script>
 {% endblock %}

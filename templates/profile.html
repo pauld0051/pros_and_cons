@@ -23,7 +23,7 @@
                 {% elif profile.sex =="no-say" %}
                 <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% else %}
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_picsquestion-mark.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% endif %}
             </span>
         </div>
@@ -36,8 +36,8 @@
                     <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
                     <p>Name: {% if profile.fname is defined %} {{ profile.fname }} {% else %} - {% endif %} 
                         {% if profile.lname is defined %} {{ profile.lname }} {% else %} - {% endif %} </p>
-                    <p>City: {% if profile.city is defined %} {{ profile.city }} {% else %} - {% endif %} </p>
                     <p>Country: {% if profile.country is defined %} {{ profile.country }} {% else %} - {% endif %}</p>
+                    <p>State: {% if profile.state is defined %} {{ profile.state }} {% else %} - {% endif %} </p>
                     <p>Birthday: {% if profile.bday is defined %} {{ profile.bday }} {% else %} - {% endif %}</p>
                 </div>
             </div>

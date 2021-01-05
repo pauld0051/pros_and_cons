@@ -116,25 +116,29 @@
     width: 128px !important;
 }
 
+
 /* Datepicker */
 
 .datepicker-date-display {
     background-color: #039be5;
 }
-   
-   .datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done {
+
+.datepicker-cancel,
+.datepicker-clear,
+.datepicker-today,
+.datepicker-done {
     color: #039be5;
 }
-   
-   .datepicker-table td.is-today {
+
+.datepicker-table td.is-today {
     color: #039be5;
 }
-   
-   .datepicker-table td.is-selected {
+
+.datepicker-table td.is-selected {
     background-color: #039be5;
     color: #039be5;
 }
 
-   button.datepicker-day-button {
-       color: #424242;
+button.datepicker-day-button {
+    color: #424242;
 }

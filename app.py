@@ -197,7 +197,7 @@ def edit_profile():
                     "fname": request.form.get("fname"),
                     "lname": request.form.get("lname"),
                     "sex": sex,
-                    "city": request.form.get("city"),
+                    "state": request.form.get("state"),
                     "country": request.form.get("country"),
                     "bday": request.form.get("bday")
                 }

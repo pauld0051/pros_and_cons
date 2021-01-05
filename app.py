@@ -1,5 +1,6 @@
 import os
 import ctypes
+import json
 from flask import (
     Flask, flash, render_template, 
     redirect, request, session, url_for)
@@ -185,6 +186,9 @@ def edit_question(question_id):
 
 @app.route("/edit_profile/", methods=["GET", "POST"])
 def edit_profile():
+    with open('countries.json', encoding="utf8") as f:
+               country = json.load(f)
+
     user = session["user"] or None
     if user: 
         user_profile = mongo.db.users.find_one({"username": user})
@@ -206,12 +210,15 @@ def edit_profile():
             mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
             flash("Profile Successfully Edited")
 
-            return render_template("edit_profile.html", profile=user_profile)
+            return render_template("edit_profile.html", profile=user_profile, countries=country)
     
         else:
-            return render_template("edit_profile.html", profile=user_profile)
+            return render_template("edit_profile.html", profile=user_profile, countries=country)
         
     return redirect(url_for("login"))
+
+
+
 
 
 @app.route("/delete_question/<question_id>")

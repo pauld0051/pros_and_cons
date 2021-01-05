@@ -32,8 +32,8 @@
         <div class="col s12 m8">
             <div class="card-panel grey lighten-5">
                 <div class="white-text">
+                    <form class="col s12" method="POST" action="{{ url_for('edit_profile') }}">
                     <div class="row">
-                        <form class="col s12" method="POST" action="{{ url_for('edit_profile') }}">
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="far fa-user prefix light-blue-text text-darken-1"></i>
@@ -59,11 +59,15 @@
                     <div class="row">
                         <div class="input-field col s6 m8">
                             <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
-                            <select name="country" class="countries order-alpha" id="countryId">
-                                <option value="">Select Country</option>
+                            <select name="country" id="country">
+                                {% for country in countries %}
+                                <option value="{{ country.name }}">{{ country.name }}</option>
+                                {% endfor %}
                             </select>
-                            <select name="state" class="states order-alpha" id="stateId">
-                                <option value="">Select State</option>
+                            <select name="state" id="state">
+                               
+                                <option value=""> country.state </option>
+                                {
                             </select>
                         </div>
                     </div>
@@ -91,7 +95,7 @@
                         </div>
                         <div class="col sm-2"><span>
                                 <label>
-                                    <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" />
+                                    <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" checked />
                                     <span>Prefer not to say</span>
                             </label>
                             </span>
@@ -108,6 +112,5 @@
         </div>
     </div>
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> 
-<script src="//geodata.solutions/includes/countrystate.js"></script>
+
 {% endblock %}

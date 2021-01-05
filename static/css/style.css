@@ -112,7 +112,7 @@
 
 /* Dropdown sorter increase width */
 
-.dropdown-content {
+.dropdown-content_user {
     width: 128px !important;
 }
 
@@ -145,6 +145,6 @@ button.datepicker-day-button {
 
 /* Country Picker */
 
-div.country-picker > select {
-    width: 400px !important;
+.dropdown-content_country {
+    width: 67% !important;
 }

@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %}
-<script src="{{ url_for ( 'static', filename='scripts/country.js' ) }} "></script>
+
 <div class="row">
     <div class="col s12 m8 offset-m2">
         <div class="card-panel grey lighten-5">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col s6 m8 country-picker">
+                            <div class="input-field col s6 m8 dropdown-content_country">
                                 <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
                                 <select name="country" id="country" ref="country">
                                 {% for country in countries %}
@@ -68,6 +68,7 @@
                                
                                 <option value="">state (coming soon) </option>
                             </select>
+                            <script src="{{ url_for ( 'static', filename='scripts/country.js' ) }} "></script>
                             </div>
                         </div>
                         <div class="row">

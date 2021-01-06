@@ -209,7 +209,7 @@ def edit_profile():
 
             mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
             flash("Profile Successfully Edited")
-
+            user_profile = mongo.db.users.find_one({"_id": ObjectId(users_id)})
             return render_template("edit_profile.html", profile=user_profile, countries=country)
     
         else:

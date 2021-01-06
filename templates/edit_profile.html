@@ -61,9 +61,13 @@
                                 <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>
                                 <select name="country" id="country" ref="country">
                                 {% for country in countries %}
+                                {% if profile.country == country.name %}
+                                <option value="{{ country.name }}" selected>{{ country.name }}</option>
+                                {% else %}
                                 <option value="{{ country.name }}">{{ country.name }}</option>
+                                {% endif %}
                                 {% endfor %}
-                            </select>
+                                </select>
                                 <select name="state" id="state">
                                
                                 <option value="">state (coming soon) </option>
@@ -74,28 +78,50 @@
                         <div class="row">
                             <div class="col sm-2"><span>
                                 <label>
+                                    {% if profile.sex == "female" %} 
+                                    <input class="with-gap" name="sex" id="female" value="female" type="radio" checked />
+                                    {% else %}
                                     <input class="with-gap" name="sex" id="female" value="female" type="radio" />
+                                    {% endif %}
                                     <span>Female</span>
                                 </label>
                                 </span>
                             </div>
                             <div class="col sm-2"><span>
                                 <label>
+                                    {% if profile.sex == "male" %}
+                                    <input class="with-gap" name="sex" id="male" value="male" type="radio" checked />
+                                    {% else %}
                                     <input class="with-gap" name="sex" id="male" value="male" type="radio" />
+                                    {% endif %}
                                     <span>male</span>
                                 </label>
                                 </span>
                             </div>
                             <div class="col sm-2"><span>
                                 <label>
+                                    {% if profile.sex == "non-binary" %}
+                                    <input class="with-gap" name="sex" id="non-binary" value="non-binary" type="radio" checked />
+                                    {% else %}
                                     <input class="with-gap" name="sex" id="non-binary" value="non-binary" type="radio" />
+                                    {% endif %}
                                     <span>non-binary</span>
                                 </label>
                                 </span>
                             </div>
                             <div class="col sm-2"><span>
                                 <label>
+                                    {% if profile.sex == "no-say" %}
                                     <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" checked />
+                                    {% elif profile.sex == "female" %}
+                                    <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" />
+                                    {% elif profile.sex == "male" %}
+                                    <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" />
+                                    {% elif profile.sex == "non-binary" %}
+                                    <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" />
+                                    {% else %}
+                                    <input class="with-gap" name="sex" id="no-say" value="no-say" type="radio" checked />
+                                    {% endif %}
                                     <span>Prefer not to say</span>
                                 </label>
                                 </span>

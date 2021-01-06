@@ -9,7 +9,9 @@ $(document).ready(function() {
     $('.datepicker').datepicker({
         format: "dd mmmm, yyyy",
         yearRange: 99,
+        maxDate: new Date(),
         showClearBtn: true,
+        selectMonths: true,
         i18n: {
             done: "Select"
     }});

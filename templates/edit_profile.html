@@ -12,7 +12,7 @@
 <div class="row">
     <div class="col s2">
         <div class="card-panel grey lighten-5 card-size">
-            <span class="left-align light-blue-text text-darken 4">
+            <a href="{{ url_for('profile', username=session['user']) }}"><span class="left-align light-blue-text text-darken 4">
                 {% if profile.sex == "female" %} 
                 <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
                 {% elif profile.sex =="male" %}
@@ -24,7 +24,8 @@
                 {% else %}
                 <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% endif %}
-            </span>
+               
+            </span></a>
         </div>
     </div>
 
@@ -138,7 +139,4 @@
         </div>
     </div>
 </div>
-<p id="demo" onclick="myFunction()">Click me to change my HTML content (innerHTML).</p>
-<p id="demo2"></p>
-
 {% endblock %}

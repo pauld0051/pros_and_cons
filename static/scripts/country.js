@@ -4,14 +4,16 @@
 // the user chooses to un-specify, they can then choose "not specified"
 // from the dropdown list. 
 document.getElementById("country").addEventListener("change", function() {
-    const country_chosen = document.getElementById("country").value; 
+    let country_chosen = document.getElementById("country").value; 
   });
+
+console.log(country_chosen);
 
 // A user can not chose a state without first choosing a country. If "not specified"
 // is chosen, the default, "not-specified" state will also be chosen. 
 
 $.ajax({
-  url: "countries.json",
+  url: "",
   dataType: 'json',
   type: 'get',
   cache: false,

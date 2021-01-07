@@ -11,7 +11,7 @@ document.getElementById("country").addEventListener("change", function() {
 // is chosen, the default, "not-specified" state will also be chosen. 
 
 $.ajax({
-  url: 'countries.json',
+  url: "countries.json",
   dataType: 'json',
   type: 'get',
   cache: false,

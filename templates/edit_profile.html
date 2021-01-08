@@ -73,14 +73,14 @@
                                 {% for country in countries %}
                                 {% for state in country.states %}
                                 {% if profile.state == state.name %}
-                                <option class="" value="{{ state.name }}" selected>{{ state.name }}</option>
+                                <option value="{{ state.name }}" selected>{{ state.name }}</option>
                                 {% else %}
-                                <option class="" value="{{ state.name }}">{{ state.name }}</option>
+                                <option value="{{ state.name }}">{{ state.name }}</option>
                                 {% endif %}
                                 {% endfor %}
                                 {% endfor %}
                             </select>
-                            <script src="{{ url_for ( 'static', filename='scripts/country.js' ) }} "></script>
+
                             </div>
                         </div>
                         <div class="row">
@@ -146,4 +146,8 @@
         </div>
     </div>
 </div>
+<script>
+    let countries = {{ countries | tojson }}
+</script>
+<script src="{{ url_for ( 'static', filename='scripts/country.js' ) }} "></script>
 {% endblock %}

@@ -1,25 +1,28 @@
 // Get the chosen country after change. First country is "not specified" 
 // which means if any country is chosen, there will be a change. 
-// even if the original country was in the countries.json file and then 
+// Even if the original country was in the countries.json file and then 
 // the user chooses to un-specify, they can then choose "not specified"
-// from the dropdown list. 
+// from the dropdown list.
+
 document.getElementById("country").addEventListener("change", function() {
-    let country_chosen = document.getElementById("country").value; 
-  });
+    const country_change = document.getElementById("country").value;
+    console.log(country_change);
+    console.log(countries);
+    const statesArray = [];
+    const Ind = countries.findIndex(e => {
+      return e['name'] === country_change
+})
 
-console.log(country_chosen);
+if(Ind != -1){
+      countries[Ind]['states'].forEach(e=> statesArray.push(e['name']))
+}
 
-// A user can not chose a state without first choosing a country. If "not specified"
-// is chosen, the default, "not-specified" state will also be chosen. 
+const selectTag = document.getElementById("state")
 
-$.ajax({
-  url: "",
-  dataType: 'json',
-  type: 'get',
-  cache: false,
-  success: function(data){
-  for (let state of data.states) {
-    console.log(state.name)
-  }
-  }
-  });
+statesArray.forEach(e => {
+    const option = document.createElement('option')
+    option.innerText = e;
+    selectTag.appendChild(option)
+    
+})
+});

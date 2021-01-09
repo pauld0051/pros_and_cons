@@ -1,8 +1,11 @@
-// Get the chosen country after change. First country is "not specified" 
-// which means if any country is chosen, there will be a change. 
-// Even if the original country was in the countries.json file and then 
-// the user chooses to un-specify, they can then choose "not specified"
-// from the dropdown list.
+//Hide the state select and only show if a user wants to change their state. 
+$(document).ready(function(){
+  $("#btn_to_hide").click(function(){
+    $("#hide_states").toggleClass("hide");
+  });
+});
+
+// Get the chosen country and list of states of that country on change in the select dropdown
 $('#state').on('contentChanged', function () {
   $(this).formSelect();
 });
@@ -19,7 +22,7 @@ document.getElementById("country").addEventListener("change", function () {
   }
   let str = "";
   statesArray.forEach(e => {
-      str += `<option value="${e}">${e}</option>`;
+      str += `<option value="${e}" selected>${e}</option>`;
   })
   selectTag.innerHTML = str;
   $("#state").trigger('contentChanged');
@@ -36,15 +39,15 @@ document.getElementById("country").addEventListener("load", function () {
   }
   let str = "";
   states_changeArray.forEach(e => {
-      str += `<option value="${e}">${e}</option>`;
+      str += `<option value="${e}" selected>${e}</option>`;
   })
   selectTag.innerHTML = str;
   $("#state").trigger('contentChanged');
 });
 
+// Allow user to change state even if they aren't changing country 
 $(document).ready(function() { 
   const country_change = document.getElementById("country").value;
-  console.log(country_change)
   const statesArray = [];
   const Ind = countries.findIndex(e => {
       return e['name'] === country_change;
@@ -54,7 +57,7 @@ $(document).ready(function() {
   }
   let str = "";
   statesArray.forEach(e => {
-      str += `<option value="${e}">${e}</option>`;
+      str += `<option value="${e}" selected>${e}</option>`;
   })
   selectTag.innerHTML = str;
   $("#state").trigger('contentChanged');
@@ -71,7 +74,7 @@ document.getElementById("country").addEventListener("load", function () {
   }
   let str = "";
   states_changeArray.forEach(e => {
-      str += `<option value="${e}">${e}</option>`;
+      str += `<option value="${e}" selected>${e}</option>`;
   })
   selectTag.innerHTML = str;
   $("#state").trigger('contentChanged');

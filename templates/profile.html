@@ -34,11 +34,11 @@
             <div class="card-panel grey lighten-5">
                 <div class="light-blue-text text-darken-4">
                     <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
-                    <p>Name: {% if profile.fname is defined %} {{ profile.fname }} {% else %} - {% endif %} 
+                    <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> Name: {% if profile.fname is defined %} {{ profile.fname }} {% else %} - {% endif %} 
                         {% if profile.lname is defined %} {{ profile.lname }} {% else %} - {% endif %} </p>
-                    <p>Country: {% if profile.country is defined %} {{ profile.country }} {% else %} - {% endif %}</p>
-                    <p>State: {% if profile.state is defined %} {{ profile.state }} {% else %} - {% endif %} </p>
-                    <p>Birthday: {% if profile.bday is defined %} {{ profile.bday }} {% else %} - {% endif %}</p>
+                    <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profile.country is defined %} {{ profile.country }} {% else %} - {% endif %}</p>
+                    <p><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if profile.state is defined %} {{ profile.state }} {% else %} - {% endif %} </p>
+                    <p><i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i> Birthday: {% if profile.bday is defined %} {{ profile.bday }} {% else %} - {% endif %}</p>
                 </div>
             </div>
         </div>

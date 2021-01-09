@@ -73,9 +73,9 @@
                                 {% for country in countries %}
                                 {% for state in country.states %}
                                 {% if profile.state == state.name %}
-                                <option value="{{ country[state.name] }}" selected>{{ country[state.name] }}</option>
+                                <option value="{{ state.name }}" selected>{{ state.name }}</option>
                                 {% else %}
-                                <option value="{{ country[state.name] }}">{{ country[state.name] }}</option>
+                                <option value="{{ state.name }}">{{ state.name }}</option>
                                 {% endif %}
                                 {% endfor %} 
                                 {% endfor %}

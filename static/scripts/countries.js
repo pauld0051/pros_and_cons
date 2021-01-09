@@ -3,26 +3,24 @@
 // Even if the original country was in the countries.json file and then 
 // the user chooses to un-specify, they can then choose "not specified"
 // from the dropdown list.
-
+const selectTag = document.getElementById("state");
 document.getElementById("country").addEventListener("change", function() {
     const country_change = document.getElementById("country").value;
     console.log(country_change);
     console.log(countries);
+    console.log(selectTag);
     const statesArray = [];
     const Ind = countries.findIndex(e => {
-      return e['name'] === country_change
+      return e['name'] === country_change;
 })
-
 if(Ind != -1){
-      countries[Ind]['states'].forEach(e=> statesArray.push(e['name']))
+      countries[Ind]['states'].forEach(e=> statesArray.push(e['name']));
 }
-
-const selectTag = document.getElementById("state")
-
 statesArray.forEach(e => {
-    const option = document.createElement('option')
-    option.innerText = e;
-    selectTag.appendChild(option)
-    
-})
+    console.log(e);  
+    const option = document.createElement('option');
+    option.value = "state.name";
+      option.innerText = e;
+      selectTag.appendChild(option);   
+  })
 });

@@ -10,6 +10,7 @@ $('#state').on('contentChanged', function () {
   $(this).formSelect();
 });
 
+// Allow users to change country and then state
 const selectTag = document.getElementById("state");
 document.getElementById("country").addEventListener("change", function () {
   const country_change = document.getElementById("country").value;
@@ -28,6 +29,7 @@ document.getElementById("country").addEventListener("change", function () {
   $("#state").trigger('contentChanged');
 });
 
+// Allow users to change state without changing country
 document.getElementById("country").addEventListener("load", function () {
   const state_change = document.getElementById("country").value;
   const states_changeArray = [];

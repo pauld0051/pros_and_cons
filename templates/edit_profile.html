@@ -52,7 +52,7 @@
                             <div class="row">
                                 <div class="input-field col s6 m8">
                                     <i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i>
-                                    <input id="bday" name="bday" type="text" class="datepicker validate" value="{{ profile.bday }}">
+                                    <input id="bday" name="bday" type="text" class="datepicker limit-date validate" value="{{ profile.bday }}">
                                     <label for="bday">Birthdate</label>
                                 </div>
                             </div>
@@ -69,19 +69,22 @@
                                 {% endif %}
                                 {% endfor %}
                                 </select>
-                                <div id="hide_states">
+                                <div>
                                 <i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i>    
                                 <select name="state" id="state">
                                 {% for country in countries %}
+                                {% if profile.country == country.name %}
                                 {% for state in country.states %}
                                 {% if profile.state == state.name %}
                                 <option value="{{ state.name }}" selected>{{ state.name }}</option>
                                 {% else %}
                                 <option value="{{ state.name }}">{{ state.name }}</option>
                                 {% endif %}
-                                {% endfor %} 
                                 {% endfor %}
-                            </select></div> 
+                                {% endif %}
+                                {% endfor %}
+                                </select>
+                            </div> 
                             </div>
                         </div>
                         <div class="row">

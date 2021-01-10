@@ -7,12 +7,13 @@ $(document).ready(function() {
     $('.modal').modal();
     $('select').formSelect();
     $('.datepicker').datepicker({
-        format: "dd mmmm, yyyy",
-        yearRange: 99,
-        maxDate: new Date(),
         showClearBtn: true,
         selectMonths: true,
+        yearRange: 90,
+        format: "dd mmmm, yyyy",
+        minDate: new Date(1920, 1, 1),
         i18n: {
             done: "Select"
-    }});
+        }           
+        });
 });

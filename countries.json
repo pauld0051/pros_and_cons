@@ -1499,6 +1499,8 @@
                 "code": "WY",
                 "name": "Wyoming",
                 "subdivision": "state"
+            },
+            {   "name": "Not Selected"
             }
         ]
     },

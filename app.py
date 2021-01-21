@@ -166,20 +166,27 @@ def add_question():
 
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
 def edit_question(question_id):
-    if request.method == "POST":
-        is_friends = "on" if request.form.get("is_friends") else "off"
-        submit = {
-            "$set": {
-                "question_title": request.form.get("question_title"),
-                "question_text": request.form.get("question_text"),
-                "is_friends": is_friends,
-                "edited_on": datetime.now().strftime("%d %b %Y %H:%M.%S")
-                }
-        }    
+    session = {}
+    user = session.get("user", None)
+    created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
+    created_by = created_byId["created_by"]
+    if user == created_by:
+        if request.method == "POST":
+            is_friends = "on" if request.form.get("is_friends") else "off"
+            submit = {
+                "$set": {
+                    "question_title": request.form.get("question_title"),
+                    "question_text": request.form.get("question_text"),
+                    "is_friends": is_friends,
+                    "edited_on": datetime.now().strftime("%d %b %Y %H:%M.%S")
+                    }
+            }    
 
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)}, submit)
-        flash("Question Successfully Edited")
-
+            mongo.db.questions.update_one({"_id": ObjectId(question_id)}, submit)
+            flash("Question Successfully Edited")
+    else:
+        return redirect(url_for("get_questions"))
+    
     question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     return render_template("edit_question.html", question=question)
 
@@ -220,10 +227,10 @@ def edit_profile():
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
 def delete_question(question_id):
-    user = session["user"] or None
+    session = {}
+    user = session.get("user", None)
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    print(user, created_by, question_id)
     if user == created_by:
         if request.method == "POST":
             mongo.db.questions.remove({"_id": ObjectId(question_id)})

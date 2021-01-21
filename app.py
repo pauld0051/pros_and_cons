@@ -218,13 +218,19 @@ def edit_profile():
     return redirect(url_for("login"))
 
 
-
-
-
-@app.route("/delete_question/<question_id>")
+@app.route("/delete_question/<question_id>", methods=["GET", "POST"])
 def delete_question(question_id):
-    mongo.db.questions.remove({"_id": ObjectId(question_id)})
-    flash("Question Successfully Deleted")
+    user = session["user"] or None
+    created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
+    created_by = created_byId["created_by"]
+    print(user, created_by, question_id)
+    if user == created_by:
+        if request.method == "POST":
+            mongo.db.questions.remove({"_id": ObjectId(question_id)})
+            flash("Question Successfully Deleted")
+    else:
+        return redirect(url_for("get_questions"))
+        
     return redirect(url_for("get_questions"))
 
 

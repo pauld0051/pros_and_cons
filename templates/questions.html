@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="row">
-                <span><em>Question asked by: {{ question.created_by }} 
+                <span><em>Question asked by: <a href="">{{ question.created_by }}</a>
                     {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
                     {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
 
@@ -119,8 +119,10 @@
             <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
-            <a href="{{ url_for('delete_question', question_id=question._id) }}" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</a>
+            <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
+                <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
+            <button id="delete" href="" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+            </form>
         </div>
     </div>
     {% endfor %}

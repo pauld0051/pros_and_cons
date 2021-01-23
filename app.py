@@ -88,7 +88,15 @@ def view_profile(profile):
 def add_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
+    pending_request = mongo.db.friend_requests.find_one(
+        {"friend_request_from": session["user"]},
+        {"friend_request_to": username})
     if request.method == "POST":
+        #check if the user is already friends or has a friend request waiting
+        if pending_request:
+            flash("Friend request pending")
+            return render_template("view_profile.html", username=username, profile=user_profile)
+        #if no friend request pending, then new friend request is posted    
         friend_request = {
             "friend_request_from": session["user"],
             "friend_request_to": username
@@ -96,7 +104,7 @@ def add_friend(profile):
         mongo.db.friend_requests.insert_one(friend_request)
         flash("Friend request sent")
         return render_template("view_profile.html", username=username, profile=user_profile)
-        #check if the user is already friends or has a friend request waiting
+        
 
 
 @app.route("/register", methods=["GET", "POST"])

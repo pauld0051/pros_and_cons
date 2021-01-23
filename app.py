@@ -70,6 +70,14 @@ def search():
     return render_template("questions.html", questions=questions)
 
 
+@app.route("/search_profiles", methods=["GET", "POST"])
+def search_profiles():
+    search_profiles = request.form.get("search_profiles")
+    profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
+
+    return render_template("search_profiles.html", profiles=profiles)
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -142,7 +150,7 @@ def profile(username):
     if session["user"]:
         return render_template("profile.html", username=username, profile=user_profile)
 
-    return redirect(url_for("login"))
+    return redirect(url_for("login"))        
 
 
 @app.route("/add_question", methods=["GET", "POST"])

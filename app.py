@@ -62,7 +62,6 @@ def filters_name():
     return render_template("filter_name.html", questions=questions)
 
 
-
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
@@ -74,8 +73,30 @@ def search():
 def search_profiles():
     search_profiles = request.form.get("search_profiles")
     profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
-
     return render_template("search_profiles.html", profiles=profiles)
+
+
+@app.route("/view_profile/<profile>", methods=["GET", "POST"])
+def view_profile(profile):
+    user_profile = mongo.db.users.find_one({"username": profile})
+    username = user_profile["username"]
+
+    return render_template("view_profile.html", username=username, profile=user_profile)
+
+
+@app.route("/add_friend/<profile>", methods=["GET", "POST"])
+def add_friend(profile):
+    user_profile = mongo.db.users.find_one({"username": profile})
+    username = user_profile["username"]
+    if request.method == "POST":
+        friend_request = {
+            "friend_request_from": session["user"],
+            "friend_request_to": username
+        }
+        mongo.db.friend_requests.insert_one(friend_request)
+        flash("Friend request sent")
+        return render_template("view_profile.html", username=username, profile=user_profile)
+        #check if the user is already friends or has a friend request waiting
 
 
 @app.route("/register", methods=["GET", "POST"])

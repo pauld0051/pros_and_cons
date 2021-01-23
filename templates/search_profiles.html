@@ -8,16 +8,42 @@
         <div class="collapsible-header teal lighten-5">
             <!-- Profile Username-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
-            <strong>{{profiles.username}}</strong>
+            <a href="{{ url_for('view_profile', profile=profiles.username) }}" ><strong>{{ profiles.username }}</strong></a>
         </div>
         <div class="collapsible-body teal lighten-4">
-            <!-- Profile First Name-->
+            <!-- Profile first and last name if present -->
+            {% if profiles.fname is defined %} 
             <div class="row">
                 <div class="col s12 grey lighten-5 z-depth-1">
-                    <p>{{ profiles.fname }}</p>
+                    <p>{{ profiles.fname }} {% if profiles.lname is defined %}{{ profiles.lname }} {% endif %}</p>
                 </div>
+            {% else %}
+            <div class="col s12 grey lighten-5 z-depth-1">
+                <p>Name not shown</p>
             </div>
+            {% endif %}
+            </div>
+        </div>
 {% endfor %}
+
+            <div class="row card-panel grey lighten-5">
+                <p>Try again?</p>
+                <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">
+                    <div class="row valign-wrapper center-align">
+                        <div class="input-field col s12 m8">
+                            <i class="fas fa-search prefix blue-text text-darken-3"></i>
+                            <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
+                            <label for="search_profiles">Search names, city, states or country</label>
+                        </div>
+                        <div class="col s12 m4">
+                            <a href="#!" class="red btn">Reset</a>
+                            <button type="submit" class="light-blue darken-1 btn">
+                                <i class="fas fa-search left"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 {% else %}
     <h3>No profiles found matching that description</h3>
             <p>Try again?</p>
@@ -39,6 +65,6 @@
                 </form>
             </div>
 {% endif %}
-            
+
 
 {% endblock %}

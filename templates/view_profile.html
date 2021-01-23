@@ -32,44 +32,18 @@
     <div class="row">
         <div class="col s12 m8">
             <div class="card-panel grey lighten-5">
-                {% if session.user %}
                 <div class="light-blue-text text-darken-4">
-                    <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
-                    {% else %}
-                    {% endif %}
+                    <form method="POST" action="{{ url_for('add_friend', profile=profile.username) }}">
+                    <button type="submit" class="right" id="friends"><span><i class="fas fa-user-plus icon-size tooltipped" data-position="bottom" data-tooltip="Add Friend"></i></span></button>
+                    </form>
                     <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> Name: {% if profile.fname is defined %} {{ profile.fname }} {% else %} - {% endif %} 
                         {% if profile.lname is defined %} {{ profile.lname }} {% else %} - {% endif %} </p>
                     <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profile.country is defined %} {{ profile.country }} {% else %} - {% endif %}</p>
                     <p><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if profile.state is defined %} {{ profile.state }} {% else %} - {% endif %} </p>
-                    <p><i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i> Birthday: {% if profile.bday is defined %} {{ profile.bday }} {% else %} - {% endif %}</p>
+                    
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Search profiles -->
-    <div class="row card-panel grey lighten-5">
-        <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">
-            <div class="row valign-wrapper center-align">
-                <div class="input-field col s12 m8">
-                    <i class="fas fa-search prefix blue-text text-darken-3"></i>
-                    <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
-                    <label for="search_profiles">Search names, city, states or country</label>
-                </div>
-                <div class="col s12 m4">
-                    <a href="#!" class="red btn">Reset</a>
-                    <button type="submit" class="light-blue darken-1 btn">
-                        <i class="fas fa-search left"></i> Search
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!-- Search function if not returning results -->
-
-
-</div>
-
-
 
 {% endblock %}

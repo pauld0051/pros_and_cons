@@ -7,7 +7,16 @@
         <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
        <strong>{{ x.friend_request_from }}</strong>
     </div>
+    <div class="collapsible-body teal lighten-4">
+        <div class="right">
+            <form method="POST" action="{{ url_for('friend_requests', user=x.friend_request_to) }}">
+            <button type="submit" name="accept" value="{{ x.friend_request_from }}"><i class="fas fa-user-check icon-size tooltipped" data-position="bottom" data-tooltip="Accept friend request"></i></button>
+            <button type="submit" name="decline" value="{{ x.friend_request_from }}"><i class="fas fa-skull-crossbones icon-size tooltipped" data-position="bottom" data-tooltip="Decline friend request"></i></button>
+            </form>
+        </div>
+    </div>
 </li>
+
 {% endfor %}
 </ul>
 

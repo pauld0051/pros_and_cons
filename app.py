@@ -32,9 +32,9 @@ def get_questions():
 def filters():
     sort = request.form.get("sort", "latest")
     if sort == "oldest":
-        questions = mongo.db.questions.find().sort("added_on", 1)
-    if sort == "latest":
         questions = mongo.db.questions.find().sort("added_on", -1)
+    if sort == "latest":
+        questions = mongo.db.questions.find().sort("added_on", 1)
     if sort == "names":
         questions = mongo.db.questions.find().sort("created_by", 1)        
     
@@ -46,19 +46,6 @@ def filter_name():
     names = session["user"]
     questions = mongo.db.questions.find(
         {"created_by": session["user"]})
-    return render_template("filter_name.html", questions=questions)
-
-
-@app.route("/filters_name", methods=["GET", "POST"])
-def filters_name():
-    sort = request.form.get("sort", "latest")
-    if sort == "oldest":
-        questions = mongo.db.questions.find({"created_by": session["user"]}).sort("added_on", 1)
-    if sort == "latest":
-        questions = mongo.db.questions.find({"created_by": session["user"]}).sort("added_on", -1)
-    if sort == "names":
-        questions = mongo.db.questions.find({"created_by": session["user"]}).sort("created_by", 1)        
-    
     return render_template("filter_name.html", questions=questions)
 
 
@@ -198,8 +185,30 @@ def profile(username):
 def friend_requests(user):
     user = session["user"]
     find_request = mongo.db.friend_requests.find({"friend_request_to": user})
-    print(user)
-    print(find_request)
+    if request.method == "POST":
+        accept_friend = request.form.get("accept")
+        decline_friend = request.form.get("decline")
+        if accept_friend:
+            friendship = {
+                "is_friends_1": accept_friend,
+                "is_friends_2": user
+            }
+            request_accepted = {
+                "friend_request_from": accept_friend,
+                "friend_request_to": user
+            }
+            mongo.db.friend_requests.remove(request_accepted)
+            mongo.db.friends.insert_one(friendship)
+            flash("Friend request accepted")
+            
+        else:
+            request_declined = {
+                "friend_request_from": decline_friend,
+                "friend_request_to": user
+            }
+            mongo.db.friend_requests.remove(request_declined)
+            flash("Friend request declined")
+
     return render_template("friend_requests.html", find_request=find_request)
 
 

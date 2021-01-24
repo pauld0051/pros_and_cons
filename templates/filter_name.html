@@ -34,7 +34,7 @@
     </span>
 </form>
 
-    <form action="{{ url_for('filters_name') }}" method="POST">
+    <form action="{{ url_for('filter_name') }}" method="POST">
     <div class="input-field col s1 right">
         <select name="sort">
           <option value="latest">Latest</option>
@@ -110,15 +110,17 @@
                 {% endif %}
             </div>
     </li>
-    <!-- Modal for Deleting Questions -->
-    <div id="{{ question._id }}" class="modal">
+     <!-- Modal for Deleting Questions -->
+     <div id="{{ question._id }}" class="modal">
         <div class="modal-content">
             <h4>Warning - You're about to delete your question!</h4>
             <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
-            <a href="{{ url_for('delete_question', question_id=question._id) }}" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</a>
+            <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
+                <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
+            <button id="delete" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+            </form>
         </div>
     </div>
     {% endfor %}

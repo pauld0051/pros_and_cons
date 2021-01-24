@@ -187,12 +187,21 @@ def profile(username):
         {"username": session["user"]})["username"]
     user_profile = mongo.db.users.find_one({"username": user})
     friend_request = mongo.db.friend_requests.find_one({"friend_request_to": user})
-    print(friend_request)
     if session["user"]:
         return render_template("profile.html", username=username, profile=user_profile, 
         friend_request=friend_request)
 
-    return redirect(url_for("login"))        
+    return redirect(url_for("login"))
+
+
+@app.route("/friend_requests/<user>", methods=["GET", "POST"])        
+def friend_requests(user):
+    user = session["user"]
+    find_request = mongo.db.friend_requests.find({"friend_request_to": user})
+    print(user)
+    print(find_request)
+    return render_template("friend_requests.html", find_request=find_request)
+
 
 
 @app.route("/add_question", methods=["GET", "POST"])

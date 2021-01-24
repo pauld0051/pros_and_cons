@@ -120,18 +120,15 @@ def add_friend(profile):
         return render_template("view_profile.html", username=username, profile=user_profile)
         
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         # check if username already exists in db
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
-
         if existing_user:
             flash("Username already exists")
             return redirect(url_for("register"))
-
         register = {
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get("password")),
@@ -189,9 +186,11 @@ def profile(username):
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
     user_profile = mongo.db.users.find_one({"username": user})
-    
+    friend_request = mongo.db.friend_requests.find_one({"friend_request_to": user})
+    print(friend_request)
     if session["user"]:
-        return render_template("profile.html", username=username, profile=user_profile)
+        return render_template("profile.html", username=username, profile=user_profile, 
+        friend_request=friend_request)
 
     return redirect(url_for("login"))        
 

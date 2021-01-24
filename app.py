@@ -88,14 +88,28 @@ def view_profile(profile):
 def add_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
-    pending_request = mongo.db.friend_requests.find_one(
-        {"friend_request_from": session["user"]},
-        {"friend_request_to": username})
+    pending_request = mongo.db.friend_requests.find_one({'$or':
+    [
+        {'$and':[{"friend_request_from": session["user"]},
+        {"friend_request_to": username}]},
+        {'$and':[{"friend_request_from": username},
+        {"friend_request_to": session["user"]}]}        
+    ]})
+    already_friends = mongo.db.friends.find_one({'$or':
+    [
+        {'$and':[{"is_friends_1": session["user"]},
+        {"is_friends_2": username}]},
+        {'$and':[{"is_friends_1": username},
+        {"is_friends_2": session["user"]}]}
+    ]})
     if request.method == "POST":
-        #check if the user is already friends or has a friend request waiting
+        #check if the user is already friends or has a friend request pending
         if pending_request:
             flash("Friend request pending")
             return render_template("view_profile.html", username=username, profile=user_profile)
+        if already_friends:
+            flash("You're already friends!")
+            return render_template("view_profile.html", username=username, profile=user_profile) 
         #if no friend request pending, then new friend request is posted    
         friend_request = {
             "friend_request_from": session["user"],

@@ -60,7 +60,6 @@ def search():
 def search_profiles():
     user = session["user"] or None
     user_profile = mongo.db.users.find_one({"username": user})
-    print(user_profile)
     search_profiles = request.form.get("search_profiles")
     profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
     return render_template("search_profiles.html", profiles=profiles, user=user_profile)
@@ -69,11 +68,15 @@ def search_profiles():
 @app.route("/view_profile/<profile>", methods=["GET", "POST"])
 def view_profile(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
-    username = user_profile["username"]
-    if session["user"]:
-        return redirect(url_for("profile", username=session["user"]))
+    usernames = user_profile["username"]
+    current_user = mongo.db.users.find_one({"username": session["user"]})
+    logged_in_user = current_user["username"]
 
-    return render_template("view_profile.html", username=username, profile=user_profile)
+    # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
+    if logged_in_user != usernames:
+        return render_template("view_profile.html", username=usernames, profile=user_profile)
+   
+    return redirect(url_for("profile", username=logged_in_user))
 
 
 @app.route("/add_friend/<profile>", methods=["GET", "POST"])

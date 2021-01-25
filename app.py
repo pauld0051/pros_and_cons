@@ -58,15 +58,20 @@ def search():
 
 @app.route("/search_profiles", methods=["GET", "POST"])
 def search_profiles():
+    user = session["user"] or None
+    user_profile = mongo.db.users.find_one({"username": user})
+    print(user_profile)
     search_profiles = request.form.get("search_profiles")
     profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
-    return render_template("search_profiles.html", profiles=profiles)
+    return render_template("search_profiles.html", profiles=profiles, user=user_profile)
 
 
 @app.route("/view_profile/<profile>", methods=["GET", "POST"])
 def view_profile(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
+    if session["user"]:
+        return redirect(url_for("profile", username=session["user"]))
 
     return render_template("view_profile.html", username=username, profile=user_profile)
 

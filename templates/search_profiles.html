@@ -3,7 +3,7 @@
 {% if profiles.count() > 0 %}
 
 <ul class="collapsible">
-{% for profiles in profiles %}
+{% for profiles in profiles if profiles.username != user.username %}
     <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Profile Username-->

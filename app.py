@@ -71,48 +71,66 @@ def view_profile(profile):
     usernames = user_profile["username"]
     current_user = mongo.db.users.find_one({"username": session["user"]})
     logged_in_user = current_user["username"]
-
+    #check to see if users are already friends with this profile
+    already_friends = mongo.db.friends.find_one({'$or':
+    [
+        {'$and':[{"is_friends_1": session["user"]},
+        {"is_friends_2": usernames}]},
+        {'$and':[{"is_friends_1": usernames},
+        {"is_friends_2": session["user"]}]}
+    ]})
+    #check to see if user has sent a friend request to this profile
+    pending_request = mongo.db.friend_requests.find_one({'$or':
+    [
+        {'$and':[{"friend_request_from": session["user"]},
+        {"friend_request_to": usernames}]},
+        {'$and':[{"friend_request_from": usernames},
+        {"friend_request_to": session["user"]}]}        
+    ]})
     # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
     if logged_in_user != usernames:
-        return render_template("view_profile.html", username=usernames, profile=user_profile)
-   
+        return render_template("view_profile.html", username=usernames, profile=user_profile, 
+        is_friends=already_friends, pending_request=pending_request)
+    
     return redirect(url_for("profile", username=logged_in_user))
 
 
 @app.route("/add_friend/<profile>", methods=["GET", "POST"])
 def add_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
-    username = user_profile["username"]
+    usernames = user_profile["username"]
     pending_request = mongo.db.friend_requests.find_one({'$or':
     [
         {'$and':[{"friend_request_from": session["user"]},
-        {"friend_request_to": username}]},
-        {'$and':[{"friend_request_from": username},
+        {"friend_request_to": usernames}]},
+        {'$and':[{"friend_request_from": usernames},
         {"friend_request_to": session["user"]}]}        
     ]})
     already_friends = mongo.db.friends.find_one({'$or':
     [
         {'$and':[{"is_friends_1": session["user"]},
-        {"is_friends_2": username}]},
-        {'$and':[{"is_friends_1": username},
+        {"is_friends_2": usernames}]},
+        {'$and':[{"is_friends_1": usernames},
         {"is_friends_2": session["user"]}]}
     ]})
     if request.method == "POST":
         #check if the user is already friends or has a friend request pending
         if pending_request:
             flash("Friend request pending")
-            return render_template("view_profile.html", username=username, profile=user_profile)
+            return render_template("view_profile.html", username=usernames, profile=user_profile, 
+            is_friends=already_friends, pending_request=pending_request)
         if already_friends:
             flash("You're already friends!")
-            return render_template("view_profile.html", username=username, profile=user_profile) 
+            return render_template("view_profile.html", username=usernames, profile=user_profile, 
+            is_friends=already_friends, pending_request=pending_request) 
         #if no friend request pending, then new friend request is posted    
         friend_request = {
             "friend_request_from": session["user"],
-            "friend_request_to": username
+            "friend_request_to": usernames
         }
         mongo.db.friend_requests.insert_one(friend_request)
         flash("Friend request sent")
-        return render_template("view_profile.html", username=username, profile=user_profile)
+        return redirect(url_for("view_profile", profile=profile))
         
 
 @app.route("/register", methods=["GET", "POST"])

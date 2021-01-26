@@ -1,7 +1,6 @@
 {% extends "base.html" %} {% block content %}
-
-<ul class="collapsible">
 {% for x in find_request %}
+<ul class="collapsible">
 <li>
     <div class="collapsible-header teal lighten-5">
         <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -16,9 +15,6 @@
         </div>
     </div>
 </li>
-
 {% endfor %}
 </ul>
-
-
 {% endblock %}

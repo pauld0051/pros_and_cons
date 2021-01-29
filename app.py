@@ -211,11 +211,22 @@ def profile(username):
 def friend_requests(user):
     user = session["user"]
     requested_from = []
-    find_request = list(mongo.db.friend_requests.find({"friend_request_to": user}))
-    for x in find_request:
-        requested_from.append(x["friend_request_from"])
-    from_user = mongo.db.users.find({"username": {"$in":requested_from}})
-    print("from user", from_user)
+
+    # fetch all requests for current user
+    requests = list(mongo.db.friend_requests.find({"friend_request_to": user}))
+
+    # project list of requestors profiles 
+    requests_from = list(map(lambda x: x['friend_request_from'], requests))
+
+    # fetch all requestors profiles
+    profiles = mongo.db.users.find({"username": {"$in":requests_from}})
+
+    # transform list of requestors profiles into dict
+    requestors = {profile['username']: profile for profile in profiles}
+    print("*** Requests", requests)
+    print("*** Requests_from", requests_from)
+    print("*** profiles", profiles)
+    print("*** requestors", requestors)
     if request.method == "POST":
         accept_friend = request.form.get("accept")
         decline_friend = request.form.get("decline")
@@ -240,7 +251,7 @@ def friend_requests(user):
             mongo.db.friend_requests.remove(request_declined)
             flash("Friend request declined")
 
-    return render_template("friend_requests.html", find_request=find_request, from_user=from_user)
+    return render_template("friend_requests.html", requests=requests, requestors=requestors)
 
 
 

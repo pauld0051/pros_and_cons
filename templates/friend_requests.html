@@ -1,44 +1,44 @@
 {% extends "base.html" %} {% block content %}
-{% for x in find_request %}
-{% for profile in from_user%}
+{% for request in requests %}
+
 <ul class="collapsible">
 <li>
     <div class="collapsible-header teal lighten-5">
         <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
-       <strong>{{ x.friend_request_from }}</strong>       
+       <strong>{{ request.friend_request_from }}</strong>       
     </div>
     <div class="collapsible-body teal lighten-4">
-        <div class="row">
-            <div class="col s2">
-                <div class="card-panel card-size grey lighten-5">
-                    <span class="left-align light-blue-text text-darken 4">
-                        {% if profile.sex == "female" %} 
-                        <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
-                        {% elif profile.sex =="male" %}
-                        <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
-                        {% elif profile.sex =="non-binary" %}
-                        <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
-                        {% elif profile.sex =="no-say" %}
-                        <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
-                        {% else %}
-                        <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
-                        {% endif %}
-                    </span>
-                </div>
-                <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> Name: {% if profile.fname is defined %} {{ profile.fname }} {% else %} - {% endif %} 
-                    {% if profile.lname is defined %} {{ profile.lname }} {% else %} - {% endif %} </p>
-                <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profile.country is defined %} {{ profile.country }} {% else %} - {% endif %}</p>
-                <p><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if profile.state is defined %} {{ profile.state }} {% else %} - {% endif %} </p>
-            </div>
+    <div class="row">
+        <div class="col s2">
+            <div class="card-panel card-size grey lighten-5">
+                <span class="left-align light-blue-text text-darken 4">
+                    {% if requestors[request.friend_request_from].sex == "female" %} 
+                    <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
+                    {% elif requestors[request.friend_request_from].sex  =="male" %}
+                    <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
+                    {% elif requestors[request.friend_request_from].sex  =="non-binary" %}
+                    <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
+                    {% elif requestors[request.friend_request_from].sex  =="no-say" %}
+                    <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                    {% else %}
+                    <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                    {% endif %}
+                </span>
+            <span><i class="far fa-user prefix light-blue-text text-darken-1"></i> Name: {% if requestors[request.friend_request_from].fname is defined %} {{ requestors[request.friend_request_from].fname }} {% else %} - {% endif %} 
+                {% if requestors[request.friend_request_from].lname is defined %} {{ requestors[request.friend_request_from].lname }} {% else %} - {% endif %} </span>
+            <span><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if requestors[request.friend_request_from].country is defined %} {{ requestors[request.friend_request_from].country }} {% else %} - {% endif %}</span>
+            <span><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if requestors[request.friend_request_from].state is defined %} {{ requestors[request.friend_request_from].state }} {% else %} - {% endif %} </span>
+        </div>
+        </div>
         <div class="right">
-            <form method="POST" action="{{ url_for('friend_requests', user=x.friend_request_to) }}">
-            <button type="submit" name="accept" value="{{ x.friend_request_from }}"><i class="fas fa-user-check icon-size tooltipped" data-position="bottom" data-tooltip="Accept friend request"></i></button>
-            <button type="submit" name="decline" value="{{ x.friend_request_from }}"><i class="fas fa-skull-crossbones icon-size tooltipped" data-position="bottom" data-tooltip="Decline friend request"></i></button>
+            <form method="POST" action="{{ url_for('friend_requests', user=request.friend_request_to) }}">
+            <button type="submit" name="accept" value="{{ request.friend_request_from }}"><i class="fas fa-user-check icon-size tooltipped" data-position="bottom" data-tooltip="Accept friend request"></i></button>
+            <button type="submit" name="decline" value="{{ request.friend_request_from }}"><i class="fas fa-skull-crossbones icon-size tooltipped" data-position="bottom" data-tooltip="Decline friend request"></i></button>
             </form>
         </div>
     </div>
 </li>
-{% endfor %}
-{% endfor %}
 </ul>
+{% endfor %} 
+
 {% endblock %}

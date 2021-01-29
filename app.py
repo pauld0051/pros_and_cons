@@ -210,7 +210,12 @@ def profile(username):
 @app.route("/friend_requests/<user>", methods=["GET", "POST"])        
 def friend_requests(user):
     user = session["user"]
-    find_request = mongo.db.friend_requests.find({"friend_request_to": user})
+    requested_from = []
+    find_request = list(mongo.db.friend_requests.find({"friend_request_to": user}))
+    for x in find_request:
+        requested_from.append(x["friend_request_from"])
+    from_user = mongo.db.users.find({"username": {"$in":requested_from}})
+    print("from user", from_user)
     if request.method == "POST":
         accept_friend = request.form.get("accept")
         decline_friend = request.form.get("decline")
@@ -235,7 +240,7 @@ def friend_requests(user):
             mongo.db.friend_requests.remove(request_declined)
             flash("Friend request declined")
 
-    return render_template("friend_requests.html", find_request=find_request)
+    return render_template("friend_requests.html", find_request=find_request, from_user=from_user)
 
 
 
@@ -260,8 +265,7 @@ def add_question():
 
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
 def edit_question(question_id):
-    session = {}
-    user = session.get("user", None)
+    user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
     if user == created_by:
@@ -321,8 +325,7 @@ def edit_profile():
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
 def delete_question(question_id):
-    session = {}
-    user = session.get("user", None)
+    user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
     if user == created_by:

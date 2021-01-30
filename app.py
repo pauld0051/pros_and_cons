@@ -90,7 +90,7 @@ def view_profile(profile):
     # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
     if logged_in_user != usernames:
         return render_template("view_profile.html", username=usernames, profile=user_profile, 
-        is_friends=already_friends, pending_request=pending_request)
+        is_friends=already_friends, pending_request=pending_request, user=logged_in_user)
     
     return redirect(url_for("profile", username=logged_in_user))
 
@@ -223,10 +223,7 @@ def friend_requests(user):
 
     # transform list of requestors profiles into dict
     requestors = {profile['username']: profile for profile in profiles}
-    print("*** Requests", requests)
-    print("*** Requests_from", requests_from)
-    print("*** profiles", profiles)
-    print("*** requestors", requestors)
+    
     if request.method == "POST":
         accept_friend = request.form.get("accept")
         decline_friend = request.form.get("decline")
@@ -239,17 +236,19 @@ def friend_requests(user):
                 "friend_request_from": accept_friend,
                 "friend_request_to": user
             }
-            mongo.db.friend_requests.remove(request_accepted)
+            mongo.db.friend_requests.delete_one(request_accepted)
             mongo.db.friends.insert_one(friendship)
             flash("Friend request accepted")
+            return redirect(url_for("friend_requests", requests=requests, requestors=requestors, user=session["user"]))
             
         else:
             request_declined = {
                 "friend_request_from": decline_friend,
                 "friend_request_to": user
             }
-            mongo.db.friend_requests.remove(request_declined)
+            mongo.db.friend_requests.delete_one(request_declined)
             flash("Friend request declined")
+            return redirect(url_for("friend_requests", requests=requests, requestors=requestors, user=session["user"]))
 
     return render_template("friend_requests.html", requests=requests, requestors=requestors)
 
@@ -341,7 +340,7 @@ def delete_question(question_id):
     created_by = created_byId["created_by"]
     if user == created_by:
         if request.method == "POST":
-            mongo.db.questions.remove({"_id": ObjectId(question_id)})
+            mongo.db.questions.delete_one({"_id": ObjectId(question_id)})
             flash("Question Successfully Deleted")
     else:
         return redirect(url_for("get_questions"))

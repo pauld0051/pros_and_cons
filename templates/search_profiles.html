@@ -1,70 +1,99 @@
-{% extends "base.html" %} {% block content %}
-
-{% if profiles.count() > 0 %}
-
-<ul class="collapsible">
+{% extends "base.html" %} {% block content %} 
+{% if profiles.count() > 0 %} 
 {% for profiles in profiles if profiles.username != user.username %}
+<ul class="collapsible">
     <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Profile Username-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
-            <a href="{{ url_for('view_profile', profile=profiles.username) }}" ><strong>{{ profiles.username }}</strong></a>
+            <a href="{{ url_for('view_profile', profile=profiles.username) }}"><strong>{{ profiles.username }}</strong></a>
         </div>
-        <div class="collapsible-body teal lighten-4">
-            <!-- Profile first and last name if present -->
-            {% if profiles.fname is defined %} 
+        <div class="collapsible-body">
             <div class="row">
-                <div class="col s12 grey lighten-5 z-depth-1">
-                    <p>{{ profiles.fname }} {% if profiles.lname is defined %}{{ profiles.lname }} {% endif %}</p>
+                <div class="col s2">
+                    <div class="card-panel card-size grey lighten-5">
+                        <span class="left-align light-blue-text text-darken 4">
+                            {% if profiles.sex == "female" %} 
+                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
+                            {% elif profiles.sex =="male" %}
+                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
+                            {% elif profiles.sex =="non-binary" %}
+                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
+                            {% elif profiles.sex =="no-say" %}
+                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                            {% else %}
+                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                            {% endif %}
+                        </span>
+                    </div>
                 </div>
-            {% else %}
-            <div class="col s12 grey lighten-5 z-depth-1">
-                <p>Name not shown</p>
-            </div>
-            {% endif %}
+                <div class="row">
+                    <div class="col s12 m8">
+                        <div class="card-panel grey lighten-5">
+                            <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> 
+                                Name: {% if profiles.fname is defined %} {{ profiles.fname }} 
+                                {% else %} - 
+                                {% endif %} 
+                                {% if profiles.lname is defined %} 
+                                {{ profiles.lname }} 
+                                {% else %} - 
+                                {% endif %} </p>
+                            <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profiles.country is defined %} {{ profiles.country }} 
+                                {% else %} - 
+                                {% endif %}</p>
+                            <p><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if profiles.state is defined %} {{ profiles.state }} 
+                                {% else %} - 
+                                {% endif %} </p>
+                            <p><i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i> Birthday: {% if profiles.bday is defined %} {{ profiles.bday }} 
+                                {% else %} - 
+                                {% endif %}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-{% endfor %}
-
-            <div class="row card-panel grey lighten-5">
-                <p>Try again?</p>
-                <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">
-                    <div class="row valign-wrapper center-align">
-                        <div class="input-field col s12 m8">
-                            <i class="fas fa-search prefix blue-text text-darken-3"></i>
-                            <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
-                            <label for="search_profiles">Search names, city, states or country</label>
-                        </div>
-                        <div class="col s12 m4">
-                            <a href="#!" class="red btn">Reset</a>
-                            <button type="submit" class="light-blue darken-1 btn">
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+<!-- Search Profiles -->
+<div class="row card-panel grey lighten-5">
+    <p>Try again?</p>
+    <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">
+        <div class="row valign-wrapper center-align">
+            <div class="input-field col s12 m8">
+                <i class="fas fa-search prefix blue-text text-darken-3"></i>
+                <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
+                <label for="search_profiles">Search names, city, states or country</label>
+            </div>
+            <div class="col s12 m4">
+                <a href="#!" class="red btn">Reset</a>
+                <button type="submit" class="light-blue darken-1 btn">
                                 <i class="fas fa-search left"></i> Search
                             </button>
-                        </div>
-                    </div>
-                </form>
             </div>
+        </div>
+    </form>
+</div>
 {% else %}
-    <h3>No profiles found matching that description</h3>
-            <p>Try again?</p>
-            <div class="row card-panel grey lighten-5">
-                <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">
-                    <div class="row valign-wrapper center-align">
-                        <div class="input-field col s12 m8">
-                            <i class="fas fa-search prefix blue-text text-darken-3"></i>
-                            <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
-                            <label for="search_profiles">Search names, city, states or country</label>
-                        </div>
-                        <div class="col s12 m4">
-                            <a href="#!" class="red btn">Reset</a>
-                            <button type="submit" class="light-blue darken-1 btn">
-                                <i class="fas fa-search left"></i> Search
-                            </button>
-                        </div>
-                    </div>
-                </form>
+<h3>No profiles found matching that description</h3>
+<p>Try again?</p>
+<div class="row card-panel grey lighten-5">
+    <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">
+        <div class="row valign-wrapper center-align">
+            <div class="input-field col s12 m8">
+                <i class="fas fa-search prefix blue-text text-darken-3"></i>
+                <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
+                <label for="search_profiles">Search names, city, states or country</label>
             </div>
-{% endif %}
-
-
+            <div class="col s12 m4">
+                <a href="#!" class="red btn">Reset</a>
+                <button type="submit" class="light-blue darken-1 btn">
+                <i class="fas fa-search left"></i> Search
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %} 
 {% endblock %}

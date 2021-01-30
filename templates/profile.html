@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block content %}
+ {% extends "base.html" %}  {% block content %} 
 
 <div class="row">
     <div class="col s12 m8 offset-m2">
@@ -37,14 +37,28 @@
                     <a href="{{ url_for ('edit_profile') }}"><span><i class="fas fa-user-edit right icon-size"></i></span></a>
                     {% else %}
                     {% endif %}
-                    <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> Name: {% if profile.fname is defined %} {{ profile.fname }} {% else %} - {% endif %} 
-                        {% if profile.lname is defined %} {{ profile.lname }} {% else %} - {% endif %} </p>
+                    <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> Name: {% if profile.fname != None %} 
+                        {{ profile.fname }} 
+                        {% else %} No name info to show {% endif %} 
+                        {% if profile.lname != None %} 
+                        {{ profile.lname }} 
+                        {% else %}
+                        {% endif %} </p>
                     {% if friend_request != None %}    
                     <a href="{{ url_for ('friend_requests', user=username) }}" class="btn-floating red darken-2 pulse right tooltipped" data-position="bottom" data-tooltip="Friend Requests Waiting"><i class="fas fa-plus-circle"></i></a>
                     {% endif %}
-                    <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profile.country is defined %} {{ profile.country }} {% else %} - {% endif %}</p>
-                    <p><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if profile.state is defined %} {{ profile.state }} {% else %} - {% endif %} </p>
-                    <p><i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i> Birthday: {% if profile.bday is defined %} {{ profile.bday }} {% else %} - {% endif %}</p>
+                    <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profile.country != None %} 
+                        {{ profile.country }} 
+                        {% else %} No country info to show 
+                        {% endif %}</p>
+                    <p><i class="fas fa-thumbtack prefix light-blue-text text-darken-1"></i> State: {% if profile.state != None %} 
+                        {{ profile.state }} 
+                        {% else %} No state info to show 
+                        {% endif %} </p>
+                    <p><i class="fas fa-birthday-cake prefix light-blue-text text-darken-1"></i> Birthday: {% if profile.bday != None %} 
+                        {{ profile.bday }} 
+                        {% else %} No birthday info to show 
+                        {% endif %}</p>
                 </div>
             </div>
         </div>
@@ -68,10 +82,6 @@
         </form>
     </div>
     <!-- Search function if not returning results -->
-
-
 </div>
-
-
 
 {% endblock %}

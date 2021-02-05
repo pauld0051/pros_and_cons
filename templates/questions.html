@@ -77,7 +77,30 @@
                     <div class="card grey lighten-5">
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Pros</span>
-                            <p>{{ question.answer_pro }}</p>
+                            {% for pro in question.pros %}
+                            <p>{{ pro.pro }}</p>
+                            {% endfor %}
+                            <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
+                            <i
+                                  class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
+                                  data-position="bottom"
+                                  data-tooltip="Add a pro to this discussion"></i>
+                                <input
+                                  id="pro"
+                                  name="pro"
+                                  minlength="4"
+                                  maxlength="250"
+                                  type="text"
+                                  class="validate"
+                                  required/>
+                                <label for="question_title">Add a pro here</label>
+                                <button
+                                class="btn-small right blue darken-3 waves-effect waves-light"
+                                type="submit">
+                                Submit
+                                <i class="fas fa-paper-plane right"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -86,8 +109,10 @@
                     <div class="card grey lighten-5">
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Cons</span>
-                            <p>{{ question.answer_con }}</p>
-                            <form method="POST" action="{{ url_for('cons', question_id=question._id) }}">
+                            {% for con in question.cons %}
+                            <p>{{ con.con }}</p>
+                            {% endfor %}
+                            <form method="POST" action="{{ url_for('cons', questions=questions, question_id=question._id) }}">
                             <i
                                   class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
                                   data-position="bottom"

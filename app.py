@@ -25,21 +25,6 @@ mongo = PyMongo(app)
 @app.route("/get_questions")
 def get_questions():
     questions = mongo.db.questions.find().sort("added_on", -1)
-    # Find all question IDs
-    # fetch only ids
-    question_ids = {question['_id'] for question in mongo.db.questions.find({}, {'_id': 1})}
-    matches = []
-    for con in mongo.db.cons.find():
-        con_id = con['question_id']
-    if con_id in question_ids:
-        matches.append(con_id)
-
-    cons = mongo.db.cons.find_one({"question_id": 'ObjectId("5feaffcfb4cf9e627842b1d8")'})
-    print("cons", cons)    
-    print("question_ids", question_ids)
-    print("matches", matches)
-    print("con_id", con_id)
-
     
     return render_template("questions.html", questions=questions, )
 
@@ -279,7 +264,7 @@ def add_question():
             "question_text": request.form.get("question_text"),
             "is_friends": is_friends,
             "created_by": session["user"],
-            "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S")
+            "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
         }
 
         mongo.db.questions.insert_one(question)
@@ -318,16 +303,30 @@ def edit_question(question_id):
 @app.route("/cons/<question_id>", methods=["GET", "POST"])
 def cons(question_id):
     user = session["user"] or None
+    questions = mongo.db.questions.find().sort("added_on", -1)
     if request.method == "POST":
         con = {
-                "con": request.form.get("con"),
-                "question_id": ObjectId(question_id)
+                "con": request.form.get("con"), 
             }
 
-        mongo.db.cons.insert_one(con)
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
         flash("Successfully Added a Con")
-    
+
+    return render_template("questions.html", questions=questions )
+
+
+@app.route("/pros/<question_id>", methods=["GET", "POST"])
+def pros(question_id):
+    user = session["user"] or None
     questions = mongo.db.questions.find().sort("added_on", -1)
+    if request.method == "POST":
+        pro = {
+                "pro": request.form.get("pro"), 
+            }
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
+        flash("Successfully Added a Pro")
+
     return render_template("questions.html", questions=questions )
 
 

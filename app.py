@@ -25,7 +25,23 @@ mongo = PyMongo(app)
 @app.route("/get_questions")
 def get_questions():
     questions = mongo.db.questions.find().sort("added_on", -1)
-    return render_template("questions.html", questions=questions)
+    # Find all question IDs
+    # fetch only ids
+    question_ids = {question['_id'] for question in mongo.db.questions.find({}, {'_id': 1})}
+    matches = []
+    for con in mongo.db.cons.find():
+        con_id = con['question_id']
+    if con_id in question_ids:
+        matches.append(con_id)
+
+    cons = mongo.db.cons.find_one({"question_id": 'ObjectId("5feaffcfb4cf9e627842b1d8")'})
+    print("cons", cons)    
+    print("question_ids", question_ids)
+    print("matches", matches)
+    print("con_id", con_id)
+
+    
+    return render_template("questions.html", questions=questions, )
 
 
 @app.route("/filters", methods=["GET", "POST"])
@@ -297,6 +313,22 @@ def edit_question(question_id):
     
     question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     return render_template("edit_question.html", question=question)
+
+
+@app.route("/cons/<question_id>", methods=["GET", "POST"])
+def cons(question_id):
+    user = session["user"] or None
+    if request.method == "POST":
+        con = {
+                "con": request.form.get("con"),
+                "question_id": ObjectId(question_id)
+            }
+
+        mongo.db.cons.insert_one(con)
+        flash("Successfully Added a Con")
+    
+    questions = mongo.db.questions.find().sort("added_on", -1)
+    return render_template("questions.html", questions=questions )
 
 
 @app.route("/edit_profile/", methods=["GET", "POST"])

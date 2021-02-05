@@ -4,11 +4,16 @@
         "Eventyret's",
         "FXNAQ",
         "Fontawesome",
+        "bday",
         "browsehappy",
         "bson",
+        "ctypes",
+        "fname",
+        "lname",
         "objectid",
         "pymongo",
         "ravlb",
+        "tojson",
         "werkzeug"
     ]
 }

@@ -148,3 +148,7 @@ button.datepicker-day-button {
 .dropdown-content_country {
     width: 67% !important;
 }
+
+.point-size {
+    font-size: 4px;
+}

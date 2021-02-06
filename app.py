@@ -306,7 +306,8 @@ def cons(question_id):
     questions = mongo.db.questions.find().sort("added_on", -1)
     if request.method == "POST":
         con = {
-                "con": request.form.get("con"), 
+                "con": request.form.get("con"),
+                "user": user 
             }
 
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
@@ -321,7 +322,8 @@ def pros(question_id):
     questions = mongo.db.questions.find().sort("added_on", -1)
     if request.method == "POST":
         pro = {
-                "pro": request.form.get("pro"), 
+                "pro": request.form.get("pro"),
+                "user": user 
             }
 
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})

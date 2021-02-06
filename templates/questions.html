@@ -78,7 +78,7 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Pros</span>
                             {% for pro in question.pros %}
-                            <p>{{ pro.pro }}</p>
+                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</a></span></p>
                             {% endfor %}
                             <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
                             <i
@@ -110,7 +110,7 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Cons</span>
                             {% for con in question.cons %}
-                            <p>{{ con.con }}</p>
+                            <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
                             {% endfor %}
                             <form method="POST" action="{{ url_for('cons', questions=questions, question_id=question._id) }}">
                             <i

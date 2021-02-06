@@ -70,29 +70,42 @@ def search_profiles():
 def view_profile(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
     usernames = user_profile["username"]
-    current_user = mongo.db.users.find_one({"username": session["user"]})
-    logged_in_user = current_user["username"]
+    if "user" in session:
+        current_user = mongo.db.users.find_one({"username": session["user"]})
+        logged_in_user = current_user["username"]
+    else:
+        current_user = None
+        logged_in_user = None
     #check to see if users are already friends with this profile
-    already_friends = mongo.db.friends.find_one({'$or':
-    [
-        {'$and':[{"is_friends_1": session["user"]},
-        {"is_friends_2": usernames}]},
-        {'$and':[{"is_friends_1": usernames},
-        {"is_friends_2": session["user"]}]}
-    ]})
+    if current_user != None:
+        already_friends = mongo.db.friends.find_one({'$or':
+        [
+            {'$and':[{"is_friends_1": current_user["username"]},
+            {"is_friends_2": usernames}]},
+            {'$and':[{"is_friends_1": usernames},
+            {"is_friends_2": current_user["username"]}]}
+        ]})
     #check to see if user has sent a friend request to this profile
-    pending_request = mongo.db.friend_requests.find_one({'$or':
-    [
-        {'$and':[{"friend_request_from": session["user"]},
-        {"friend_request_to": usernames}]},
-        {'$and':[{"friend_request_from": usernames},
-        {"friend_request_to": session["user"]}]}        
-    ]})
+        pending_request = mongo.db.friend_requests.find_one({'$or':
+        [
+            {'$and':[{"friend_request_from": current_user["username"]},
+            {"friend_request_to": usernames}]},
+            {'$and':[{"friend_request_from": usernames},
+            {"friend_request_to": current_user["username"]}]}        
+        ]})
+
+    else: 
+        return render_template("view_profile.html", username=usernames, profile=user_profile)
+
     # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
-    if logged_in_user != usernames:
+    if logged_in_user != user_profile["username"]:
         return render_template("view_profile.html", username=usernames, profile=user_profile, 
         is_friends=already_friends, pending_request=pending_request, user=logged_in_user)
     
+    # Check to see if user is not logged in
+    if current_user == None:
+        return render_template("view_profile.html", username=usernames, profile=user_profile)
+
     return redirect(url_for("profile", username=logged_in_user))
 
 
@@ -100,20 +113,23 @@ def view_profile(profile):
 def add_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
     usernames = user_profile["username"]
+    user = session["user"]
     pending_request = mongo.db.friend_requests.find_one({'$or':
     [
-        {'$and':[{"friend_request_from": session["user"]},
+        {'$and':[{"friend_request_from": user},
         {"friend_request_to": usernames}]},
         {'$and':[{"friend_request_from": usernames},
-        {"friend_request_to": session["user"]}]}        
+        {"friend_request_to": user}]}        
     ]})
     already_friends = mongo.db.friends.find_one({'$or':
     [
-        {'$and':[{"is_friends_1": session["user"]},
+        {'$and':[{"is_friends_1": user},
         {"is_friends_2": usernames}]},
         {'$and':[{"is_friends_1": usernames},
-        {"is_friends_2": session["user"]}]}
+        {"is_friends_2": user}]}
     ]})
+    print("already friends from add_friend = ", already_friends)
+    print("pending_request from add_friend = ", pending_request)
     if request.method == "POST":
         #check if the user is already friends or has a friend request pending
         if pending_request:
@@ -131,7 +147,8 @@ def add_friend(profile):
         }
         mongo.db.friend_requests.insert_one(friend_request)
         flash("Friend request sent")
-        return redirect(url_for("view_profile", profile=profile))
+        return redirect(url_for("view_profile", username=usernames, profile=user_profile, 
+            is_friends=already_friends, pending_request=pending_request))
         
 
 @app.route("/register", methods=["GET", "POST"])

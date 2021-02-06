@@ -26,7 +26,7 @@ mongo = PyMongo(app)
 def get_questions():
     questions = mongo.db.questions.find().sort("added_on", -1)
     
-    return render_template("questions.html", questions=questions, )
+    return render_template("questions.html", questions=questions)
 
 
 @app.route("/filters", methods=["GET", "POST"])

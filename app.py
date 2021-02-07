@@ -70,6 +70,8 @@ def search_profiles():
 def view_profile(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
+    questions = mongo.db.questions.find(
+        {"created_by": username})
     if "user" not in session:
         return render_template("view_profile.html", profile=user_profile)
     current_user = mongo.db.users.find_one({"username": session["user"]})
@@ -94,7 +96,8 @@ def view_profile(profile):
         ]})
         # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
         return render_template("view_profile.html", profile=user_profile, 
-        is_friends=already_friends, pending_request=pending_request, user=logged_in_user)
+        is_friends=already_friends, pending_request=pending_request, user=logged_in_user, 
+        questions=questions)
     #  If user is logged in, they get to see their own profile   
     else:
         return redirect(url_for("profile", username=logged_in_user))
@@ -201,6 +204,9 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
+    # Get questions that the user has input themselves
+    questions = mongo.db.questions.find(
+        {"created_by": session["user"]})
     user = session["user"] or None
     # grab the session user's username from db
     username = mongo.db.users.find_one(
@@ -209,7 +215,7 @@ def profile(username):
     friend_request = mongo.db.friend_requests.find_one({"friend_request_to": user})
     if session["user"]:
         return render_template("profile.html", username=username, profile=user_profile, 
-        friend_request=friend_request)
+        friend_request=friend_request, questions=questions)
 
     return redirect(url_for("login"))
 
@@ -258,7 +264,6 @@ def friend_requests(user):
             return redirect(url_for("friend_requests", requests=requests, requestors=requestors, user=session["user"]))
 
     return render_template("friend_requests.html", requests=requests, requestors=requestors)
-
 
 
 @app.route("/add_question", methods=["GET", "POST"])

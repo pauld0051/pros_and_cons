@@ -63,4 +63,135 @@
             </div>
         </div>
     </div>
+
+    <!-- Search function if returning results -->
+{% if questions.count() > 0 %}
+
+<!-- All questions unsorted -->
+<ul class="collapsible">
+    {% for question in questions %}
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <!-- Question Title-->
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>{{question.question_title }}</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <!-- Question Text-->
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>{{ question.question_text }}</p>
+                </div>
+            </div>
+            <div class="row teal lighten-4">
+                <div class="col s12 m6">
+                    <!-- Pro card -->
+                    <div class="card grey lighten-5">
+                        <div class="card-content grey-text text-darken-4">
+                            <span class="card-title center-align">Pros</span>
+                            {% for pro in question.pros %}
+                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</a></span></p>
+                            {% endfor %}
+                            {% if session.user %}
+                            <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
+                            <i
+                                  class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
+                                  data-position="bottom"
+                                  data-tooltip="Add a pro to this discussion"></i>
+                                <input
+                                  id="pro"
+                                  name="pro"
+                                  minlength="4"
+                                  maxlength="250"
+                                  type="text"
+                                  class="validate"
+                                  required/>
+                                <label for="question_title">Add a pro here</label>
+                                <button
+                                class="btn-small right blue darken-3 waves-effect waves-light"
+                                type="submit">
+                                Submit
+                                <i class="fas fa-paper-plane right"></i>
+                                </button>
+                            </form>
+                            {% else %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <!-- Con card -->
+                    <div class="card grey lighten-5">
+                        <div class="card-content grey-text text-darken-4">
+                            <span class="card-title center-align">Cons</span>
+                            {% for con in question.cons %}
+                            <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
+                            {% endfor %}
+                            {% if session.user %}
+                            <form method="POST" action="{{ url_for('cons', questions=questions, question_id=question._id) }}">
+                            <i
+                                  class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
+                                  data-position="bottom"
+                                  data-tooltip="Add a con to this discussion"></i>
+                                <input
+                                  id="con"
+                                  name="con"
+                                  minlength="4"
+                                  maxlength="250"
+                                  type="text"
+                                  class="validate"
+                                  required/>
+                                <label for="question_title">Add a con here</label>
+                                <button
+                                class="btn-small right blue darken-3 waves-effect waves-light"
+                                type="submit">
+                                Submit
+                                <i class="fas fa-paper-plane right"></i>
+                                </button>
+                            </form>
+                            {% else %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a>
+                    {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
+                    {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
+
+            </div>
+            <div class="row">
+                {% if question.is_friends == "on" %}
+                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> {% else %}
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == "admin" %}
+                <div class="right">
+                    <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
+                    Finish</a>
+                    <a href="{{ url_for('edit_question', question_id=question._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
+                    Edit</a>
+                    <button data-target="{{ question._id }}" class="btn-small button-size red darken-4 tooltipped modal-trigger" data-position="bottom" data-tooltip="Delete your question">
+                    Delete</button>
+                </div>
+                {% endif %}
+            </div>
+    </li>
+    <!-- Modal for Deleting Questions -->
+    <div id="{{ question._id }}" class="modal">
+        <div class="modal-content">
+            <h4>Warning - You're about to delete your question!</h4>
+            <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
+        </div>
+        <div class="modal-footer">
+            <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
+                <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
+            <button id="delete" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+{% else %}
+<h3 class="red-text text-darken-3 center-align">No Questions found matching that search</h3>
+{% endif %} 
 {% endblock %}

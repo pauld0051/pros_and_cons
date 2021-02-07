@@ -24,7 +24,7 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_questions")
 def get_questions():
-    questions = mongo.db.questions.find().sort("added_on", -1)
+    questions = mongo.db.questions.find().sort("_id", -1)
     
     return render_template("questions.html", questions=questions)
 
@@ -33,9 +33,9 @@ def get_questions():
 def filters():
     sort = request.form.get("sort", "latest")
     if sort == "oldest":
-        questions = mongo.db.questions.find().sort("added_on", -1)
+        questions = mongo.db.questions.find().sort("_id", 1)
     if sort == "latest":
-        questions = mongo.db.questions.find().sort("added_on", 1)
+        questions = mongo.db.questions.find().sort("added_on", -1)
     if sort == "names":
         questions = mongo.db.questions.find().sort("created_by", 1)        
     
@@ -149,42 +149,58 @@ def register():
         # check if username already exists in db
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
+        # check to see if user wants to be permanently logged in on registration
+        permanent = request.form.get("remember")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
         if existing_user:
             flash("Username already exists")
             return redirect(url_for("register"))
-        register = {
-            "username": request.form.get("username").lower(),
-            "password": generate_password_hash(request.form.get("password")),
-            "fname": request.form.get("fname"),
-            "lname": request.form.get("lname"),
-            "bday": request.form.get("bday"),
-            "state": request.form.get("state"),
-            "country": request.form.get("country"),
-            "sex": request.form.get("sex"),
+        if password == confirm:     
+            register = {
+                "username": request.form.get("username").lower(),
+                "password": generate_password_hash(request.form.get("password")),
+                "fname": request.form.get("fname"),
+                "lname": request.form.get("lname"),
+                "bday": request.form.get("bday"),
+                "state": request.form.get("state"),
+                "country": request.form.get("country"),
+                "sex": request.form.get("sex"),
 
-        }
-        mongo.db.users.insert_one(register)
+            }
+            mongo.db.users.insert_one(register)
 
-        # put the new user into 'session' cookie
-        session["user"] = request.form.get("username").lower()
-        flash("Registration Successful!")
-        return redirect(url_for("profile", username=session["user"]))
+            # put the new user into 'session' cookie
+            session["user"] = request.form.get("username").lower()
+            session.permanent = permanent
+            flash("Registration Successful!")
+            return redirect(url_for("profile", username=session["user"]))
+    
+        else:
+            session["non_registered_user"] = request.form.get("username").lower()
+            flash("Passwords don't match, try again.")
+            print(session["non_registered_user"])
+            return render_template("register.html", store_user=session["non_registered_user"])
+
 
     return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    
     if request.method == "POST":
         # check if username exists in db
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()})
-
+        # see if user wants to be permanently logged in
+        permanent = request.form.get("remember")
         if existing_user:
             # ensure hashed password matches user input
             if check_password_hash(
                     existing_user["password"], request.form.get("password")):
                 session["user"] = request.form.get("username").lower()
+                session.permanent = permanent
                 flash("Welcome, {}".format(
                     request.form.get("username")))
                 return redirect(url_for(
@@ -290,7 +306,7 @@ def edit_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by:
+    if user == created_by or "admin":
         if request.method == "POST":
             is_friends = "on" if request.form.get("is_friends") else "off"
             submit = {
@@ -331,6 +347,8 @@ def cons(question_id):
 def pros(question_id):
     user = session["user"] or None
     questions = mongo.db.questions.find().sort("added_on", -1)
+    pro_index = mongo.db.questions.find_one({ "pros": {"$in": [0]}})
+    print(pro_index)
     if request.method == "POST":
         pro = {
                 "pro": request.form.get("pro"),
@@ -382,7 +400,7 @@ def delete_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by:
+    if user == created_by or "admin":
         if request.method == "POST":
             mongo.db.questions.delete_one({"_id": ObjectId(question_id)})
             flash("Question Successfully Deleted")

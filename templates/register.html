@@ -8,8 +8,12 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="fas fa-user-plus prefix red-text text-lighten-1"></i>
+                    {% if session['non_registered_user'] %}
+                    <input id="username" name="username" type="text" minlength="5" maxlength="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" value="{{ session['non_registered_user'] }}" required />
+                    {% else %}
                     <input id="username" name="username" type="text" minlength="5" maxlength="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required />
                     <label for="username">Username</label>
+                    {% endif %}
                 </div>
             </div>
             <!-- Password -->
@@ -36,6 +40,12 @@
             <span>Register for the world's fastest growing Social Media network where you
         get to ask the questions!</span
       >
+      <p>
+        <label>
+          <input type="checkbox" id="remember" name="remember" />
+          <span class="tooltipped" data-position="bottom" data-tooltip="Stay permanently logged in">Remember me...</span>
+        </label>
+      </p>
     </div>
   </form>
 </div>

@@ -78,7 +78,11 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Pros</span>
                             {% for pro in question.pros %}
-                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</a></span></p>
+                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - 
+                                <a href="{{ url_for('view_profile', profile=pro.user) }}">
+                                    <span>{{ pro.user }}</a>
+                                        {% if session.user == pro.user or "admin" %}<a data-target="edit" class="modal-trigger"><span class="tooltipped" data-position="bottom" data-tooltip="Edit your response">  
+                                        <sm>(edit)</sm></a></span>{% endif %}</p>
                             {% endfor %}
                             {% if session.user %}
                             <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
@@ -177,6 +181,19 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal for editing Pros -->
+    
+    <div id="edit" class="modal">
+        <div class="modal-content">
+            <h4>Warning - You're about to delete your question!</h4>
+            <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
+        </div>
+        <div class="modal-footer">
+            
+        </div>
+    </div>
+
     {% endfor %}
 </ul>
 {% else %}

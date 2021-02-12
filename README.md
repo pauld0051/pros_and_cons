@@ -33,3 +33,7 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
 ## SECURITY
 
 An admin user was set up using a random key generator to prevent the possible forcing entry using the "admin" username. The Jinja template allows a user that matches the "created_by" database tag to update or delete an entry. But an admin given a secret username will be able to also update and delete entries if deemed inappropriate. As more admins are employed, more admin names can be introduced into the backend. No admin will be given the title 'admin' as their username.
+
+To prevent users from accessing certain areas of the page when they're not logged in Flask will check for session users. The homepage requires users to be logged in to check their friendships against those asking questions. If someone is not logged in they are given the impossible user name: wITbuhxpgAn0JZYyXCUr.
+
+This works on two levels - 1) a username can not have capital letters in it. And 2) the name would be unlikely to be chosen by any user due to its randomness. 

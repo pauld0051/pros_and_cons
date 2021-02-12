@@ -30,14 +30,11 @@ def get_questions():
         # Check to see if the session user is friends with the created_by user
         friends = list(mongo.db.friends.find({'$or': 
             [{'is_friends_1': session["user"]}, {'is_friends_2': session["user"]}]}))
-        # Now we have a list of all the user's friends
-        users_friends = [x['is_friends_1'] 
-        if x['is_friends_1'] != session["user"] else x['is_friends_2'] for x in friends]
-
+       
         return render_template("questions.html", questions=questions, admin=admin, friends=friends)
 
     else:
-        friends = "NoPoSsIbLeNaMe"
+        friends = "wITbuhxpgAn0JZYyXCUr"
         return render_template("questions.html", questions=questions, admin=admin, friends=friends)
 
 

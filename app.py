@@ -37,7 +37,7 @@ def get_questions():
         return render_template("questions.html", questions=questions, admin=admin, friends=friends)
 
     else:
-        friends = None
+        friends = "NoPoSsIbLeNaMe"
         return render_template("questions.html", questions=questions, admin=admin, friends=friends)
 
 

@@ -29,4 +29,7 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
   from here the remainder of the jQuery and JavaScript for-loop can be coded and input int the select element at the appropriate location. Two sections of this code will appear, one for when a country change is made by the user (eventListener "change") and one for when the page loads, this means the user can change state if they have already selected a country.
 
 6. User profile search requests to MongoDB are slightly limited in their capacity to search for usernames with digits. For example, if a username contains more than 1 digit in it then MongoDB's index function does not return that value. A username with just one digit in it at the end of the name is returned. For example admin1 will be returned if a search for "admin" was conducted. But admin12 will not be returned for the same search.
-Happy coding!
+
+## SECURITY
+
+An admin user was set up using a random key generator to prevent the possible forcing entry using the "admin" username. The Jinja template allows a user that matches the "created_by" database tag to update or delete an entry. But an admin given a secret username will be able to also update and delete entries if deemed inappropriate. As more admins are employed, more admin names can be introduced into the backend. No admin will be given the title 'admin' as their username.

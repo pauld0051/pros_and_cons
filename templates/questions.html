@@ -51,13 +51,15 @@
     </div>
     </form> 
 </div>
-    
+
 <!-- Search function if returning results -->
 {% if questions.count() > 0 %}
 
 <!-- All questions unsorted -->
 <ul class="collapsible">
-    {% for question in questions %}
+    {% for friend in friends %}
+    {% for question in questions if question.is_friends == "on" %}
+    {% if friend.is_friends_1 == session.user or friend.is_friends_1 == questions.created_by or friend.is_friends_2 == session.user or friend.is_friends_2 == questions.created_by %}
     <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
@@ -81,8 +83,8 @@
                             <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - 
                                 <a href="{{ url_for('view_profile', profile=pro.user) }}">
                                     <span>{{ pro.user }}</a>
-                                        {% if session.user == pro.user or "admin" %}<a data-target="edit" class="modal-trigger"><span class="tooltipped" data-position="bottom" data-tooltip="Edit your response">  
-                                        <sm>(edit)</sm></a></span>{% endif %}</p>
+                                        {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
+                                        </a>{% endif %}</p>
                             {% endfor %}
                             {% if session.user %}
                             <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
@@ -151,12 +153,11 @@
                 <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a>
                     {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
                     {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
-
             </div>
             <div class="row">
                 {% if question.is_friends == "on" %}
                 <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> {% else %}
-                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == "admin" %}
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == admin %}
                 <div class="right">
                     <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                     Finish</a>
@@ -164,11 +165,13 @@
                     Edit</a>
                     <button data-target="{{ question._id }}" class="btn-small button-size red darken-4 tooltipped modal-trigger" data-position="bottom" data-tooltip="Delete your question">
                     Delete</button>
-                </div>
+                </div>  
+                {% endif %}
                 {% endif %}
             </div>
     </li>
-    <!-- Modal for Deleting Questions -->
+    
+   <!-- Modal for Deleting Questions -->
     <div id="{{ question._id }}" class="modal">
         <div class="modal-content">
             <h4>Warning - You're about to delete your question!</h4>
@@ -181,22 +184,10 @@
             </form>
         </div>
     </div>
-
-    <!-- Modal for editing Pros -->
-    
-    <div id="edit" class="modal">
-        <div class="modal-content">
-            <h4>Warning - You're about to delete your question!</h4>
-            <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
-        </div>
-        <div class="modal-footer">
-            
-        </div>
-    </div>
-
+    {% endfor %}
     {% endfor %}
 </ul>
 {% else %}
 <h3 class="red-text text-darken-3 center-align">No Questions found matching that search</h3>
-{% endif %} 
+{% endif %}
 {% endblock %}

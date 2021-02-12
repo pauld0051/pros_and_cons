@@ -24,9 +24,21 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_questions")
 def get_questions():
+    admin = "9dyhnxe8u4"
     questions = mongo.db.questions.find().sort("_id", -1)
-    
-    return render_template("questions.html", questions=questions)
+    if "user" in session:
+        # Check to see if the session user is friends with the created_by user
+        friends = list(mongo.db.friends.find({'$or': 
+            [{'is_friends_1': session["user"]}, {'is_friends_2': session["user"]}]}))
+        # Now we have a list of all the user's friends
+        users_friends = [x['is_friends_1'] 
+        if x['is_friends_1'] != session["user"] else x['is_friends_2'] for x in friends]
+
+        return render_template("questions.html", questions=questions, admin=admin, friends=friends)
+
+    else:
+        friends = None
+        return render_template("questions.html", questions=questions, admin=admin, friends=friends)
 
 
 @app.route("/filters", methods=["GET", "POST"])
@@ -73,7 +85,7 @@ def view_profile(profile):
     questions = mongo.db.questions.find(
         {"created_by": username})
     if "user" not in session:
-        return render_template("view_profile.html", profile=user_profile)
+        return render_template("view_profile.html", profile=user_profile, questions=questions)
     current_user = mongo.db.users.find_one({"username": session["user"]})
     logged_in_user = current_user["username"]
     if logged_in_user != user_profile["username"]:
@@ -166,7 +178,6 @@ def register():
                 "state": request.form.get("state"),
                 "country": request.form.get("country"),
                 "sex": request.form.get("sex"),
-
             }
             mongo.db.users.insert_one(register)
 
@@ -306,7 +317,7 @@ def edit_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by or "admin":
+    if user == created_by or "9dyhnxe8u4":
         if request.method == "POST":
             is_friends = "on" if request.form.get("is_friends") else "off"
             submit = {
@@ -400,7 +411,7 @@ def delete_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by or "admin":
+    if user == created_by or "9dyhnxe8u4":
         if request.method == "POST":
             mongo.db.questions.delete_one({"_id": ObjectId(question_id)})
             flash("Question Successfully Deleted")

@@ -25,11 +25,25 @@ mongo = PyMongo(app)
 @app.route("/get_questions")
 def get_questions():
     admin = "9dyhnxe8u4"
-    questions = list(mongo.db.questions.find().sort("_id", -1))
+    questions = mongo.db.questions.find().sort("_id", -1)
+    question_created_by = list(mongo.db.questions.find())
+    created_by = []
+
+    
     if "user" in session:
-        # Check to see if the session user is friends with the created_by user
-        friends = list(mongo.db.friends.find({'$or': 
-            [{'is_friends_1': session["user"]}, {'is_friends_2': session["user"]}]}))
+        profile = list(mongo.db.users.find({"username": session["user"]}))[0]
+        friendships = profile['friends']
+        friends = []
+        for friend_id in friendships:
+            friend_profile = list(mongo.db.users.find({"_id": friend_id}))[0]
+            friend_friends = friend_profile['friends']
+            if profile['_id'] in friend_friends:
+                friends.append(friend_profile)
+            
+        
+        print("friends = ", friends)
+        print("friendsips = ", friendships)    
+        
        
         return render_template("questions.html", questions=questions, admin=admin, friends=friends)
 
@@ -187,7 +201,7 @@ def register():
         else:
             session["non_registered_user"] = request.form.get("username").lower()
             flash("Passwords don't match, try again.")
-            print(session["non_registered_user"])
+            
             return render_template("register.html", store_user=session["non_registered_user"])
 
 
@@ -247,6 +261,8 @@ def profile(username):
 @app.route("/friend_requests/<user>", methods=["GET", "POST"])        
 def friend_requests(user):
     user = session["user"]
+    logged_in_user = mongo.db.users.find_one({"username": session["user"] })
+    logged_in_id = logged_in_user["_id"]
     requested_from = []
 
     # fetch all requests for current user
@@ -264,7 +280,10 @@ def friend_requests(user):
     if request.method == "POST":
         accept_friend = request.form.get("accept")
         decline_friend = request.form.get("decline")
+        
         if accept_friend:
+            requestors_user = mongo.db.users.find_one({"username": accept_friend})
+            requestors_id = requestors_user["_id"]
             friendship = {
                 "is_friends_1": accept_friend,
                 "is_friends_2": user
@@ -275,7 +294,12 @@ def friend_requests(user):
             }
             mongo.db.friend_requests.delete_one(request_accepted)
             mongo.db.friends.insert_one(friendship)
+            mongo.db.users.find_one_and_update({"_id": logged_in_id},
+                {"$push": {"friends": requestors_id}})
+            mongo.db.users.find_one_and_update({"_id": requestors_id},
+                {"$push": {"friends": logged_in_id}})
             flash("Friend request accepted")
+            
             return redirect(url_for("friend_requests", requests=requests, requestors=requestors, user=session["user"]))
             
         else:
@@ -355,14 +379,13 @@ def cons(question_id):
 def pros(question_id):
     user = session["user"] or None
     questions = mongo.db.questions.find().sort("added_on", -1)
-    pro_index = mongo.db.questions.find_one({ "pros": {"$in": [0]}})
-    print(pro_index)
+    
     if request.method == "POST":
         pro = {
                 "pro": request.form.get("pro"),
                 "user": user 
             }
-
+       
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
         flash("Successfully Added a Pro")
 

@@ -53,12 +53,13 @@
 </div>
 
 <!-- Search function if returning results -->
-{% if questions|length > 0 %}
+{% if questions.count() > 0 %}
 <!-- Return all questions without "friends only" switched on (unless session user) -->
 <ul class="collapsible">
 {% for question in questions %}
-{% if question.is_friends == "off" or ( session.user == question.created_by and question.is_friends == "on") %}
     <li>
+        {% for friend in friends %}
+        {% if (question.is_friends == "on" and friend.username == question.created_by or session.user == question.created_by) or question.is_friends == "off" %}
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -168,27 +169,10 @@
                 Delete</button>
             {% endif %}
             </div>
-            <!-- If friends is on then only friends can see these questions -->
-            <li>
-            
-            {% if question.is_friends == "on" %}
-            {% for friend in friends %}
-            {% if session.user and ((friend.is_friends_1 == "admin") and (friend.is_friends_2 == "test12")) %}
-            <div class="collapsible-header teal lighten-5">
-                <!-- Question Title-->
-                <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
-                <strong>{{question.question_title }}</strong>
-            </div>
-            <h1>A-{{ friend.is_friends_1 }}-Z</h1>
-            <h1>A-{{ friend.is_friends_2 }}-Z</h1>
-            {% endif %}
-            {% endfor %}<!-- for loop for friends -->
-            {% endif %}<!-- if friends is on -->
-
-            </li>
     </div><!-- collapsible body end div -->
+    {% endif %}
+    {% endfor %}
     </li>
-{% endif %}
 {% endfor %}
 </ul>
 {% endif %}

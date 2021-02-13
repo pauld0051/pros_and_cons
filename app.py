@@ -25,7 +25,7 @@ mongo = PyMongo(app)
 @app.route("/get_questions")
 def get_questions():
     admin = "9dyhnxe8u4"
-    questions = mongo.db.questions.find().sort("_id", -1)
+    questions = list(mongo.db.questions.find().sort("_id", -1))
     if "user" in session:
         # Check to see if the session user is friends with the created_by user
         friends = list(mongo.db.friends.find({'$or': 

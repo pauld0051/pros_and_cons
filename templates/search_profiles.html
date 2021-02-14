@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %} 
-{% if profiles.count() > 0 %} 
+{% if profiles|length > 0 %} 
 {% for profiles in profiles if profiles.username != user.username %}
 <ul class="collapsible">
     <li>
@@ -14,15 +14,15 @@
                     <div class="card-panel card-size grey lighten-5">
                         <span class="left-align light-blue-text text-darken 4">
                             {% if profiles.sex == "female" %} 
-                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
+                            <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
                             {% elif profiles.sex =="male" %}
-                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
+                            <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
                             {% elif profiles.sex =="non-binary" %}
-                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
+                            <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
                             {% elif profiles.sex =="no-say" %}
-                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                            <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                             {% else %}
-                            <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                            <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                             {% endif %}
                         </span>
                     </div>
@@ -30,6 +30,30 @@
                 <div class="row">
                     <div class="col s12 m8">
                         <div class="card-panel grey lighten-5">
+                            <div class="light-blue-text text-darken-4">
+                                {{ is_friends }}
+                                {% if session.user is defined %}
+                                {% if is_friends != None %}
+                                <span><i class="fas fa-check-circle icon-size tooltipped right" data-position="bottom" data-tooltip="Friends"></i></span>
+                                {% elif pending_request.friend_request_from == username and pending_request.friend_request_to == user %}
+                                <form method="POST" action="{{ url_for('friend_requests', user=pending_request.friend_request_to) }}">
+                                    <button type="submit" name="accept" value="{{ pending_request.friend_request_from }}">
+                                        <i class="fas fa-user-check icon-size tooltipped" data-position="bottom" data-tooltip="Accept friend request"></i>
+                                    </button>
+                                    <button type="submit" name="decline" value="{{ pending_request.friend_request_from }}">
+                                        <i class="fas fa-skull-crossbones icon-size tooltipped" data-position="bottom" data-tooltip="Decline friend request"></i>
+                                    </button>
+                                </form>
+                                {% elif pending_request != None %} 
+                                <span><i class="far fa-pause-circle icon-size tooltipped right" data-position="bottom" data-tooltip="Pending request"></i></span>
+                                {% else %}
+                                <form method="POST" action="{{ url_for('add_friend', profile=profiles.username) }}">
+                                    <button type="submit" class="right" id="friends">
+                                        <span><i class="fas fa-user-plus icon-size tooltipped" data-position="bottom" data-tooltip="Add Friend"></i></span>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                {% endif %}
                             <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> 
                                 Name: {% if profiles.fname is defined %} {{ profiles.fname }} 
                                 {% else %} - 

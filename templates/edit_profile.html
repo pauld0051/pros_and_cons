@@ -14,15 +14,15 @@
         <div class="card-panel grey lighten-5 card-size">
             <a href="{{ url_for('profile', username=session['user']) }}"><span class="left-align light-blue-text text-darken 4">
                 {% if profile.sex == "female" %} 
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/female.png') }}" alt="Profile Pic">
                 {% elif profile.sex =="male" %}
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/male.png') }}" alt="Profile Pic">
                 {% elif profile.sex =="non-binary" %}
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/non-binary.png') }}" alt="Profile Pic">
                 {% elif profile.sex =="no-say" %}
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% else %}
-                <img class="profile-pic-size" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
+                <img class="profile-pic-size responsive-img" src="{{ url_for ('static', filename='images/profile_pics/question-mark.png') }}" alt="Profile Pic">
                 {% endif %}
                
             </span></a>

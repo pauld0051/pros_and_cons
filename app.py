@@ -25,31 +25,22 @@ mongo = PyMongo(app)
 @app.route("/get_questions")
 def get_questions():
     admin = "9dyhnxe8u4"
-    questions = mongo.db.questions.find().sort("_id", -1)
-    question_created_by = list(mongo.db.questions.find())
-    created_by = []
-
+    questions = list(mongo.db.questions.find().sort("_id", -1))
+    created_by = [created_by['created_by'] for created_by in questions]
+    is_friends = [is_friends['is_friends'] for is_friends in questions]  
     
     if "user" in session:
-        profile = list(mongo.db.users.find({"username": session["user"]}))[0]
-        friendships = profile['friends']
-        friends = []
-        for friend_id in friendships:
-            friend_profile = list(mongo.db.users.find({"_id": friend_id}))[0]
-            friend_friends = friend_profile['friends']
-            if profile['_id'] in friend_friends:
-                friends.append(friend_profile)
-            
-        
-        print("friends = ", friends)
-        print("friendsips = ", friendships)    
-        
-       
-        return render_template("questions.html", questions=questions, admin=admin, friends=friends)
+        profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
+        profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
+        friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
+        friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+        matched = [matched for matched in created_by if matched in friend_list] # Look to see if any friends match to the created_by list
+        matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
+     
+        return render_template("questions.html", questions=questions, admin=admin, matched=matched)
 
-    else:
-        friends = "wITbuhxpgAn0JZYyXCUr"
-        return render_template("questions.html", questions=questions, admin=admin, friends=friends)
+    else: # If user is not logged in then no need to match for friendships
+        return render_template("questions.html", questions=questions, admin=admin)
 
 
 @app.route("/filters", methods=["GET", "POST"])
@@ -82,11 +73,33 @@ def search():
 
 @app.route("/search_profiles", methods=["GET", "POST"])
 def search_profiles():
+    current_user = mongo.db.users.find_one({"username": session["user"]})
     user = session["user"] or None
     user_profile = mongo.db.users.find_one({"username": user})
     search_profiles = request.form.get("search_profiles")
-    profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
-    return render_template("search_profiles.html", profiles=profiles, user=user_profile)
+    profiles = list(mongo.db.users.find({"$text": {"$search": search_profiles}}))
+    profile_name = []
+    for x in profiles:
+        profile_name.append(x["username"])
+    already_friends = mongo.db.friends.find_one({'$or':
+        [
+            {'$and':[{"is_friends_1": current_user["username"]},
+            {"is_friends_2": profile_name}]},
+            {'$and':[{"is_friends_1": profile_name},
+            {"is_friends_2": current_user["username"]}]}
+        ]})
+        # check to see if user has sent a friend request to this profile
+    pending_request = mongo.db.friend_requests.find_one({'$or':
+        [
+        {'$and':[{"friend_request_from": current_user["username"]},
+        {"friend_request_to": profile_name}]},
+        {'$and':[{"friend_request_from": profile_name},
+        {"friend_request_to": current_user["username"]}]}        
+        ]})
+    return render_template("search_profiles.html", profiles=profiles, is_friends=already_friends,
+    pending_request=pending_request, user=user_profile)
+    
+
 
 
 @app.route("/view_profile/<profile>", methods=["GET", "POST"])
@@ -189,6 +202,7 @@ def register():
                 "state": request.form.get("state"),
                 "country": request.form.get("country"),
                 "sex": request.form.get("sex"),
+                "friends": []
             }
             mongo.db.users.insert_one(register)
 

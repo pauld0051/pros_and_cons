@@ -53,17 +53,15 @@
 </div>
 
 <!-- Search function if returning results -->
-{% if questions.count() > 0 %}
-<!-- Return all questions without "friends only" switched on (unless session user) -->
+{% if questions|length > 0 %}
 <ul class="collapsible">
-{% for question in questions %}
+    {% for question in questions if question.created_by in matched or question.is_friends == "off" or question.created_by == session.user %}
     <li>
-        {% for friend in friends %}
-        {% if (question.is_friends == "on" and friend.username == question.created_by or session.user == question.created_by) or question.is_friends == "off" %}
+        
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
-            <strong>{{question.question_title }}</strong>
+            <strong>{{question.question_title }} {{question.is_friends}}</strong>
         </div>
         <div class="collapsible-body teal lighten-4">
             <!-- Question Text-->
@@ -170,10 +168,24 @@
             {% endif %}
             </div>
     </div><!-- collapsible body end div -->
-    {% endif %}
-    {% endfor %}
     </li>
-{% endfor %}
+
+    <!-- Modal for Deleting Questions -->
+    <div id="{{ question._id }}" class="modal">
+        <div class="modal-content">
+            <h4>Warning - You're about to delete your question!</h4>
+            <p>Are you sure you want to do this? Click "Delete" to delete your question or "Cancel" to return to the questions page.</p>
+        </div>
+        <div class="modal-footer">
+            <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
+                <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
+            <button id="delete" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    {% endfor %}
 </ul>
+
 {% endif %}
 {% endblock %}

@@ -31,14 +31,18 @@
                     <div class="col s12 m8">
                         <div class="card-panel grey lighten-5">
                             <div class="light-blue-text text-darken-4">
-                                {{send_request}}
-                            {% for friend in friends if profiles.username in friend %}
+                            {% for friend in friends %}
+                            {% if profiles.username == friend %}
                             <span><i class="fas fa-check-circle icon-size tooltipped right" data-position="bottom" data-tooltip="Friends"></i></span>    
+                            {% endif %}
                             {% endfor %}
-                            {% for request in requested if profiles.username in request %}
+                            {% for sent_request in requested %}
+                            {% if profiles.username == sent_request %}
                             <span><i class="far fa-pause-circle icon-size tooltipped right" data-position="bottom" data-tooltip="Pending request"></i></span>
+                            {% endif %}
                             {% endfor %}
-                            {% for requests in requested_to if profiles.username in requests %}
+                            {% for received_request in requested_to %}
+                            {% if profiles.username == received_request %}
                             <form method="POST" action="{{ url_for('friend_requests', user=user.username) }}">
                                 <button class="right" type="submit" name="accept" value="{{ profiles.username }}">
                                     <i class="fas fa-user-check icon-size tooltipped" data-position="bottom" data-tooltip="Accept friend request"></i>
@@ -47,14 +51,17 @@
                                     <i class="fas fa-skull-crossbones icon-size tooltipped" data-position="bottom" data-tooltip="Decline friend request"></i>
                                 </button>
                             </form>
+                            {% endif %}
                             {% endfor%}
-                            {% if send_request == True %}
+                            {% for send_request in result_list %}
+                            {% if send_request[0] == profiles.username and send_request[1] == False %}
                             <form method="POST" action="{{ url_for('add_friend', profile=profiles.username) }}">
                                 <button type="submit" class="right" id="friends">
                                     <span><i class="fas fa-user-plus icon-size tooltipped" data-position="bottom" data-tooltip="Add Friend"></i></span>
                                 </button>
                             </form>
                             {% endif %}
+                            {% endfor %}
                             <p><i class="far fa-user prefix light-blue-text text-darken-1"></i> 
                                 Name: {% if profiles.fname is defined %} {{ profiles.fname }} 
                                 {% else %} - 

@@ -73,32 +73,46 @@ def search():
 
 @app.route("/search_profiles", methods=["GET", "POST"])
 def search_profiles():
-    current_user = mongo.db.users.find_one({"username": session["user"]})
     user = session["user"] or None
     user_profile = mongo.db.users.find_one({"username": user})
     search_profiles = request.form.get("search_profiles")
-    profiles = list(mongo.db.users.find({"$text": {"$search": search_profiles}}))
-    profile_name = []
-    for x in profiles:
-        profile_name.append(x["username"])
-    already_friends = mongo.db.friends.find_one({'$or':
-        [
-            {'$and':[{"is_friends_1": current_user["username"]},
-            {"is_friends_2": profile_name}]},
-            {'$and':[{"is_friends_1": profile_name},
-            {"is_friends_2": current_user["username"]}]}
-        ]})
-        # check to see if user has sent a friend request to this profile
-    pending_request = mongo.db.friend_requests.find_one({'$or':
-        [
-        {'$and':[{"friend_request_from": current_user["username"]},
-        {"friend_request_to": profile_name}]},
-        {'$and':[{"friend_request_from": profile_name},
-        {"friend_request_to": current_user["username"]}]}        
-        ]})
-    return render_template("search_profiles.html", profiles=profiles, is_friends=already_friends,
-    pending_request=pending_request, user=user_profile)
-    
+    profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
+
+    # Check if the logged in user is friends with any of the found profiles
+    # Check all the profiles that are found against current friends
+    searched_profiles = list(mongo.db.users.find({"$text": {"$search": search_profiles}}))
+    profile_usernames = []
+    for username in searched_profiles:
+        profile_usernames.append(username["username"]) # Find a list of all the names that came up in the search
+    profile_friends = user_profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
+    friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
+    friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+    matched = [matched for matched in profile_usernames if matched in friend_list] # Look to see if any friends match to the created_by list
+    matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
+    # Check if there is a pending friends request from the logged in user (display pause)
+    from_user = list(mongo.db.friend_requests.find({"friend_request_from": user_profile["username"]})) 
+    request_from = []
+    for profile in from_user:
+        request_from.append(profile["friend_request_to"]) # For each request to a profile
+    requested = [requested for requested in profile_usernames if requested in request_from]
+    # Check if there is a pending friends request from the found profiles (allow accept or decline)
+    to_user = list(mongo.db.friend_requests.find({"friend_request_to": user_profile["username"]}))
+    request_to = []
+    for profile in to_user:
+        request_to.append(profile["friend_request_from"]) # For each request from a profile
+    requested_to = [requested_to for requested_to in profile_usernames if requested_to in request_to]
+    # For everything else allow logged in user to send a friend request
+    if matched == [] and requested == [] and request_to == []:
+        send_requests = True
+    else:
+        send_requests = False
+    print("matched = ", matched)
+    print("requested = ", requested)
+    print("requested_to = ", requested_to)
+    print("send_requests = ", send_requests)
+
+    return render_template("search_profiles.html", profiles=profiles, user=user_profile, friends=matched, 
+    requested=requested, requested_to=requested_to, send_request=send_requests)
 
 
 

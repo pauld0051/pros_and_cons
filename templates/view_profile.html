@@ -65,11 +65,12 @@
     </div>
 
     <!-- Search function if returning results -->
-{% if questions.count() > 0 %}
-
+{% if user is defined %}
+{% if questions|length > 0 %}
 <!-- All questions unsorted -->
 <ul class="collapsible">
     {% for question in questions %}
+    {% if question.is_friends == "off" or (question.is_friends == "on" and friends != None)  %}
     <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
@@ -164,7 +165,7 @@
             <div class="row">
                 {% if question.is_friends == "on" %}
                 <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> {% else %}
-                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == "admin" %}
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == admin %}
                 <div class="right">
                     <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                     Finish</a>
@@ -189,9 +190,11 @@
             </form>
         </div>
     </div>
+    {% endif %}
     {% endfor %}
 </ul>
 {% else %}
 <h3 class="red-text text-darken-3 center-align">No Questions found matching that search</h3>
+{% endif %}
 {% endif %} 
 {% endblock %}

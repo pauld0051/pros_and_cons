@@ -47,11 +47,11 @@ def get_questions():
 def filters():
     sort = request.form.get("sort", "latest")
     if sort == "oldest":
-        questions = mongo.db.questions.find().sort("_id", 1)
+        questions = list(mongo.db.questions.find().sort("_id", 1))
     if sort == "latest":
-        questions = mongo.db.questions.find().sort("added_on", -1)
+        questions = list(mongo.db.questions.find().sort("added_on", -1))
     if sort == "names":
-        questions = mongo.db.questions.find().sort("created_by", 1)        
+        questions = list(mongo.db.questions.find().sort("created_by", 1))
     
     return render_template("questions.html", questions=questions)
 
@@ -67,7 +67,7 @@ def filter_name():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     query = request.form.get("query")
-    questions = mongo.db.questions.find({"$text": {"$search": query}})     
+    questions = list(mongo.db.questions.find({"$text": {"$search": query}}))     
     return render_template("questions.html", questions=questions)
 
 
@@ -118,14 +118,15 @@ def search_profiles():
         requested=requested, requested_to=requested_to, result_list=result_list)
     else:
         return redirect(url_for("login")) 
-        
+
 
 @app.route("/view_profile/<profile>", methods=["GET", "POST"])
 def view_profile(profile):
+    admin = "9dyhnxe8u4"
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
-    questions = mongo.db.questions.find(
-        {"created_by": username})
+    questions = list(mongo.db.questions.find(
+        {"created_by": username}))
     if "user" not in session:
         return render_template("view_profile.html", profile=user_profile, questions=questions)
     current_user = mongo.db.users.find_one({"username": session["user"]})
@@ -150,8 +151,8 @@ def view_profile(profile):
         ]})
         # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
         return render_template("view_profile.html", profile=user_profile, 
-        is_friends=already_friends, pending_request=pending_request, user=logged_in_user, 
-        questions=questions)
+        friends=already_friends, pending_request=pending_request, user=logged_in_user, 
+        questions=questions, admin=admin)
     #  If user is logged in, they get to see their own profile   
     else:
         return redirect(url_for("profile", username=logged_in_user))
@@ -394,7 +395,7 @@ def edit_question(question_id):
 @app.route("/cons/<question_id>", methods=["GET", "POST"])
 def cons(question_id):
     user = session["user"] or None
-    questions = mongo.db.questions.find().sort("added_on", -1)
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
     if request.method == "POST":
         con = {
                 "con": request.form.get("con"),
@@ -410,7 +411,7 @@ def cons(question_id):
 @app.route("/pros/<question_id>", methods=["GET", "POST"])
 def pros(question_id):
     user = session["user"] or None
-    questions = mongo.db.questions.find().sort("added_on", -1)
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
     
     if request.method == "POST":
         pro = {

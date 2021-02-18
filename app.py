@@ -158,6 +158,42 @@ def view_profile(profile):
         return redirect(url_for("profile", username=logged_in_user))
 
 
+@app.route("/remove_friend/<profile>", methods=["GET", "POST"])
+def remove_friend(profile):
+    user_profile = mongo.db.users.find_one({"username": profile}) # Find the profile of the user being looked at
+    profile_id = user_profile["_id"] # Find the ID of the profile of the user being looked at
+    username = user_profile["username"] # Find the username of the ID of the profile being looked at
+    remove_friend_profile = mongo.db.users.find_one({"friends": ObjectId(profile_id)})
+    friends_of_user = user_profile["friends"] # Find the list of friends of the profile being looked at
+    logged_in_user = session["user"] # Name of the logged in user
+    logged_in = mongo.db.users.find_one({"username": logged_in_user}) # Profile of the logged in user
+    logged_id = logged_in["_id"] # ID of the logged in user
+    friends_of_logged_in = logged_in["friends"] # List of friends of the logged in user
+    remove_friend_user = mongo.db.users.find_one({"friends": ObjectId(logged_id)})
+    # Find the friendship in the collection Friends
+    already_friends = mongo.db.friends.find_one({'$or':
+    [
+        {'$and':[{"is_friends_1": logged_in_user},
+        {"is_friends_2": username}]},
+        {'$and':[{"is_friends_1": username},
+        {"is_friends_2": logged_in_user}]}
+    ]})
+        
+    if request.method == "POST":
+        mongo.db.users.find_one_and_update(
+            {"_id": profile_id},
+            {"$pull": {"friends": remove_friend_profile["_id"]}})
+        mongo.db.users.find_one_and_update(
+            {"_id": logged_id},
+            {"$pull": {"friends": remove_friend_user["_id"]}})
+        mongo.db.friends.remove(already_friends)
+
+    flash("Successfully removed friend")      
+    return redirect(url_for("profile", username=logged_in_user))
+
+
+
+
 @app.route("/add_friend/<profile>", methods=["GET", "POST"])
 def add_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile})

@@ -1,6 +1,7 @@
 import os
 import ctypes
 import json
+import re
 from flask import (
     Flask, flash, render_template, 
     redirect, request, session, url_for)
@@ -10,6 +11,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 if os.path.exists("env.py"):
     import env
+
+
+# Validation rules
+
+def validate_name(username):
+    # Validates users first & last names.
+    # Only allow letters, hyphens and underscores. No spaces.
+    return re.match("^[a-zA-Z0-9-_]{5,15}$", username)
 
 
 app = Flask (__name__)
@@ -259,6 +268,11 @@ def register():
         if existing_user:
             flash("Username already exists")
             return redirect(url_for("register"))
+        session["non_registered_user"] = request.form.get("username").lower()
+        if request.form.get("username") == "" or not validate_name(
+           request.form.get("username").lower()):
+            flash("Use only letters, numbers, dashes and underscores")
+            return redirect(url_for("register", store_user=session["non_registered_user"]))
         if password == confirm:     
             register = {
                 "username": request.form.get("username").lower(),

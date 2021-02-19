@@ -9,9 +9,9 @@
                 <div class="input-field col s12">
                     <i class="fas fa-user-plus prefix red-text text-lighten-1"></i>
                     {% if session['non_registered_user'] %}
-                    <input id="username" name="username" type="text" minlength="5" maxlength="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" value="{{ session['non_registered_user'] }}" required />
+                    <input id="username" name="username" type="text" value="{{ session['non_registered_user'] }}" required />
                     {% else %}
-                    <input id="username" name="username" type="text" minlength="5" maxlength="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required />
+                    <input id="username" name="username" type="text" required />
                     <label for="username">Username</label>
                     {% endif %}
                 </div>

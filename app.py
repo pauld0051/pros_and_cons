@@ -16,9 +16,21 @@ if os.path.exists("env.py"):
 # Validation rules
 
 def validate_name(username):
-    # Validates users first & last names.
+    # Validates usernames.
     # Only allow letters, hyphens and underscores. No spaces.
     return re.match("^[a-zA-Z0-9-_]{5,15}$", username)
+
+
+def validate_question(question):
+    # Validates question titles
+    # Only allow printable characters and spaces.
+    return re.match("^[ -~]{5,255}$", question)
+
+
+def validate_question_text(question_text):
+    # Validates question text
+    # Only allow printable characters and spaces.
+    return re.match("^[ -~]{5,1020}$", question_text)
 
 
 app = Flask (__name__)
@@ -36,7 +48,7 @@ def get_questions():
     admin = "9dyhnxe8u4"
     questions = list(mongo.db.questions.find().sort("_id", -1))
     created_by = [created_by['created_by'] for created_by in questions]
-    is_friends = [is_friends['is_friends'] for is_friends in questions]  
+    is_friends = [is_friends['is_friends'] for is_friends in questions]
     
     if "user" in session:
         profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
@@ -211,8 +223,6 @@ def remove_friend(profile):
 
     flash("Successfully removed friend")      
     return redirect(url_for("profile", username=logged_in_user))
-
-
 
 
 @app.route("/add_friend/<profile>", methods=["GET", "POST"])
@@ -412,6 +422,12 @@ def friend_requests(user):
 @app.route("/add_question", methods=["GET", "POST"])
 def add_question():
     if request.method == "POST":
+        if request.form.get("question_title") == "" or not validate_question(
+           request.form.get("question_title")):
+           flash("Use only printable letters.")
+        if request.form.get("question_text") == "" or not validate_question_text(
+            request.form.get("question_text")):
+            flash("Use only printable letters.")
         is_friends = "on" if request.form.get("is_friends") else "off"
         question = {
             "question_title": request.form.get("question_title"),
@@ -420,7 +436,6 @@ def add_question():
             "created_by": session["user"],
             "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
         }
-
         mongo.db.questions.insert_one(question)
         flash("Question Successfully Added")
         return redirect(url_for("get_questions"))
@@ -430,6 +445,7 @@ def add_question():
 
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
 def edit_question(question_id):
+    admin = "9dyhnxe8u4"
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
@@ -451,8 +467,26 @@ def edit_question(question_id):
         return redirect(url_for("get_questions"))
     
     question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-    return render_template("edit_question.html", question=question)
+    return render_template("edit_question.html", question=question, admin=admin)
 
+
+@app.route("/finish_question/<question_id>", methods=["GET", "POST"])
+def finish_question(question_id):
+    admin = "9dyhnxe8u4"
+    user = session["user"] or None
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
+    created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
+    created_by = created_byId["created_by"]
+    if user == created_by or "9dyhnxe8u4":
+        if request.method == "POST":
+            finish = {
+                "$set": {
+                    "finished": request.form.get("finish")
+                }
+            }
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"finished": True}})
+    return redirect(url_for("get_questions"))
 
 @app.route("/cons/<question_id>", methods=["GET", "POST"])
 def cons(question_id):
@@ -467,7 +501,7 @@ def cons(question_id):
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
         flash("Successfully Added a Con")
 
-    return render_template("questions.html", questions=questions )
+    return render_template("questions.html", questions=questions, admin=admin)
 
 
 @app.route("/pros/<question_id>", methods=["GET", "POST"])

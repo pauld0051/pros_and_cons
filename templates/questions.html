@@ -55,9 +55,8 @@
 <!-- Search function if returning results -->
 {% if questions|length > 0 %}
 <ul class="collapsible">
-    {% for question in questions if question.created_by in matched or question.is_friends == "off" or question.created_by == session.user %}
+    {% for question in questions if question.created_by in matched or question.is_friends == "off" or question.created_by == session.user or session.user == admin %}
     <li>
-        
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -83,7 +82,7 @@
                                 {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
                                 </a>{% endif %}</p>
                     {% endfor %}
-                    {% if session.user %}
+                    {% if session.user and question.finished is not defined %}
                     <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
                     <i
                           class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -118,7 +117,7 @@
                     {% for con in question.cons %}
                     <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
                     {% endfor %}
-                    {% if session.user %}
+                    {% if session.user and question.finished is not defined %}
                     <form method="POST" action="{{ url_for('cons', questions=questions, question_id=question._id) }}">
                     <i
                           class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -159,8 +158,10 @@
             {% endif %} 
             {% if session.user|lower == question.created_by|lower or session.user == admin %}
             <div class="right">
-                <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
-                Finish</a>
+                <form method="POST" action="{{ url_for('finish_question', question_id=question._id) }}">
+                <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
+                Finish</button>
+                </form>
                 <a href="{{ url_for('edit_question', question_id=question._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
                 Edit</a>
                 <button data-target="{{ question._id }}" class="btn-small button-size red darken-4 tooltipped modal-trigger" data-position="bottom" data-tooltip="Delete your question">

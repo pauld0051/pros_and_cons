@@ -46,14 +46,27 @@ def get_questions():
 @app.route("/filters", methods=["GET", "POST"])
 def filters():
     sort = request.form.get("sort", "latest")
+    admin = "9dyhnxe8u4"
+    questions = list(mongo.db.questions.find().sort("_id", -1))
+    created_by = [created_by['created_by'] for created_by in questions]
+    if "user" in session:
+        user = session["user"] or None
+        user_profile = mongo.db.users.find_one({"username": user})
+        profile_friends = user_profile["friends"]
+        friends = mongo.db.users.find({"_id": {"$in": profile_friends}})
+        friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+        matched = [matched for matched in created_by if matched in friend_list] # Look to see if any friends match to the created_by list
+        matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
     if sort == "oldest":
         questions = list(mongo.db.questions.find().sort("_id", 1))
     if sort == "latest":
         questions = list(mongo.db.questions.find().sort("added_on", -1))
     if sort == "names":
         questions = list(mongo.db.questions.find().sort("created_by", 1))
+    if sort == "friends":
+        questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
     
-    return render_template("questions.html", questions=questions)
+    return render_template("questions.html", questions=questions, matched=matched, admin=admin)
 
 
 @app.route("/filter_name", methods=["GET", "POST"])
@@ -88,7 +101,6 @@ def search_profiles():
         for username in searched_profiles:
             profile_usernames.append(username["username"]) # Find a list of all the names that came up in the search
         profile_friends = user_profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
-    
         friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
         friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
         matched = [matched for matched in profile_usernames if matched in friend_list] # Look to see if any friends match to the created_by list

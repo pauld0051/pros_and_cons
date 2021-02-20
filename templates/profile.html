@@ -115,7 +115,7 @@
                             <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</a></span></p>
                             {% endfor %}
                             {% if session.user and question.finished is not defined %}
-                            <form method="POST" action="{{ url_for('pros', questions=questions, question_id=question._id) }}">
+                            <form method="POST" action="{{ url_for('pros', question_id=question._id) }}">
                             <i
                                   class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
                                   data-position="bottom"
@@ -150,7 +150,7 @@
                             <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
                             {% endfor %}
                             {% if session.user and question.finished is not defined %}
-                            <form method="POST" action="{{ url_for('cons', questions=questions, question_id=question._id) }}">
+                            <form method="POST" action="{{ url_for('cons', question_id=question._id) }}">
                             <i
                                   class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
                                   data-position="bottom"

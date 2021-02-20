@@ -515,7 +515,7 @@ def finish_question(question_id):
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"finished": True}})
     return redirect(url_for("get_questions"))
 
-@app.route("/cons/<question_id>", methods=["GET", "POST"])
+@app.route("/cons/<question_id>", methods=["POST"])
 def cons(question_id):
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
@@ -533,7 +533,7 @@ def cons(question_id):
     return redirect(url_for("view_question", question_id=question_id))
 
 
-@app.route("/pros/<question_id>", methods=["GET", "POST"])
+@app.route("/pros/<question_id>", methods=["POST"])
 def pros(question_id):
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
@@ -546,7 +546,7 @@ def pros(question_id):
        
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
         flash("Successfully Added a Pro")
-
+    print(question_id)
     return redirect(url_for("view_question", question_id=question_id))
 
 

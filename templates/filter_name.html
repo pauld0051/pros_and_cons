@@ -24,11 +24,12 @@
 <!-- Show all questions on click -->
 <div class="row">
     {% if session.user %}
-    <form class="form-inline" action="{{ url_for('get_questions') }}" method="POST">
+    <form class="form-inline" action="{{ url_for('filters') }}" method="POST">
         <button class="btn btn-small" type="submit">All questions</button>
+    </form>
     {% else %}
     {% endif %}
-    </form>
+
 <!-- Filter questions with choice -->
     <form class="form-inline" action="{{ url_for('filter_name') }}" method="POST">
         <div class="input-field col s1 right dropdown-content_user">
@@ -144,6 +145,9 @@
             <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a>
                 {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
                 {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
+                {% if question.finished is defined %}
+                <span><em>Question is closed for further comments</em></span>
+                {% endif %}
         </div>
         <div class="row">
             {% if question.is_friends == "on" %}

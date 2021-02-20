@@ -21,37 +21,31 @@
     </form>
 </div>
 
-<!-- Show only user's questions on checkbox -->
-<!-- Add if checked then be on filter_name.html but if unchecked be on questions.html -->
+<!-- Show all questions on click -->
 <div class="row">
-    <form action="{{ url_for('get_questions') }}">
-    <span>
-    <label>
-        <input type="checkbox" id="user_content"/>
-        <span>All questions</span>
-    </label>
-    <button class="btn btn-small" type="submit">Sort Now</button>
-    </span>
-</form>
-
-    <form action="{{ url_for('filter_name') }}" method="POST">
-    <div class="input-field col s1 right">
-        <select name="sort">
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
-          <option value="friends">Friends</option>
-          <option value="names">Name</option>
-          <option value="oldest">Popular</option>
-          <option value="oldest">Unanswered</option>
-        </select>
-        <label>Sort</label>
-        <button class="btn btn-small" type="submit">Sort Now</button>
-    </div>
-    </form> 
+    {% if session.user %}
+    <form class="form-inline" action="{{ url_for('get_questions') }}" method="POST">
+        <button class="btn btn-small" type="submit">All questions</button>
+    {% else %}
+    {% endif %}
+    </form>
+<!-- Filter questions with choice -->
+    <form class="form-inline" action="{{ url_for('filter_name') }}" method="POST">
+        <div class="input-field col s1 right dropdown-content_user">
+            <select name="sort">
+              <option value="latest">Latest</option>
+              <option value="oldest">Oldest</option>
+              <option value="oldest">Popular</option>
+              <option value="oldest">Unanswered</option>
+            </select>
+            <label>Sort</label>
+            <button class="btn btn-small" type="submit">Sort Now</button>
+        </div>
+    </form>
 </div>
     
 <!-- Search function if returning results -->
-{% if questions.count() > 0 %}
+{% if questions|length > 0 %}
 
 <!-- All questions unsorted -->
 <ul class="collapsible">

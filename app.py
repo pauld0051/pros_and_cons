@@ -94,23 +94,31 @@ def filters():
         friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
         matched = [matched for matched in created_by if matched in friend_list] # Look to see if any friends match to the created_by list
         matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
-    if sort == "oldest":
-        questions = list(mongo.db.questions.find().sort("_id", 1))
-    if sort == "latest":
-        questions = list(mongo.db.questions.find().sort("added_on", -1))
-    if sort == "names":
-        questions = list(mongo.db.questions.find().sort("created_by", 1))
-    if sort == "friends":
-        questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
+    if request.method == "POST":    
+        if sort == "oldest":
+            questions = list(mongo.db.questions.find().sort("_id", 1))
+        if sort == "latest":
+            questions = list(mongo.db.questions.find().sort("added_on", -1))
+        if sort == "names":
+            questions = list(mongo.db.questions.find().sort("created_by", 1))
+        if sort == "friends":
+            questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
     
     return render_template("questions.html", questions=questions, matched=matched, admin=admin)
 
 
 @app.route("/filter_name", methods=["GET", "POST"])
 def filter_name():
-    names = session["user"]
-    questions = mongo.db.questions.find(
-        {"created_by": session["user"]})
+    user = session["user"] or None
+    sort = request.form.get("sort", "latest")
+    questions = list(mongo.db.questions.find(
+        {"created_by": user}))
+    if request.method == "POST":     
+        if sort == "oldest":
+            questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
+        if sort == "latest":
+            questions = list(mongo.db.questions.find({"created_by": user}).sort("added_on", -1))
+
     return render_template("filter_name.html", questions=questions)
 
 

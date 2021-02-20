@@ -21,35 +21,29 @@
     </form>
 </div>
 
-<!-- Show only user's questions on checkbox -->
-
+<!-- Show only user's questions on click -->
 <div class="row">
 {% if session.user %}
-    <form action="{{ url_for('filter_name') }}" method="POST">
-    <span>
-    <label>
-        <input type="checkbox" id="user_content"/>
-        <span>Your questions only</span>
-    </label>
-    <button class="btn btn-small" type="submit">Sort Now</button>
-    </span>
-</form>
+    <form class="form-inline" action="{{ url_for('filter_name') }}" method="POST">
+        <button class="btn btn-small" type="submit">Your Posts Only</button>
 {% else %}
 {% endif %}
-    <form action="{{ url_for('filters') }}" method="POST">
-    <div class="input-field col s1 right dropdown-content_user">
-        <select name="sort">
-          <option value="latest">Latest</option>
-          <option value="oldest">Oldest</option>
-          <option value="friends">Friends</option>
-          <option value="names">Name</option>
-          <option value="oldest">Popular</option>
-          <option value="oldest">Unanswered</option>
-        </select>
-        <label>Sort</label>
-        <button class="btn btn-small" type="submit">Sort Now</button>
-    </div>
-    </form> 
+    </form>
+<!-- Filter questions with choice -->
+    <form class="form-inline" action="{{ url_for('filters') }}" method="POST">
+        <div class="input-field col s1 right dropdown-content_user">
+            <select name="sort">
+            <option value="latest">Latest</option>
+            <option value="oldest">Oldest</option>
+            <option value="friends">Friends</option>
+            <option value="names">Name</option>
+            <option value="oldest">Popular</option>
+            <option value="oldest">Unanswered</option>
+            </select>
+            <label>Sort</label>
+            <button class="btn btn-small" type="submit">Sort Now</button>
+        </div>
+    </form>
 </div>
 
 <!-- Search function if returning results -->

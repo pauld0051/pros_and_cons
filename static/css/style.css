@@ -65,6 +65,11 @@
     font-size: 22px;
 }
 
+/* Forms inline */
+.form-inline {
+    display: inline;
+}
+
 
 /* Button growth */
 

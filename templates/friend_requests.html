@@ -30,11 +30,11 @@
                         <div class="card-panel grey lighten-5">
                             <div class="right">
                                 <form method="POST" action="{{ url_for('friend_requests', user=request.friend_request_to) }}">
-                                    <button type="submit" name="accept" value="{{ request.friend_request_from }}">
-                                    <i class="fas fa-user-check icon-size tooltipped" data-position="bottom" data-tooltip="Accept friend request"></i>
+                                    <button class="right margin-left btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="accept" value="{{ request.friend_request_from }}">
+                                    <i class="fas fa-user-check icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Accept friend request"></i>
                                     </button>
-                                    <button type="submit" name="decline" value="{{ request.friend_request_from }}">
-                                    <i class="fas fa-skull-crossbones icon-size tooltipped" data-position="bottom" data-tooltip="Decline friend request"></i>
+                                    <button class="btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="decline" value="{{ request.friend_request_from }}">
+                                    <i class="fas fa-skull-crossbones icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Decline friend request"></i>
                                     </button>
                                 </form>
                             </div>

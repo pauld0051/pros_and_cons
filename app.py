@@ -206,6 +206,7 @@ def view_profile(profile):
             {'$and':[{"friend_request_from": username},
             {"friend_request_to": current_user["username"]}]}        
         ]})
+        print(pending_request)
         # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
         return render_template("view_profile.html", profile=user_profile, 
         friends=already_friends, pending_request=pending_request, user=logged_in_user, 

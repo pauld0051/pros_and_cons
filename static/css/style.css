@@ -157,3 +157,8 @@ button.datepicker-day-button {
 .point-size {
     font-size: 4px;
 }
+
+/* Selection buttons requiring padding */
+.margin-left {
+    margin-left: 8px;
+}

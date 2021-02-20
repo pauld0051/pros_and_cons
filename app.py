@@ -64,6 +64,22 @@ def get_questions():
         return render_template("questions.html", questions=questions, admin=admin)
 
 
+@app.route("/view_question/<question_id>")
+def view_question(question_id):
+    questions = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+    admin = "9dyhnxe8u4"
+    created_by = questions["created_by"]
+
+    if "user" in session:
+        profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
+        profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
+        friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
+        friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+        matched = [x for x in friend_list if x == created_by] # Look to see if any friends match to the created_by list
+        matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
+
+    return render_template("view_question.html", question=questions, matched=matched, admin=admin)
+
 @app.route("/filters", methods=["GET", "POST"])
 def filters():
     sort = request.form.get("sort", "latest")
@@ -492,6 +508,7 @@ def finish_question(question_id):
 def cons(question_id):
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
+    
     if request.method == "POST":
         con = {
                 "con": request.form.get("con"),
@@ -500,8 +517,9 @@ def cons(question_id):
 
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
         flash("Successfully Added a Con")
+        
 
-    return render_template("questions.html", questions=questions, admin=admin)
+    return redirect(url_for("view_question", question_id=question_id))
 
 
 @app.route("/pros/<question_id>", methods=["GET", "POST"])
@@ -518,7 +536,7 @@ def pros(question_id):
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
         flash("Successfully Added a Pro")
 
-    return render_template("questions.html", questions=questions )
+    return redirect(url_for("view_question", question_id=question_id))
 
 
 @app.route("/edit_profile/", methods=["GET", "POST"])

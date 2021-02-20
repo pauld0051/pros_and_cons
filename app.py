@@ -78,7 +78,10 @@ def view_question(question_id):
         matched = [x for x in friend_list if x == created_by] # Look to see if any friends match to the created_by list
         matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
 
-    return render_template("view_question.html", question=questions, matched=matched, admin=admin)
+        return render_template("view_question.html", question=questions, matched=matched, admin=admin)
+    else:
+        matched = []
+        return render_template("view_question.html", question=questions, matched=matched, admin=admin)
 
 @app.route("/filters", methods=["GET", "POST"])
 def filters():
@@ -206,7 +209,6 @@ def view_profile(profile):
             {'$and':[{"friend_request_from": username},
             {"friend_request_to": current_user["username"]}]}        
         ]})
-        print(pending_request)
         # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
         return render_template("view_profile.html", profile=user_profile, 
         friends=already_friends, pending_request=pending_request, user=logged_in_user, 

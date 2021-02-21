@@ -46,9 +46,9 @@
                         {{ profile.lname }} 
                         {% else %}
                         {% endif %} </p>
-                    {% if friend_request != None %}    
-                    <a href="{{ url_for ('friend_requests', user=username) }}" class="btn-floating red darken-2 pulse right tooltipped" data-position="bottom" data-tooltip="Friend Requests Waiting"><i class="fas fa-plus-circle"></i></a>
-                    {% endif %}
+                    {% if friend_request != None %}  
+                    <a href="{{ url_for ('friend_requests', user=profile._id, action='none') }}" class="btn-floating red darken-2 pulse right tooltipped" data-position="bottom" data-tooltip="Friend Requests Waiting"><i class="fas fa-plus-circle"></i></a>
+                    {% endif %} 
                     <p><i class="fas fa-globe-asia prefix light-blue-text text-darken-1"></i> Country: {% if profile.country != None %} 
                         {{ profile.country }} 
                         {% else %} No country info to show 

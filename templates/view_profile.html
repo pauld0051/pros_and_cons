@@ -35,6 +35,7 @@
                 <div class="light-blue-text text-darken-4">
                     {% if user is defined %}
                     {% if friends != None %}
+                    
                     <span><i class="fas fa-user-check icon-size tooltipped right" data-position="bottom" data-tooltip="Friends"></i></span>
                     <!-- Modal Trigger -->
                     <a class="modal-trigger" href="#{{ profile.username }}"><i class="fas fa-user-minus icon-size tooltipped" data-position="bottom" data-tooltip="Remove friendship"></i></a>
@@ -53,14 +54,16 @@
                         </div>
                     </div>
                     {% elif pending_request.friend_request_from == profile.username and pending_request.friend_request_to == session.user %}
-                    <form method="POST" action="{{ url_for('friend_requests', user=pending_request.friend_request_to) }}">
-                        <button type="submit" name="accept" class="margin-left right btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" value="{{ pending_request.friend_request_from }}">
-                            <i class="fas fa-user-check icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Accept friend request"></i>
-                        </button>
-                        <button type="submit" name="decline" class="right btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" value="{{ pending_request.friend_request_from }}">
-                            <i class="fas fa-skull-crossbones icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Decline friend request"></i>
-                        </button>
-                    </form>
+                    <form method="POST" action="{{ url_for('friend_requests', user=user_id._id, action='accept_friend') }}">
+                        <button class="right margin-left btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="accept">
+                                <i class="fas fa-user-check icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Accept friend request"></i>
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ url_for('friend_requests', user=user._id, action='decline_friend') }}" class="form-inline">
+                                <button class="btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="decline">
+                                <i class="fas fa-skull-crossbones icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Decline friend request"></i>
+                                </button>
+                            </form>
                     {% elif pending_request != None %} 
                     <span><i class="far fa-pause-circle icon-size tooltipped right" data-position="bottom" data-tooltip="Pending request"></i></span>
                     {% else %}

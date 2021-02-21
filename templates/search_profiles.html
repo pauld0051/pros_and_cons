@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block content %}
 {% if profiles.count() > 0 %} 
 {% for profiles in profiles if profiles.username != user.username %}
+
 <ul class="collapsible">
     <li>
         <div class="collapsible-header teal lighten-5">
@@ -43,12 +44,14 @@
                             {% endfor %}
                             {% for received_request in requested_to %}
                             {% if profiles.username == received_request %}
-                            <form method="POST" action="{{ url_for('friend_requests', user=user.username) }}">
-                                <button class="margin-left right btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="accept" value="{{ profiles.username }}">
-                                    <i class="fas fa-user-check icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Accept friend request"></i>
+                            <form method="POST" action="{{ url_for('friend_requests', user=user._id, action='accept_friend') }}" class="form-inline">
+                                <button class="right margin-left btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="accept">
+                                <i class="fas fa-user-check icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Accept friend request"></i>
                                 </button>
-                                <button class="right btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="decline" value="{{ profiles.username }}">
-                                    <i class="fas fa-skull-crossbones icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Decline friend request"></i>
+                            </form>
+                            <form method="POST" action="{{ url_for('friend_requests', user=user._id, action='decline_friend') }}" class="form-inline">
+                                <button class="btn-floating btn-small no-shadow waves-effect waves-light blue-grey lighten-4 grow" type="submit" name="decline">
+                                <i class="fas fa-skull-crossbones icon-size tooltipped grey-text text-darken-4" data-position="bottom" data-tooltip="Decline friend request"></i>
                                 </button>
                             </form>
                             {% endif %}

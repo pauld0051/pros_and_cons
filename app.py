@@ -211,8 +211,8 @@ def view_profile(profile):
         ]})
         # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
         return render_template("view_profile.html", profile=user_profile, 
-        friends=already_friends, pending_request=pending_request, user=logged_in_user, 
-        questions=questions, admin=admin)
+        friends=already_friends, pending_request=pending_request, user=current_user["username"], 
+        questions=questions, admin=admin, user_id=current_user)
     #  If user is logged in, they get to see their own profile   
     else:
         return redirect(url_for("profile", username=logged_in_user))
@@ -390,60 +390,61 @@ def profile(username):
     return redirect(url_for("login"))
 
 
-@app.route("/friend_requests/<user>", methods=["GET", "POST"])        
-def friend_requests(user):
-    user = session["user"]
-    logged_in_user = mongo.db.users.find_one({"username": session["user"] })
-    logged_in_id = logged_in_user["_id"]
-    requested_from = []
-
-    # fetch all requests for current user
-    requests = list(mongo.db.friend_requests.find({"friend_request_to": user}))
-
-    # project list of requestors profiles 
-    requests_from = list(map(lambda x: x['friend_request_from'], requests))
-
-    # fetch all requestors profiles
-    profiles = mongo.db.users.find({"username": {"$in":requests_from}})
-
-    # transform list of requestors profiles into dict
-    requestors = {profile['username']: profile for profile in profiles}
-    
-    if request.method == "POST":
-        accept_friend = request.form.get("accept")
-        decline_friend = request.form.get("decline")
+@app.route("/friend_requests/<user>/<action>", methods=["GET", "POST"])        
+def friend_requests(user, action):
+    if user:
+        logged_in_user = mongo.db.users.find_one({"_id": ObjectId(user)})
+        logged_user = logged_in_user["username"]
+        requested_from = []
+        # fetch all requests for current user
+        requests = list(mongo.db.friend_requests.find({"friend_request_to": logged_user}))
+        # project list of requestors profiles 
+        requests_from = list(map(lambda x: x['friend_request_from'], requests))
+        # fetch all requestors profiles
+        profiles = mongo.db.users.find({"username": {"$in":requests_from}})
+        # transform list of requestors profiles into dict
+        requestors = {profile['username']: profile for profile in profiles}
         
-        if accept_friend:
-            requestors_user = mongo.db.users.find_one({"username": accept_friend})
-            requestors_id = requestors_user["_id"]
-            friendship = {
-                "is_friends_1": accept_friend,
-                "is_friends_2": user
-            }
-            request_accepted = {
-                "friend_request_from": accept_friend,
-                "friend_request_to": user
-            }
-            mongo.db.friend_requests.delete_one(request_accepted)
-            mongo.db.friends.insert_one(friendship)
-            mongo.db.users.find_one_and_update({"_id": logged_in_id},
-                {"$push": {"friends": requestors_id}})
-            mongo.db.users.find_one_and_update({"_id": requestors_id},
-                {"$push": {"friends": logged_in_id}})
-            flash("Friend request accepted")
+        if request.method == "POST":
+            if action == 'accept_friend':
+                user_name = mongo.db.users.find_one({"username": session["user"]})
+                user_id = user_name["_id"] 
+                accept_friend = request.form.get("accept")
+                requestors_user = mongo.db.users.find_one({"username": accept_friend})
+                requestors_id = requestors_user["_id"]                
+                friendship = {
+                    "is_friends_1": accept_friend,
+                    "is_friends_2": logged_user
+                }
+                request_accepted = {
+                    "friend_request_from": accept_friend,
+                    "friend_request_to": logged_user
+                }
+                mongo.db.friend_requests.delete_one(request_accepted)
+                mongo.db.friends.insert_one(friendship)
+                mongo.db.users.find_one_and_update({"_id": user_id},
+                    {"$push": {"friends": requestors_id}})
+                mongo.db.users.find_one_and_update({"_id": requestors_id},
+                    {"$push": {"friends": user_id}})
+                flash("Friend request accepted")
+                
+                return redirect(url_for("friend_requests", user=user_id, action=action))
             
-            return redirect(url_for("friend_requests", requests=requests, requestors=requestors, user=session["user"]))
-            
-        else:
-            request_declined = {
-                "friend_request_from": decline_friend,
-                "friend_request_to": user
-            }
-            mongo.db.friend_requests.delete_one(request_declined)
-            flash("Friend request declined")
-            return redirect(url_for("friend_requests", requests=requests, requestors=requestors, user=session["user"]))
+            if action == 'decline_friend':
+                user_name = mongo.db.users.find_one({"username": session["user"]})
+                user_id = user_name["_id"] 
+                decline_friend = request.form.get("decline")
+                request_declined = {
+                    "friend_request_from": decline_friend,
+                    "friend_request_to": logged_user
+                }
+                mongo.db.friend_requests.delete_one(request_declined)
+                flash("Friend request declined")
+                return redirect(url_for("friend_requests", user=user_id, action=action))
+    
+        return render_template("friend_requests.html", requests=requests, requestors=requestors, logged_in=logged_in_user, user=logged_user)
 
-    return render_template("friend_requests.html", requests=requests, requestors=requestors)
+    return redirect(url_for("login"))
 
 
 @app.route("/add_question", methods=["GET", "POST"])
@@ -546,7 +547,7 @@ def pros(question_id):
        
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
         flash("Successfully Added a Pro")
-    print(question_id)
+
     return redirect(url_for("view_question", question_id=question_id))
 
 

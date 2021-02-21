@@ -182,6 +182,36 @@ def search_profiles():
 
 @app.route("/view_profile/<profile>", methods=["GET", "POST"])
 def view_profile(profile):
+    user_profile = mongo.db.users.find_one({"username": profile}) # Find the profile of the user being looked at
+    profile_id = user_profile["_id"] # Find the ID of the profile of the user being looked at
+    username = user_profile["username"] # Find the username of the ID of the profile being looked at
+    remove_friend_profile = mongo.db.users.find_one({"friends": ObjectId(profile_id)})
+    friends_of_user = user_profile["friends"] # Find the list of friends of the profile being looked at
+    logged_in_user = session["user"] # Name of the logged in user
+    logged_in = mongo.db.users.find_one({"username": logged_in_user}) # Profile of the logged in user
+    logged_id = logged_in["_id"] # ID of the logged in user
+    friends_of_logged_in = logged_in["friends"] # List of friends of the logged in user
+    remove_friend_user = mongo.db.users.find_one({"friends": ObjectId(logged_id)})
+    # Find the friendship in the collection Friends
+    already_friends = mongo.db.friends.find_one({'$or':
+    [
+        {'$and':[{"is_friends_1": logged_in_user},
+        {"is_friends_2": username}]},
+        {'$and':[{"is_friends_1": username},
+        {"is_friends_2": logged_in_user}]}
+    ]})
+    print("user_profile = ", user_profile)
+    print("profile_id = ", profile_id)
+    print("username = ", username)
+    print("remove_friend_profile = ", remove_friend_profile)
+    print("friends_of_user = ", friends_of_user)
+    print("logged_in_user = ", logged_in_user)
+    print("logged_in = ", logged_in)
+    print("logged_id = ", logged_id)
+    print("friends_of_logged_in = ", friends_of_logged_in)
+    print("remove_friend_user = ", remove_friend_user)
+    print("already_friends = ", already_friends)
+
     admin = "9dyhnxe8u4"
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
@@ -223,29 +253,29 @@ def remove_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile}) # Find the profile of the user being looked at
     profile_id = user_profile["_id"] # Find the ID of the profile of the user being looked at
     username = user_profile["username"] # Find the username of the ID of the profile being looked at
-    remove_friend_profile = mongo.db.users.find_one({"friends": ObjectId(profile_id)})
+    remove_friend_profile = mongo.db.users.find_one({"friends": ObjectId(profile_id)}) # Finds the profile of the logged in user
     friends_of_user = user_profile["friends"] # Find the list of friends of the profile being looked at
     logged_in_user = session["user"] # Name of the logged in user
     logged_in = mongo.db.users.find_one({"username": logged_in_user}) # Profile of the logged in user
     logged_id = logged_in["_id"] # ID of the logged in user
     friends_of_logged_in = logged_in["friends"] # List of friends of the logged in user
-    remove_friend_user = mongo.db.users.find_one({"friends": ObjectId(logged_id)})
+    remove_friend_user = mongo.db.users.find_one({"friends": ObjectId(logged_id)}) # Find the friend in the array with this ID
     # Find the friendship in the collection Friends
     already_friends = mongo.db.friends.find_one({'$or':
     [
-        {'$and':[{"is_friends_1": logged_in_user},
-        {"is_friends_2": username}]},
-        {'$and':[{"is_friends_1": username},
+        {'$and':[{"is_friends_1": logged_in_user}, # Logged in username
+        {"is_friends_2": username}]}, # The profile being looked at
+        {'$and':[{"is_friends_1": username}, # The inverse of the first statement
         {"is_friends_2": logged_in_user}]}
     ]})
         
     if request.method == "POST":
         mongo.db.users.find_one_and_update(
-            {"_id": profile_id},
-            {"$pull": {"friends": remove_friend_profile["_id"]}})
+            {"_id": profile_id}, # The ID of the profile being looked at
+            {"$pull": {"friends": logged_id}}) # Removes this friend (user that is logged in)
         mongo.db.users.find_one_and_update(
-            {"_id": logged_id},
-            {"$pull": {"friends": remove_friend_user["_id"]}})
+            {"_id": logged_id}, # The ID of the logged in user
+            {"$pull": {"friends": profile_id}}) # Removes the profile that is being looked at
         mongo.db.friends.remove(already_friends)
 
     flash("Successfully removed friend")      

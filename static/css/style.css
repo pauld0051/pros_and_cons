@@ -115,7 +115,8 @@
 
 /* Prevent Materialize Textarea cutting off the bottom of lower case g, j and y */
 
-#question_text {
+#question_text,
+#message_text {
     line-height: 24px;
 }
 

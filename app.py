@@ -604,6 +604,35 @@ def delete_question(question_id):
     return redirect(url_for("get_questions"))
 
 
+@app.route("/help")
+def help():
+
+    return render_template("help.html")
+
+
+@app.route("/send_message", methods=["GET", "POST"])
+def send_message():
+
+    if "user" in session: 
+        if request.method == "POST":
+            message = request.form["message"]
+            
+            submit = {
+                "type": message,
+                "message": request.form.get("message_text"),
+                "username": session["user"]
+            }
+
+            mongo.db.messages.insert_one(submit)
+            flash("Message Sent")
+
+            return redirect(url_for("get_questions"))
+    else:
+        return redirect(url_for("login"))    
+
+    return render_template("send_message.html")
+
+
 @app.route("/logout")
 def logout():
     # remove user from session cookie

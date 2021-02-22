@@ -65,6 +65,24 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
 
     - View profiles of friends and unfriend them if needed
 
+    - Finish a question they have started so that no more responses can be added
+
+    - Edit or update a question the user started
+
+    - Delete a question that the user started
+
+    - Search for questions based on keywords
+
+  - Users who are not logged in can:
+
+    - View all open questions that do not have the "Friends Only" switch set to "on"
+
+    - View the profile of the user who wrote the question
+
+    - Search for questions
+
+To avoid excessive spamming or unsolicited messages, users must be logged in to add questions or pros and cons. Non-logged in users do not have a profile page, but can view registered users profiles, but can not add friendships.
+
 **Known bugs:**
 
 1. Materialize navbar links "flash" on click. This occurs in Firefox and appears to be due to either hardware acceleration or an extension installed on Firefox. During development Firefox was started in safemode which removed the issue completely. Some users may therefore experience the flashing when clicking links on the navigation pane at the top of the screen.

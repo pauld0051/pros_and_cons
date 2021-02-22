@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block content %}
+
+<h3 class="blue-text text-darken-3 center-align">Send a message to the administrator</h3>
+<p>Fill out the form appropriately. Make sure all fields are completed. Your administrator will read your message. You will not receive a reply 
+    but if there is actionable content, a thorough investigation will take place before any further action is taken.</p>
+
+<div class="row card-panel grey lighten-5">
+    <form class="col s12" method="POST" action="{{ url_for('send_message') }}">
+        <div class="row">
+            <!-- Add title -->
+          <div class="input-field col s12">
+            <p>What is your reason to send a message?</p>
+            <p>
+                <label>
+                  <input name="message" value="harassment" type="radio" />
+                  <span>Harassment</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input name="message" value="hate" type="radio" />
+                  <span>Hate Speech</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input name="message" value="spam" type="radio"  />
+                  <span>Spam</span>
+                </label>
+              </p>
+              <p>
+                <label>
+                  <input name="message" value="other" type="radio" />
+                  <span>Other</span>
+                </label>
+              </p>
+          </div>
+        </div>  
+        <div class="row">
+            <!-- Add message -->
+          <div class="input-field col s12">
+            <i
+              class="fas fa-comment prefix blue-text text-darken-3 tooltipped"
+              data-position="bottom"
+              data-tooltip="Describe in detail, with links where needed, of why you're filing this report"></i>
+            <textarea
+              id="message_text"
+              name="message_text"
+              class="materialize-textarea validate"
+              required></textarea>
+            <label for="message_text">Your Message</label>
+          </div>
+        </div>
+        <button type="submit" class="btn-large blue darken-3 waves-effect waves-light">
+            Submit
+            <i class="fas fa-paper-plane right"></i>
+          </button>
+    </form>
+<small class="grey-text text-darken-3">You should include all the details including any usernames involved, links to the content that you would like investigated and any information you can provide.</small>
+</div> <!-- End Row-->
+
+{% endblock %}

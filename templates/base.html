@@ -29,7 +29,7 @@
     <!-- Dropdown Structure Mobile-->
     <ul id="dropdown_nav" class="dropdown-content">
         <li><a href="#"><i class="fas fa-user-friends grey-text text-darken-4"></i><span> Friends</span></a></li>
-        <li><a href="#"><i class="fas fa-question-circle grey-text text-darken-4"></i><span> Help</span></a></li>
+        <li><a href="{{ url_for('help') }}"><i class="fas fa-question-circle grey-text text-darken-4"></i><span> Help</span></a></li>
         <li class="divider"></li>
         <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt grey-text text-darken-4"></i><span>
                     Logout</span></a></li>
@@ -37,7 +37,7 @@
     <!-- Dropdown Structure Desktop-->
     <ul id="dropdown_nav_desktop" class="dropdown-content">
         <li><a href="#"><i class="fas fa-user-friends grey-text text-darken-4"></i><span>Friends</span></a></li>
-        <li><a href="#"><i class="fas fa-question-circle grey-text text-darken-4"></i><span>Help</span></a></li>
+        <li><a href="{{ url_for('help') }}"><i class="fas fa-question-circle grey-text text-darken-4"></i><span>Help</span></a></li>
         <li class="divider"></li>
         <li><a href="{{ url_for('logout') }}"><i
                     class="fas fa-sign-out-alt grey-text text-darken-4"></i><span>Logout</span></a></li>

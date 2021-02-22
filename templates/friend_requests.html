@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block content %} 
+{% extends "base.html" %} {% block content %}
+{% if requests|length > 0 %} 
 {% for request in requests %}
 
 <ul class="collapsible">
@@ -62,5 +63,7 @@
     </li>
     {% endfor %}
 </ul>
-
+{% else %}
+<h3 class="red-text text-darken-3 center-align">There's no more friend requests today.</h3>
+{% endif %}
 {% endblock %}

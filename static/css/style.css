@@ -107,6 +107,11 @@
     width: 74px;
 }
 
+/* Unfriend modal buttons */
+.modal-button-size {
+    width: 88px;
+}
+
 
 /* Prevent Materialize Textarea cutting off the bottom of lower case g, j and y */
 

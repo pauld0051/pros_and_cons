@@ -152,7 +152,7 @@
         </div>
         <div class="row">
             {% if question.is_friends == "on" %}
-            <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> 
+            <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only friends can view this"></i> 
             {% else %}
             <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> 
             {% endif %} 
@@ -183,14 +183,15 @@
         </div>
         <div class="modal-footer">
             <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
-                <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
-            <button id="delete" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+                <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
+            <button id="delete" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
             </form>
         </div>
     </div>
 
     {% endfor %}
 </ul>
-
+{% else %}
+<h3 class="red-text text-darken-3 center-align">No questions match that criteria.</h3>
 {% endif %}
 {% endblock %}

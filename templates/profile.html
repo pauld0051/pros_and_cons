@@ -187,7 +187,7 @@
             </div>
             <div class="row">
                 {% if question.is_friends == "on" %}
-                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> {% else %}
+                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your can view this"></i> {% else %}
                 <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> {% endif %} {% if session.user|lower == question.created_by|lower or session.user == "admin" %}
                 <div class="right">
                     <a href="" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
@@ -208,15 +208,15 @@
         </div>
         <div class="modal-footer">
             <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
-                <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
-            <button id="delete" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+                <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
+            <button id="delete" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
             </form>
         </div>
     </div>
     {% endfor %}
 </ul>
 {% else %}
-<h3 class="red-text text-darken-3 center-align">No Questions found matching that search</h3>
+<h3 class="red-text text-darken-3 center-align">Consider asking some questions in the community</h3>
 {% endif %} 
 
 {% endblock %}

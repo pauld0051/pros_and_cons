@@ -7,12 +7,63 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
 ## CONTENTS
 
 - [Description](#description)
+  - [Goals](#site-goals)
 
 - [Known Bugs](#known-bugs)
 
 ## DESCRIPTION
 
 **Pros and Cons** is a social media website aimed at bringing people from around the world together to answer user based questions on any topic imaginable. Users will have other users answer their question with the pros and cons of their upcoming decisions. The site will mimic similar social media sites and users can only answer questions when they are logged in. Users will be able to easily register and currently will not require any identification. All users will need to login to answer questions is a user name and password. Users will be able to allow public responses to their questions, or responses from their friends only.
+
+## SITE GOALS
+
+- Pros and Cons is a social media website that focuses on user's asking questions that they'd like to weigh up all possibilities before carrying out the said question; users can:
+
+  - New Users can:
+
+    - Register with a unique username and password without special characters
+
+    - Stay logged in after registration without the need to continually sign in by simply clicking the checkbox at the bottom of the registration page
+
+    - Check their password is correct before registering, a new user can not register if passwords do not match
+  
+  - Existing users who are logged in will be able to:
+
+    - View the site and all questions that are open for public view
+
+    - Sort all the questions by date added latest and oldest, friends only, user's posts only
+
+    - Send and accept friend requests
+
+    - Search for new friends by username, first name, last name, country and state
+
+    - View friends profiles to see their questions
+
+    - Adjust their profile to include their first name, last name, country and state as well as a hidden birthday
+
+    - Change their profile picture based on sex/gender to either male, female, non-binary or rather not say, all fields in the profile are optional
+
+    - Click on the home button to view all questions, including questions from the user's friends that are set to "friends only"
+
+    - Click on any question on the questions page, read it and choose whether to add a pro or a con to that question
+
+    - Adding a pro or a con opens the question to the browser so the user can add multiple pros and cons
+
+    - Click on the person who created the question to see their profile
+
+    - Send a friend request via the profile page of a viewed profile
+
+    - Click on a question to open it in the browser or just browse the question from the homepage
+
+    - Write a pro or a con on any browsed question on the homepage which then opens the question in the browser window for more pros and cons to be added
+
+    - Write their own question via the "ask questions" link in the header
+
+    - Add a title to the question and a body for more explanation
+
+    - Set the question to public, allowing anyone to answer or to "friends only" meaning only friends can answer
+
+    - View profiles of friends and unfriend them if needed
 
 **Known bugs:**
 

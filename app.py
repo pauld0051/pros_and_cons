@@ -97,7 +97,11 @@ def filters():
         friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
         matched = [matched for matched in created_by if matched in friend_list] # Look to see if any friends match to the created_by list
         matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
-    if request.method == "POST":    
+    
+    # Sort depending on user request
+    if request.method == "POST":
+        if "user" not in session:
+            matched = []    
         if sort == "oldest":
             questions = list(mongo.db.questions.find().sort("_id", 1))
         if sort == "latest":
@@ -106,8 +110,11 @@ def filters():
             questions = list(mongo.db.questions.find().sort("created_by", 1))
         if sort == "friends":
             questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
+
     
     return render_template("questions.html", questions=questions, matched=matched, admin=admin)
+
+   
 
 
 @app.route("/filter_name", methods=["GET", "POST"])
@@ -527,9 +534,7 @@ def cons(question_id):
                 "user": user 
             }
 
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
-        flash("Successfully Added a Con")
-        
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})        
 
     return redirect(url_for("view_question", question_id=question_id))
 
@@ -546,7 +551,6 @@ def pros(question_id):
             }
        
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
-        flash("Successfully Added a Pro")
 
     return redirect(url_for("view_question", question_id=question_id))
 

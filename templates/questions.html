@@ -35,7 +35,10 @@
             <select name="sort">
             <option value="latest">Latest</option>
             <option value="oldest">Oldest</option>
+            {% if session.user %}
             <option value="friends">Friends</option>
+            {% else %}
+            {% endif %}
             <option value="names">Name</option>
             <option value="oldest">Popular</option>
             <option value="oldest">Unanswered</option>

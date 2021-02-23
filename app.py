@@ -114,8 +114,6 @@ def filters():
     
     return render_template("questions.html", questions=questions, matched=matched, admin=admin)
 
-   
-
 
 @app.route("/filter_name", methods=["GET", "POST"])
 def filter_name():
@@ -381,6 +379,7 @@ def login():
 
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
+    admin = "9dyhnxe8u4"
     # Get questions that the user has input themselves
     questions = mongo.db.questions.find(
         {"created_by": session["user"]})
@@ -390,9 +389,18 @@ def profile(username):
         {"username": session["user"]})["username"]
     user_profile = mongo.db.users.find_one({"username": user})
     friend_request = mongo.db.friend_requests.find_one({"friend_request_to": user})
-    if session["user"]:
+    
+    if session["user"] == admin:
+        messages = mongo.db.messages.find()
         return render_template("profile.html", username=username, profile=user_profile, 
-        friend_request=friend_request, questions=questions)
+        friend_request=friend_request, questions=questions, admin=admin, messages=messages)
+    
+    if session["user"]:
+        messages = None
+        return render_template("profile.html", username=username, profile=user_profile, 
+        friend_request=friend_request, questions=questions, admin=admin, messages=messages)
+    
+    
 
     return redirect(url_for("login"))
 

@@ -9,6 +9,8 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
 - [Description](#description)
   - [Goals](#site-goals)
 
+- [Admin Responsibilities](#admin-responsibilities)
+
 - [Known Bugs](#known-bugs)
 
 ## DESCRIPTION
@@ -112,8 +114,12 @@ The difference in this technique compared with just viewing the profile is that 
 
 ## SECURITY
 
-An admin user was set up using a random key generator to prevent the possible forcing entry using the "admin" username. The Jinja template allows a user that matches the "created_by" database tag to update or delete an entry. But an admin given a secret username will be able to also update and delete entries if deemed inappropriate. As more admins are employed, more admin names can be introduced into the backend. No admin will be given the title 'admin' as their username.
+An admin user was set up using a random key generator to prevent the possible forcing entry using the "admin" username. 
 
-To prevent users from accessing certain areas of the page when they're not logged in Flask will check for session users. The homepage requires users to be logged in to check their friendships against those asking questions. If someone is not logged in they are given the impossible user name: wITbuhxpgAn0JZYyXCUr.
+To prevent users from accessing certain areas of the page when they're not logged in Flask will check for session users. The homepage requires users to be logged in to check their friendships against those asking questions.
 
-This works on two levels - 1) a username can not have capital letters in it. And 2) the name would be unlikely to be chosen by any user due to its randomness. 
+## ADMIN RESPONSIBILITIES
+
+The admin role plays a very special part in Pros and Cons. The admin is given a secret username but has unlimited access to all posts, profiles, questions, pros and cons as well as an ability to receive messages from users. An admin is the only user who can currently receive messages. For security reasons, these messages are only available to the admin user account and can only be accessed with the admin user account. At present, these messages will only be available from manually accessing them in MongoDB, however, a count is accessible on the admin user profile page. No other page has access to this count. Messages are deleted manually from MongoDB as they are actioned.
+
+The admin user account can edit, delete or finish any questions that do not meet the standards accepted by Pros and Cons as a friendly and safe social media outlet. If users continually breach the site rules, their account may be removed from the MongoDB database. Currently this is done manually.

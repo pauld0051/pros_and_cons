@@ -1,5 +1,160 @@
 {% extends "base.html" %} {% block content %}
 
-<a href="{{ url_for('send_message') }}">Send A Message</a>
+<ul class="collapsible">
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>Reporting a user or a post</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>Your safety and wellbeing are our priority and we offer a number of easy tools for you to use to protect yourself from bullying, harassment, 
+                        hate-speech, spam and more. 
+                    </p>
+                    <ul>
+                        <ol>Set your questions to "Friends Only" (<i class="fas fa-user-friends blue-text text-darken-3"></i>) that way only people you know will be able to see your posts.</ol><br>
+                        <ol>Unfriend (<i class="fas fa-user-minus blue-text text-darken-3"></i>) users who are harassing or bullying you.</ol><br>
+                        <ol><a href="{{ url_for('send_message') }}">Report</a> an incident immediately by filling out a short message. Your administrator will investigate 
+                        within 2 working days.</ol><br>
+                    </ul>
+                    <p>The best protection against bullying and harassment is not to retaliate. Most bullies are attention seekers, and you giving them that attention 
+                        feeds their need for attention. Ignoring them takes away any power they might think they have. 
+                    </p>
+                    <p>If you or someone you know or another user appears to be in danger, do not keep it secret, tell someone you trust immediately and <a href="{{ url_for('send_message') }}">report</a> 
+                         it as soon as possible to us.</p>
+                </div>
+            </div>
+        </div>
+    </li>
+    <br>
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>Adding a question</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>You can add any range of questions that you want to check. Be specific in your title but more general in your text about the question. The 
+                        more specific you are about a topic, the more replies you're likely to get. Click on the question mark symbol (<i class="fas fa-question grey-text text-darken-4"></i>) at the top of any page to ask 
+                        question.
+                    </p>
+                    <ul>
+                        <ol>Ask questions that have clear pros and cons associated.</ol><br>
+                        <ol>Be clear about what you're asking, and edit your question if replies don't seem to be targeting your question.</ol><br>
+                    </ul>
+                    <p>Pros and Cons is about being social and getting the answers to difficult questions or just a push in the right direction. Make sure you get involved 
+                        with answering questions with pros and cons too, that way you'll get a real feel for how the site works.  
+                    </p>
+                </div>
+            </div>
+        </div>
+    </li>
+    <br>
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>Adding a pro or a con</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>You can submit a pro and/or con to any post that is open to you (either by your friends or public posts). Simply add your comment to either 
+                        a pro or a con and submit. This will open the same question in the browser and allow you to add more pros or cons to the question. The 
+                        more you're involved, the more people will become involved in your posts. 
+                    </p>
+                    <ul>
+                        <ol>Give specific replies and be careful not to repeat other people's responses.</ol><br>
+                        <ol>Give personal experience, anecdote, or even an evidence based approach to your responses.</ol><br>
+                    </ul>
+                    <p>Users who ask questions can then weigh up the respective pros and cons to determine their best course of action. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </li>
+    <br>
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>Cancelling your account</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>You can cancel your account at anytime by sending us a message <a href="{{ url_for('send_message') }}">here</a>. Of course we don't want to see you go, but 
+                        your administrator will help remove your account manually. This is done to avoid accidental deletion and will take about 2 working days to complete. It is 
+                        your responsibility to delete your posts. They do not go when you go. If they remain, and someone joins with that identical name, they will have control over 
+                        your posts. You can simply delete your posts by clicking the delete button on each question you wrote. You can do this from your profile (<i class="fas fa-user grey-text text-darken-4"></i>)
+                         page. 
+                    </p>
+                    <ul>
+                        <ol>We'll be sorry to see you go, but you are welcome to join back up again at anytime.</ol><br>
+                        <ol>Let us also know what we could have done to improve your experience.</ol><br>
+                    </ul>
+                    <p>Currently you can not delete your pros or cons that you replied to within someone's question. If you really need one of those removed, <a href="{{ url_for('send_message') }}">let us know </a>which post 
+                        and which reply you want removed. This can be actioned within two working days. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </li>
+    <br>
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>Strict Policies - No Warnings</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>You can post almost anything you like, and we 100% accept your freedom to speech. However, that freedom of speech becomes limited when it involves hate speech,
+                        harassment, spam, advertising, public-health misinformation, defamation or any illegal activities. 
+                        You are being provided a platform to speak from, and we expect you to use this freely and within reason. Don't make us delete your posts. 
+                    </p>
+                    <ul>
+                        <ol>Any hate-speech, harassment, spam, or notes on an illegal activity will be removed immediately and without warning.</ol><br>
+                        <ol>Any administrator reserves the right to delete any post that goes against Pros and Cons Terms and Conditions. This will be without warning.</ol><br>
+                    </ul>
+                    <p>There is no appeal process for content that was removed. However, we do run a three strike policy for less serious offences. If an offense is repeated, 
+                        an entire profile could be removed and all posts associated. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </li>
+    <br>
+    <li>
+        <div class="collapsible-header teal lighten-5">
+            <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
+            <strong>Public Health - Especially during a pandemic</strong>
+        </div>
+        <div class="collapsible-body teal lighten-4">
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>You can post information and questions regarding public health, in particular the current coronavirus pandemic. However, anti-vaccination talk will be removed 
+                        immediately and without warning. Vaccination is considered the safest and most effective measure to protecting against many infectious diseases. Current 
+                        coronavirus vaccination programs are in place and have been highlighted by an extremely safe and potentially effective vaccine. 
+
+                        We understand some of you might be in the medical profession and would like to give information regarding this to the public. This is not the place to do it, 
+                        and therefore all posts that discuss public health, that contain misinformation (based on current best evidence) will be deleted to protect our communities. 
+                    </p>
+                    <ul>
+                        <ol>All anti-vaccination content will be deleted immediately.</ol><br>
+                        <ol>All misinformation regarding the current pandemic will be deleted immediately.</ol><br>
+                        <ol>Any administrator reserves the right to delete any post that goes against Pros and Cons Terms and Conditions. This will be without warning.</ol><br>
+                    </ul>
+                    <p>There is no appeal process for content that was removed. However, we do run a three strike policy for less serious offences. If an offense is repeated, 
+                        an entire profile could be removed and all posts associated.
+                        
+                        This is not an argument on your freedom of speech, you have every right to your freedom of speech, we do not need to provide a platform for you to do that from. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </li>
+    <br>
+</ul>
 
 {% endblock %}

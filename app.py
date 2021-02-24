@@ -89,6 +89,7 @@ def filters():
     admin = "9dyhnxe8u4"
     questions = list(mongo.db.questions.find().sort("_id", -1))
     created_by = [created_by['created_by'] for created_by in questions]
+       
     if "user" in session:
         user = session["user"] or None
         user_profile = mongo.db.users.find_one({"username": user})
@@ -110,6 +111,8 @@ def filters():
             questions = list(mongo.db.questions.find().sort("created_by", 1))
         if sort == "friends":
             questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
+        
+
 
     
     return render_template("questions.html", questions=questions, matched=matched, admin=admin)
@@ -620,11 +623,9 @@ def help():
 
 @app.route("/send_message", methods=["GET", "POST"])
 def send_message():
-
     if "user" in session: 
         if request.method == "POST":
             message = request.form["message"]
-            
             submit = {
                 "type": message,
                 "message": request.form.get("message_text"),

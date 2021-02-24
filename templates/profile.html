@@ -216,8 +216,8 @@
     {% endfor %}
 </ul>
 {% else %}
-{% if messages.count() > 0 %}
 {% if session.user == admin %}
+{% if messages.count() > 0 %}
 <h3 class="red-text text-darken-3 center-align">There are {{ messages.count() }} messages(s) waiting to be read</h3>
 {% endif %}
 {% else %}

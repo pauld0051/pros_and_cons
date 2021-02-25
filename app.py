@@ -2,6 +2,7 @@ import os
 import ctypes
 import json
 import re
+import random
 from flask import (
     Flask, flash, render_template, 
     redirect, request, session, url_for)
@@ -49,7 +50,13 @@ def get_questions():
     questions = list(mongo.db.questions.find().sort("_id", -1))
     created_by = [created_by['created_by'] for created_by in questions]
     is_friends = [is_friends['is_friends'] for is_friends in questions]
-    
+    # Find a random "question of the day" to head the home page
+    q_o_t_d = []
+    for qs in questions:
+        q_o_t_d.append(qs["_id"])
+    random_q = random.choice(q_o_t_d)
+    lead_question = mongo.db.questions.find_one({"_id": random_q})
+
     if "user" in session:
         profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
         profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
@@ -58,10 +65,10 @@ def get_questions():
         matched = [matched for matched in created_by if matched in friend_list] # Look to see if any friends match to the created_by list
         matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
      
-        return render_template("questions.html", questions=questions, admin=admin, matched=matched)
+        return render_template("questions.html", questions=questions, admin=admin, matched=matched, q_o_t_d=lead_question)
 
     else: # If user is not logged in then no need to match for friendships
-        return render_template("questions.html", questions=questions, admin=admin)
+        return render_template("questions.html", questions=questions, admin=admin, q_o_t_d=lead_question)
 
 
 @app.route("/view_question/<question_id>")
@@ -554,9 +561,8 @@ def cons(question_id):
                 "user": user 
             }
         find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-        array1 = len(find_one_q['pros'])
-        array2 = len(find_one_q['cons'])
-        replies = array1 + array2 + 1
+        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
+
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})        
 
@@ -574,11 +580,9 @@ def pros(question_id):
                 "user": user 
             }
         find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-        array1 = len(find_one_q['pros'])
-        array2 = len(find_one_q['cons'])
-        replies = array1 + array2 + 1
+        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
 
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro},})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})
 
     return redirect(url_for("view_question", question_id=question_id))

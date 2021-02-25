@@ -3,23 +3,132 @@
 
 <h3 class="blue-text text-darken-3 center-align">Questions</h3>
 
-<div class="row card-panel grey lighten-5">
-    <form action="{{ url_for('search') }}" method="POST" class="col s12">
-        <div class="row valign-wrapper center-align">
-            <div class="input-field col s12 m8">
-                <i class="fas fa-search prefix blue-text text-darken-3"></i>
-                <input type="text" name="query" id="query" minlength="3" class="validate" required>
-                <label for="query">Search Questions</label>
-            </div>
-            <div class="col s12 m4">
-                <a href="{{ url_for('get_questions') }}" class="red btn">Reset</a>
-                <button type="submit" class="light-blue darken-1 btn">
-                    <i class="fas fa-search left"></i> Search
-                </button>
-            </div>
+<ul class="">
+    {% if q_o_t_d.created_by in matched or q_o_t_d.is_friends == "off" or q_o_t_d.created_by == session.user or session.user == admin %}
+    <li class="active">
+        <div class="collapsible-header teal lighten-5">
+            <!-- Question Title-->
+            <i class="fas fa-question-circle blue-text text-darken-3"></i>
+            <strong>{{q_o_t_d.question_title }}</strong>
         </div>
-    </form>
-</div>
+        <div class="collapsible-body teal lighten-4 uncollapsed">
+            <!-- Question Text-->
+            <div class="row">
+                <div class="col s12 grey lighten-5 z-depth-1">
+                    <p>{{ q_o_t_d.question_text }}</p>
+                </div>
+            </div>
+            <div class="row teal lighten-4">
+                <div class="col s12 m6">
+                     <!-- Pro card -->
+                     <div class="card grey lighten-5">
+                        <div class="card-content grey-text text-darken-4">
+                        <span class="card-title center-align">Pros</span>
+                            {% for pro in q_o_t_d.pros %}
+                        <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - 
+                            <a href="{{ url_for('view_profile', profile=pro.user) }}">
+                                <span>{{ pro.user }}</a>
+                                    {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
+                                    </a>{% endif %}</p>
+                        {% endfor %}
+                        {% if session.user and q_o_t_d.finished is not defined %}
+                        <form method="POST" action="{{ url_for('pros', question_id=q_o_t_d._id) }}">
+                        <i
+                              class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
+                              data-position="bottom"
+                              data-tooltip="Add a pro to this discussion"></i>
+                            <input
+                              id="pro"
+                              name="pro"
+                              minlength="4"
+                              maxlength="250"
+                              type="text"
+                              class="validate"
+                              required/>
+                            <label for="question_title">Add a pro here</label>
+                            <button
+                            class="btn-small right blue darken-3 waves-effect waves-light"
+                            type="submit">
+                            Submit
+                            <i class="fas fa-paper-plane right"></i>
+                            </button>
+                        </form>
+                        {% else %}
+                        {% endif %}
+                     </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <!-- Con card -->
+                <div class="card grey lighten-5">
+                    <div class="card-content grey-text text-darken-4">
+                        <span class="card-title center-align">Cons</span>
+                        {% for con in q_o_t_d.cons %}
+                        <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
+                        {% endfor %}
+                        {% if session.user and q_o_t_d.finished is not defined %}
+                        <form method="POST" action="{{ url_for('cons', question_id=q_o_t_d._id) }}">
+                        <i
+                              class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
+                              data-position="bottom"
+                              data-tooltip="Add a con to this discussion"></i>
+                            <input
+                              id="con"
+                              name="con"
+                              minlength="4"
+                              maxlength="250"
+                              type="text"
+                              class="validate"
+                              required/>
+                            <label for="question_title">Add a con here</label>
+                            <button
+                            class="btn-small right blue darken-3 waves-effect waves-light"
+                            type="submit">
+                            Submit
+                            <i class="fas fa-paper-plane right"></i>
+                            </button>
+                        </form>
+                        {% else %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            </div><!-- pros and cons end div -->
+            <div class="row">
+                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=q_o_t_d.created_by) }}">{{ q_o_t_d.created_by }}</a>
+                    {% if q_o_t_d.edited_on is defined %} and was added on: {{ q_o_t_d.added_on }} then edited on: {{ q_o_t_d.edited_on }}
+                    {% else %} and was added on: {{ q_o_t_d.added_on }} {% endif %}</em></span><br>
+                    {% if q_o_t_d.finished is defined %}
+                    <span><em>Question is closed for further comments</em></span>
+                    {% endif %}
+            </div>
+            <div class="row">
+                {% if q_o_t_d.is_friends == "on" %}
+                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> 
+                {% else %}
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> 
+                {% endif %} 
+                {% if session.user|lower == q_o_t_d.created_by|lower or session.user == admin %}
+                <div class="right">
+                    {% if q_o_t_d.finished is not defined %}
+                    <form method="POST" action="{{ url_for('finish_question', question_id=q_o_t_d._id) }}">
+                    <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
+                    Finish</button>
+                    <a href="{{ url_for('edit_question', question_id=q_o_t_d._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
+                    Edit</a>
+                    {% else %}
+                    {% endif %}
+                    <button data-target="{{ q_o_t_d._id }}" class="btn-small button-size red darken-4 tooltipped modal-trigger" data-position="bottom" data-tooltip="Delete your question">
+                    Delete</button>
+                    </form>
+                {% endif %}
+                </div>
+        </div><!-- collapsible body end div -->
+        
+        </div>
+    </li>
+    {% endif %}
+</ul>
 
 <!-- Show only user's questions on click -->
 <div class="row">

@@ -89,7 +89,10 @@ def filters():
     admin = "9dyhnxe8u4"
     questions = list(mongo.db.questions.find().sort("_id", -1))
     created_by = [created_by['created_by'] for created_by in questions]
-       
+    array1 = len(questions[0]['pros'])
+    array2 = len(questions[0]['cons'])
+    replies = array1 + array2
+
     if "user" in session:
         user = session["user"] or None
         user_profile = mongo.db.users.find_one({"username": user})
@@ -111,9 +114,11 @@ def filters():
             questions = list(mongo.db.questions.find().sort("created_by", 1))
         if sort == "friends":
             questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
-        
-
-
+        if sort == "popular":
+            questions = list(mongo.db.questions.find().sort("replies", -1))
+        if sort == "unanswered":
+            questions = list(mongo.db.questions.find().sort("replies", 1))
+       
     
     return render_template("questions.html", questions=questions, matched=matched, admin=admin)
 
@@ -467,6 +472,7 @@ def friend_requests(user, action):
 
 @app.route("/add_question", methods=["GET", "POST"])
 def add_question():
+    replies = 0
     if request.method == "POST":
         if request.form.get("question_title") == "" or not validate_question(
            request.form.get("question_title")):
@@ -481,6 +487,9 @@ def add_question():
             "is_friends": is_friends,
             "created_by": session["user"],
             "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
+            "pros": [],
+            "cons": [],
+            "replies": replies
         }
         mongo.db.questions.insert_one(question)
         flash("Question Successfully Added")
@@ -544,8 +553,12 @@ def cons(question_id):
                 "con": request.form.get("con"),
                 "user": user 
             }
-
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})        
+        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        array1 = len(find_one_q['pros'])
+        array2 = len(find_one_q['cons'])
+        replies = array1 + array2 + 1
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})        
 
     return redirect(url_for("view_question", question_id=question_id))
 
@@ -554,14 +567,19 @@ def cons(question_id):
 def pros(question_id):
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
-    
+   
     if request.method == "POST":
         pro = {
                 "pro": request.form.get("pro"),
                 "user": user 
             }
-       
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
+        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        array1 = len(find_one_q['pros'])
+        array2 = len(find_one_q['cons'])
+        replies = array1 + array2 + 1
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro},})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})
 
     return redirect(url_for("view_question", question_id=question_id))
 

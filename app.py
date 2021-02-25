@@ -56,6 +56,9 @@ def get_questions():
         q_o_t_d.append(qs["_id"])
     random_q = random.choice(q_o_t_d)
     lead_question = mongo.db.questions.find_one({"_id": random_q})
+    what_is_friend = lead_question["is_friends"]
+    if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
+        return get_questions()       
 
     if "user" in session:
         profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching

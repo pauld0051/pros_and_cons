@@ -102,6 +102,14 @@ def filters():
     array1 = len(questions[0]['pros'])
     array2 = len(questions[0]['cons'])
     replies = array1 + array2
+    q_o_t_d = []
+    for qs in questions:
+        q_o_t_d.append(qs["_id"])
+    random_q = random.choice(q_o_t_d)
+    lead_question = mongo.db.questions.find_one({"_id": random_q})
+    what_is_friend = lead_question["is_friends"]
+    if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
+        return filters()       
 
     if "user" in session:
         user = session["user"] or None
@@ -130,29 +138,51 @@ def filters():
             questions = list(mongo.db.questions.find().sort("replies", 1))
        
     
-    return render_template("questions.html", questions=questions, matched=matched, admin=admin)
+    return render_template("questions.html", questions=questions, matched=matched, admin=admin, q_o_t_d=lead_question)
 
 
 @app.route("/filter_name", methods=["GET", "POST"])
 def filter_name():
     user = session["user"] or None
     sort = request.form.get("sort", "latest")
-    questions = list(mongo.db.questions.find(
-        {"created_by": user}))
+    questions = list(mongo.db.questions.find({"created_by": user}))
+    q_o_t_d = []
+    for qs in questions:
+        q_o_t_d.append(qs["_id"])
+    random_q = random.choice(q_o_t_d)
+    lead_question = mongo.db.questions.find_one({"_id": random_q})
+    what_is_friend = lead_question["is_friends"]
+    if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
+        return filter_name()       
     if request.method == "POST":     
         if sort == "oldest":
             questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
         if sort == "latest":
             questions = list(mongo.db.questions.find({"created_by": user}).sort("added_on", -1))
 
-    return render_template("filter_name.html", questions=questions)
+    return render_template("filter_name.html", questions=questions, q_o_t_d=lead_question)
 
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    admin = "9dyhnxe8u4"
     query = request.form.get("query")
-    questions = list(mongo.db.questions.find({"$text": {"$search": query}}))     
-    return render_template("questions.html", questions=questions)
+    questions = list(mongo.db.questions.find({"$text": {"$search": query}}))
+    created_by = [created_by['created_by'] for created_by in questions]
+    is_friends = [is_friends['is_friends'] for is_friends in questions]
+
+    if "user" in session:
+        profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
+        profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
+        friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
+        friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+        matched = [matched for matched in created_by if matched in friend_list] # Look to see if any friends match to the created_by list
+        matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
+     
+        return render_template("search_questions.html", questions=questions, admin=admin, matched=matched)
+
+    else: # If user is not logged in then no need to match for friendships
+        return render_template("search_questions.html", questions=questions, admin=admin)
 
 
 @app.route("/search_profiles", methods=["GET", "POST"])

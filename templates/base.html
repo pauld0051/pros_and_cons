@@ -47,17 +47,6 @@
             <a href="#" data-target="mobile-links" class="sidenav-trigger right"><i
                     class="fas fa-bars grey-text text-darken-4"></i></a>
             <ul class="right hide-on-med-and-down">
-                <!-- Search Bar -->
-                <li class="center">
-                    <div class="nav-wrapper">
-                        <form action="{{ url_for('search') }}" method="POST">
-                          <div class="input-field">
-                            <input type="search" id="search" name="query" minlength="3" class="validate" required>
-                            <label class="label-icon" for="search"><i class="fas fa-search prefix blue-text text-darken-3"></i>search</label>
-                          </div>
-                        </form>
-                    </div>
-                </li>
                 {% if session.user %}
                 <li>
                     <a class="btn-floating btn-large no-shadow waves-effect waves-light blue-grey lighten-4 grow" href="{{ url_for('get_questions') }}">

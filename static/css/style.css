@@ -112,6 +112,11 @@
     width: 88px;
 }
 
+/* Button sizes on search panel */
+.search-button {
+    width: 110px !important;
+}
+
 
 /* Prevent Materialize Textarea cutting off the bottom of lower case g, j and y */
 

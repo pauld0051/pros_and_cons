@@ -13,8 +13,9 @@ from datetime import datetime
 if os.path.exists("env.py"):
     import env
 
-
-# Validation rules
+#------------------#
+# Validation rules #
+#----------------- #
 
 def validate_name(username):
     # Validates usernames.
@@ -41,7 +42,6 @@ app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
-
 
 @app.route("/")
 @app.route("/get_questions")
@@ -74,6 +74,199 @@ def get_questions():
         return render_template("questions.html", questions=questions, admin=admin, q_o_t_d=lead_question)
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    
+    if request.method == "POST":
+        # check if username exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+        # see if user wants to be permanently logged in
+        permanent = request.form.get("remember")
+        if existing_user:
+            # ensure hashed password matches user input
+            if check_password_hash(
+                    existing_user["password"], request.form.get("password")):
+                session["user"] = request.form.get("username").lower()
+                session.permanent = permanent
+                flash("Welcome, {}".format(
+                    request.form.get("username")))
+                return redirect(url_for(
+                    "profile", username=session["user"]))
+            else:
+                # invalid password match
+                flash("Incorrect Username and/or Password")
+                return redirect(url_for("login"))
+
+        else:
+            # username doesn't exist
+            flash("Incorrect Username and/or Password")
+            return redirect(url_for("login"))
+
+    return render_template("login.html")
+
+
+#----------------------------------------#
+# CRUD | Create | Read | Update | Delete #
+#----------------------------------------#
+
+#---------- Create ----------#
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        # check if username already exists in db
+        existing_user = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})
+        # check to see if user wants to be permanently logged in on registration
+        permanent = request.form.get("remember")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm")
+        if existing_user:
+            flash("Username already exists")
+            return redirect(url_for("register"))
+        session["non_registered_user"] = request.form.get("username").lower()
+        if request.form.get("username") == "" or not validate_name(
+           request.form.get("username").lower()):
+            flash("Use only letters, numbers, dashes and underscores")
+            return redirect(url_for("register", store_user=session["non_registered_user"]))
+        if password == confirm:     
+            register = {
+                "username": request.form.get("username").lower(),
+                "password": generate_password_hash(request.form.get("password")),
+                "fname": request.form.get("fname"),
+                "lname": request.form.get("lname"),
+                "bday": request.form.get("bday"),
+                "state": request.form.get("state"),
+                "country": request.form.get("country"),
+                "sex": request.form.get("sex"),
+                "friends": []
+            }
+            mongo.db.users.insert_one(register)
+
+            # put the new user into 'session' cookie
+            session["user"] = request.form.get("username").lower()
+            session.permanent = permanent
+            flash("Registration Successful!")
+            return redirect(url_for("profile", username=session["user"]))
+    
+        else:
+            session["non_registered_user"] = request.form.get("username").lower()
+            flash("Passwords don't match, try again.")
+            
+            return render_template("register.html", store_user=session["non_registered_user"])
+
+    return render_template("register.html")
+
+
+@app.route("/add_question", methods=["GET", "POST"])
+def add_question():
+    replies = 0
+    if request.method == "POST":
+        if request.form.get("question_title") == "" or not validate_question(
+           request.form.get("question_title")):
+           flash("Use only printable letters.")
+        if request.form.get("question_text") == "" or not validate_question_text(
+            request.form.get("question_text")):
+            flash("Use only printable letters.")
+        is_friends = "on" if request.form.get("is_friends") else "off"
+        question = {
+            "question_title": request.form.get("question_title"),
+            "question_text": request.form.get("question_text"),
+            "is_friends": is_friends,
+            "created_by": session["user"],
+            "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
+            "pros": [],
+            "cons": [],
+            "replies": replies
+        }
+        mongo.db.questions.insert_one(question)
+        flash("Question Successfully Added")
+        return redirect(url_for("get_questions"))
+
+    return render_template("add_question.html")
+
+
+@app.route("/add_friend/<profile>", methods=["GET", "POST"])
+def add_friend(profile):
+    user_profile = mongo.db.users.find_one({"username": profile})
+    username = user_profile["username"]
+    logged_in_user = session["user"]
+    pending_request = mongo.db.friend_requests.find_one({'$or':
+    [
+        {'$and':[{"friend_request_from": logged_in_user},
+        {"friend_request_to": username}]},
+        {'$and':[{"friend_request_from": username},
+        {"friend_request_to": logged_in_user}]}        
+    ]})
+    already_friends = mongo.db.friends.find_one({'$or':
+    [
+        {'$and':[{"is_friends_1": logged_in_user},
+        {"is_friends_2": username}]},
+        {'$and':[{"is_friends_1": username},
+        {"is_friends_2": logged_in_user}]}
+    ]})
+    if request.method == "POST":
+        #check if the user is already friends or has a friend request pending
+        if pending_request:
+            flash("Friend request pending")
+            return render_template("view_profile.html", profile=username, 
+            is_friends=already_friends, pending_request=pending_request)
+        if already_friends:
+            flash("You're already friends!")
+            return render_template("view_profile.html", profile=username, 
+            is_friends=already_friends, pending_request=pending_request) 
+        #if no friend request pending, then new friend request is posted    
+        friend_request = {
+            "friend_request_from": session["user"],
+            "friend_request_to": username
+        }
+        mongo.db.friend_requests.insert_one(friend_request)
+        flash("Friend request sent")
+        return redirect(url_for("view_profile", profile=username, 
+            is_friends=already_friends, pending_request=pending_request))
+
+
+@app.route("/cons/<question_id>", methods=["POST"])
+def cons(question_id):
+    user = session["user"] or None
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
+    
+    if request.method == "POST":
+        con = {
+                "con": request.form.get("con"),
+                "user": user 
+            }
+        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})        
+
+    return redirect(url_for("view_question", question_id=question_id))
+
+
+@app.route("/pros/<question_id>", methods=["POST"])
+def pros(question_id):
+    user = session["user"] or None
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
+   
+    if request.method == "POST":
+        pro = {
+                "pro": request.form.get("pro"),
+                "user": user 
+            }
+        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})
+
+    return redirect(url_for("view_question", question_id=question_id))
+
+
+#---------- Read ----------#
+
 @app.route("/view_question/<question_id>")
 def view_question(question_id):
     questions = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
@@ -93,21 +286,22 @@ def view_question(question_id):
         matched = []
         return render_template("view_question.html", question=questions, matched=matched, admin=admin)
 
+
+#---------- Search and Filters ----------#
+
 @app.route("/filters", methods=["GET", "POST"])
 def filters():
     sort = request.form.get("sort", "latest")
     admin = "9dyhnxe8u4"
     questions = list(mongo.db.questions.find().sort("_id", -1))
     created_by = [created_by['created_by'] for created_by in questions]
-    array1 = len(questions[0]['pros'])
-    array2 = len(questions[0]['cons'])
-    replies = array1 + array2
+    # Find the question of the day - a random open question that appears at the top of the list, changes on refresh
     q_o_t_d = []
     for qs in questions:
         q_o_t_d.append(qs["_id"])
     random_q = random.choice(q_o_t_d)
     lead_question = mongo.db.questions.find_one({"_id": random_q})
-    what_is_friend = lead_question["is_friends"]
+    what_is_friend = lead_question["is_friends"] # Avoid questions that have "is_friends" set to "on"
     if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
         return filters()       
 
@@ -137,7 +331,6 @@ def filters():
         if sort == "unanswered":
             questions = list(mongo.db.questions.find().sort("replies", 1))
        
-    
     return render_template("questions.html", questions=questions, matched=matched, admin=admin, q_o_t_d=lead_question)
 
 
@@ -159,6 +352,10 @@ def filter_name():
             questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
         if sort == "latest":
             questions = list(mongo.db.questions.find({"created_by": user}).sort("added_on", -1))
+        if sort == "popular":
+            questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", -1))
+        if sort == "unanswered":
+            questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", 1))
 
     return render_template("filter_name.html", questions=questions, q_o_t_d=lead_question)
 
@@ -271,160 +468,6 @@ def view_profile(profile):
         return redirect(url_for("profile", username=logged_in_user))
 
 
-@app.route("/remove_friend/<profile>", methods=["GET", "POST"])
-def remove_friend(profile):
-    user_profile = mongo.db.users.find_one({"username": profile}) # Find the profile of the user being looked at
-    profile_id = user_profile["_id"] # Find the ID of the profile of the user being looked at
-    username = user_profile["username"] # Find the username of the ID of the profile being looked at
-    remove_friend_profile = mongo.db.users.find_one({"friends": ObjectId(profile_id)}) # Finds the profile of the logged in user
-    friends_of_user = user_profile["friends"] # Find the list of friends of the profile being looked at
-    logged_in_user = session["user"] # Name of the logged in user
-    logged_in = mongo.db.users.find_one({"username": logged_in_user}) # Profile of the logged in user
-    logged_id = logged_in["_id"] # ID of the logged in user
-    friends_of_logged_in = logged_in["friends"] # List of friends of the logged in user
-    remove_friend_user = mongo.db.users.find_one({"friends": ObjectId(logged_id)}) # Find the friend in the array with this ID
-    # Find the friendship in the collection Friends
-    already_friends = mongo.db.friends.find_one({'$or':
-    [
-        {'$and':[{"is_friends_1": logged_in_user}, # Logged in username
-        {"is_friends_2": username}]}, # The profile being looked at
-        {'$and':[{"is_friends_1": username}, # The inverse of the first statement
-        {"is_friends_2": logged_in_user}]}
-    ]})
-        
-    if request.method == "POST":
-        mongo.db.users.find_one_and_update(
-            {"_id": profile_id}, # The ID of the profile being looked at
-            {"$pull": {"friends": logged_id}}) # Removes this friend (user that is logged in)
-        mongo.db.users.find_one_and_update(
-            {"_id": logged_id}, # The ID of the logged in user
-            {"$pull": {"friends": profile_id}}) # Removes the profile that is being looked at
-        mongo.db.friends.remove(already_friends)
-
-    flash("Successfully removed friend")      
-    return redirect(url_for("profile", username=logged_in_user))
-
-
-@app.route("/add_friend/<profile>", methods=["GET", "POST"])
-def add_friend(profile):
-    user_profile = mongo.db.users.find_one({"username": profile})
-    username = user_profile["username"]
-    logged_in_user = session["user"]
-    pending_request = mongo.db.friend_requests.find_one({'$or':
-    [
-        {'$and':[{"friend_request_from": logged_in_user},
-        {"friend_request_to": username}]},
-        {'$and':[{"friend_request_from": username},
-        {"friend_request_to": logged_in_user}]}        
-    ]})
-    already_friends = mongo.db.friends.find_one({'$or':
-    [
-        {'$and':[{"is_friends_1": logged_in_user},
-        {"is_friends_2": username}]},
-        {'$and':[{"is_friends_1": username},
-        {"is_friends_2": logged_in_user}]}
-    ]})
-    if request.method == "POST":
-        #check if the user is already friends or has a friend request pending
-        if pending_request:
-            flash("Friend request pending")
-            return render_template("view_profile.html", profile=username, 
-            is_friends=already_friends, pending_request=pending_request)
-        if already_friends:
-            flash("You're already friends!")
-            return render_template("view_profile.html", profile=username, 
-            is_friends=already_friends, pending_request=pending_request) 
-        #if no friend request pending, then new friend request is posted    
-        friend_request = {
-            "friend_request_from": session["user"],
-            "friend_request_to": username
-        }
-        mongo.db.friend_requests.insert_one(friend_request)
-        flash("Friend request sent")
-        return redirect(url_for("view_profile", profile=username, 
-            is_friends=already_friends, pending_request=pending_request))
-        
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        # check if username already exists in db
-        existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
-        # check to see if user wants to be permanently logged in on registration
-        permanent = request.form.get("remember")
-        password = request.form.get("password")
-        confirm = request.form.get("confirm")
-        if existing_user:
-            flash("Username already exists")
-            return redirect(url_for("register"))
-        session["non_registered_user"] = request.form.get("username").lower()
-        if request.form.get("username") == "" or not validate_name(
-           request.form.get("username").lower()):
-            flash("Use only letters, numbers, dashes and underscores")
-            return redirect(url_for("register", store_user=session["non_registered_user"]))
-        if password == confirm:     
-            register = {
-                "username": request.form.get("username").lower(),
-                "password": generate_password_hash(request.form.get("password")),
-                "fname": request.form.get("fname"),
-                "lname": request.form.get("lname"),
-                "bday": request.form.get("bday"),
-                "state": request.form.get("state"),
-                "country": request.form.get("country"),
-                "sex": request.form.get("sex"),
-                "friends": []
-            }
-            mongo.db.users.insert_one(register)
-
-            # put the new user into 'session' cookie
-            session["user"] = request.form.get("username").lower()
-            session.permanent = permanent
-            flash("Registration Successful!")
-            return redirect(url_for("profile", username=session["user"]))
-    
-        else:
-            session["non_registered_user"] = request.form.get("username").lower()
-            flash("Passwords don't match, try again.")
-            
-            return render_template("register.html", store_user=session["non_registered_user"])
-
-
-    return render_template("register.html")
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    
-    if request.method == "POST":
-        # check if username exists in db
-        existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
-        # see if user wants to be permanently logged in
-        permanent = request.form.get("remember")
-        if existing_user:
-            # ensure hashed password matches user input
-            if check_password_hash(
-                    existing_user["password"], request.form.get("password")):
-                session["user"] = request.form.get("username").lower()
-                session.permanent = permanent
-                flash("Welcome, {}".format(
-                    request.form.get("username")))
-                return redirect(url_for(
-                    "profile", username=session["user"]))
-            else:
-                # invalid password match
-                flash("Incorrect Username and/or Password")
-                return redirect(url_for("login"))
-
-        else:
-            # username doesn't exist
-            flash("Incorrect Username and/or Password")
-            return redirect(url_for("login"))
-
-    return render_template("login.html")
-    
-
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     admin = "9dyhnxe8u4"
@@ -447,9 +490,43 @@ def profile(username):
         messages = None
         return render_template("profile.html", username=username, profile=user_profile, 
         friend_request=friend_request, questions=questions, admin=admin, messages=messages)
-    
-    
 
+    return redirect(url_for("login"))
+
+
+#---------- Update ----------#
+
+@app.route("/edit_profile/", methods=["GET", "POST"])
+def edit_profile():
+    with open('countries.json', encoding="utf8") as f:
+               country = json.load(f)
+
+    user = session["user"] or None
+    if user: 
+        user_profile = mongo.db.users.find_one({"username": user})
+        users_id = user_profile["_id"]
+
+        if request.method == "POST":
+            sex = request.form['sex']
+            submit = {
+                "$set": {
+                    "fname": request.form.get("fname"),
+                    "lname": request.form.get("lname"),
+                    "sex": sex,
+                    "state": request.form.get("state"),
+                    "country": request.form.get("country"),
+                    "bday": request.form.get("bday")
+                }
+            }
+
+            mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
+            flash("Profile Successfully Edited")
+            user_profile = mongo.db.users.find_one({"_id": ObjectId(users_id)})
+            return render_template("edit_profile.html", profile=user_profile, countries=country)
+    
+        else:
+            return render_template("edit_profile.html", profile=user_profile, countries=country)
+        
     return redirect(url_for("login"))
 
 
@@ -505,37 +582,10 @@ def friend_requests(user, action):
                 flash("Friend request declined")
                 return redirect(url_for("friend_requests", user=user_id, action=action))
     
-        return render_template("friend_requests.html", requests=requests, requestors=requestors, logged_in=logged_in_user, user=logged_user)
+        return render_template("friend_requests.html", requests=requests, requestors=requestors, 
+        logged_in=logged_in_user, user=logged_user)
 
     return redirect(url_for("login"))
-
-
-@app.route("/add_question", methods=["GET", "POST"])
-def add_question():
-    replies = 0
-    if request.method == "POST":
-        if request.form.get("question_title") == "" or not validate_question(
-           request.form.get("question_title")):
-           flash("Use only printable letters.")
-        if request.form.get("question_text") == "" or not validate_question_text(
-            request.form.get("question_text")):
-            flash("Use only printable letters.")
-        is_friends = "on" if request.form.get("is_friends") else "off"
-        question = {
-            "question_title": request.form.get("question_title"),
-            "question_text": request.form.get("question_text"),
-            "is_friends": is_friends,
-            "created_by": session["user"],
-            "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
-            "pros": [],
-            "cons": [],
-            "replies": replies
-        }
-        mongo.db.questions.insert_one(question)
-        flash("Question Successfully Added")
-        return redirect(url_for("get_questions"))
-
-    return render_template("add_question.html")
 
 
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
@@ -583,76 +633,41 @@ def finish_question(question_id):
         mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"finished": True}})
     return redirect(url_for("get_questions"))
 
-@app.route("/cons/<question_id>", methods=["POST"])
-def cons(question_id):
-    user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
-    
-    if request.method == "POST":
-        con = {
-                "con": request.form.get("con"),
-                "user": user 
-            }
-        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
 
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})        
+#---------- Delete ----------#
 
-    return redirect(url_for("view_question", question_id=question_id))
-
-
-@app.route("/pros/<question_id>", methods=["POST"])
-def pros(question_id):
-    user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
-   
-    if request.method == "POST":
-        pro = {
-                "pro": request.form.get("pro"),
-                "user": user 
-            }
-        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
-
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})
-
-    return redirect(url_for("view_question", question_id=question_id))
-
-
-@app.route("/edit_profile/", methods=["GET", "POST"])
-def edit_profile():
-    with open('countries.json', encoding="utf8") as f:
-               country = json.load(f)
-
-    user = session["user"] or None
-    if user: 
-        user_profile = mongo.db.users.find_one({"username": user})
-        users_id = user_profile["_id"]
-
-        if request.method == "POST":
-            sex = request.form['sex']
-            submit = {
-                "$set": {
-                    "fname": request.form.get("fname"),
-                    "lname": request.form.get("lname"),
-                    "sex": sex,
-                    "state": request.form.get("state"),
-                    "country": request.form.get("country"),
-                    "bday": request.form.get("bday")
-                }
-            }
-
-            mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
-            flash("Profile Successfully Edited")
-            user_profile = mongo.db.users.find_one({"_id": ObjectId(users_id)})
-            return render_template("edit_profile.html", profile=user_profile, countries=country)
-    
-        else:
-            return render_template("edit_profile.html", profile=user_profile, countries=country)
+@app.route("/remove_friend/<profile>", methods=["GET", "POST"])
+def remove_friend(profile):
+    user_profile = mongo.db.users.find_one({"username": profile}) # Find the profile of the user being looked at
+    profile_id = user_profile["_id"] # Find the ID of the profile of the user being looked at
+    username = user_profile["username"] # Find the username of the ID of the profile being looked at
+    remove_friend_profile = mongo.db.users.find_one({"friends": ObjectId(profile_id)}) # Finds the profile of the logged in user
+    friends_of_user = user_profile["friends"] # Find the list of friends of the profile being looked at
+    logged_in_user = session["user"] # Name of the logged in user
+    logged_in = mongo.db.users.find_one({"username": logged_in_user}) # Profile of the logged in user
+    logged_id = logged_in["_id"] # ID of the logged in user
+    friends_of_logged_in = logged_in["friends"] # List of friends of the logged in user
+    remove_friend_user = mongo.db.users.find_one({"friends": ObjectId(logged_id)}) # Find the friend in the array with this ID
+    # Find the friendship in the collection Friends
+    already_friends = mongo.db.friends.find_one({'$or':
+    [
+        {'$and':[{"is_friends_1": logged_in_user}, # Logged in username
+        {"is_friends_2": username}]}, # The profile being looked at
+        {'$and':[{"is_friends_1": username}, # The inverse of the first statement
+        {"is_friends_2": logged_in_user}]}
+    ]})
         
-    return redirect(url_for("login"))
+    if request.method == "POST":
+        mongo.db.users.find_one_and_update(
+            {"_id": profile_id}, # The ID of the profile being looked at
+            {"$pull": {"friends": logged_id}}) # Removes this friend (user that is logged in)
+        mongo.db.users.find_one_and_update(
+            {"_id": logged_id}, # The ID of the logged in user
+            {"$pull": {"friends": profile_id}}) # Removes the profile that is being looked at
+        mongo.db.friends.remove(already_friends)
+
+    flash("Successfully removed friend")      
+    return redirect(url_for("profile", username=logged_in_user))
 
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
@@ -669,6 +684,8 @@ def delete_question(question_id):
         
     return redirect(url_for("get_questions"))
 
+
+#---------- Help and Policies ----------#
 
 @app.route("/help")
 def help():
@@ -696,6 +713,20 @@ def send_message():
 
     return render_template("send_message.html")
 
+
+@app.route("/policies/terms")
+def terms():
+
+    return render_template("policies/terms.html")
+
+
+@app.route("/policies/privacy")
+def privacy():
+
+    return render_template("policies/privacy.html")
+
+
+#---------- Logout ----------#
 
 @app.route("/logout")
 def logout():

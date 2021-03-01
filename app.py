@@ -26,13 +26,15 @@ def validate_name(username):
 def validate_question(question):
     # Validates question titles
     # Only allow printable characters and spaces but not mathematical operators. Up to 255 characters.
-    return re.match(r"^[^+\-*/><]{5,255}$", question)
+    # Allow the "-" sign as the only mathematical operator
+    return re.match(r"^[^+\*/><]{5,255}$", question)
 
 
 def validate_question_text(question_text):
     # Validates question text
     # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
-    return re.match(r"^[^+\-*/><]{5,1020}$", question_text)
+    # Allow the "-" sign as the only mathematical operator
+    return re.match(r"^[^+\*/><]{5,1020}$", question_text)
 
 
 app = Flask (__name__)

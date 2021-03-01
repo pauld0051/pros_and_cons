@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block content %}
+<br>
+<a href="{{ url_for('get_questions') }}"><img class="logo-size" src="{{ url_for ('static', filename='images/pros_and_cons_logo.png') }}" alt="Pros and Cons Logo"></a>
+<h1>Oooooopsie doopsie</h1>
+<p>The boring bit:</small>
+<p>You just got a 404 and that means that someone, somewhere is yet to create the page you were trying to get to. There's a couple of fine options from here.</p>
+<p>1) You can invent a time machine, go ahead in time, and hope that you reach a time when someone did create that page you were looking for, or....</p>
+<p>2) This page does exist, so you can just look at it, admire it, be inspired by it and generally be happy with the choices you've made today, or...</p>
+<p>3) Hit the back button, depending on your browser, it's probably on the top left, it might be somewhere else, browser developers aren't always just thinking about you, or...</p>
+<p>4) You can always just go <a href="{{ url_for('get_questions') }}">home <i class="fas fa-home grey-text text-darken-4"></i></a></p>
+
+<p>Thank you for discovering this page, no one really discovers it other than through serendipity. You're very serendipitous today. </p>
+
+{% endblock %}

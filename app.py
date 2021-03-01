@@ -736,6 +736,14 @@ def logout():
     return redirect(url_for("login"))
 
 
+#---------- Logout ----------#
+
+@app.errorhandler(404)
+def page_not_found(error):
+
+    return render_template("error/page_not_found.html")
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
     port=int(os.environ.get("PORT")),

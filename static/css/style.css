@@ -92,14 +92,12 @@
     background-color: #ef5350;
 }
 
-
 /* Collapsible headers */
 
 .collapsible-header strong {
     font-weight: 600;
     margin-left: 12px;
 }
-
 
 /* Button sizes on question panels */
 
@@ -114,9 +112,8 @@
 
 /* Button sizes on search panel */
 .search-button {
-    width: 110px !important;
+    width: 110px;
 }
-
 
 /* Prevent Materialize Textarea cutting off the bottom of lower case g, j and y */
 
@@ -124,7 +121,6 @@
 #message_text {
     line-height: 24px;
 }
-
 
 /* Dropdown sorter increase width */
 
@@ -178,3 +174,5 @@ button.datepicker-day-button {
  .uncollapsed {
     display: block !important;
  }
+
+ 

@@ -1,4 +1,22 @@
 {% extends "base.html" %} {% block content %}
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v10.0&appId=335490644461179&autoLogAppEvents=1" nonce="johOZkNq"></script>
+<script>window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+  
+    return t;
+  }(document, "script", "twitter-wjs"));</script>
 
 <h3 class="blue-text text-darken-3 center-align">{{ question.created_by }}'s Question</h3>
 <ul class="">
@@ -122,6 +140,10 @@
             {% endif %}
             </div>
     </div><!-- collapsible body end div -->
+    <div class="fb-share-button tooltipped" data-position="bottom" data-tooltip="Share this question to Facebook" data-href="https://pros-and-cons-1.herokuapp.com/view_question/{{question._id}}" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpros-and-cons-1.herokuapp.com%2Fview_question%2F%257B%257Bquestion.question_id%257D%257D&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+    <span class="tooltipped" data-position="bottom" data-tooltip="Tweet this question"><a class="twitter-share-button"
+    href="https://twitter.com/intent/tweet?text={{question.question_title}}%20https://pros-and-cons-1.herokuapp.com/view_question/{{question._id}}">
+    Tweet</a></span>
     </li>
 
     <!-- Modal for Deleting Questions -->

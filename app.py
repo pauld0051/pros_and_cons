@@ -25,14 +25,14 @@ def validate_name(username):
 
 def validate_question(question):
     # Validates question titles
-    # Only allow printable characters and spaces.
-    return re.match("^[ -~]{5,255}$", question)
+    # Only allow printable characters and spaces but not mathematical operators. Up to 255 characters.
+    return re.match(r"^[^+\-*/><]{5,255}$", question)
 
 
 def validate_question_text(question_text):
     # Validates question text
-    # Only allow printable characters and spaces.
-    return re.match("^[ -~]{5,1020}$", question_text)
+    # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
+    return re.match(r"^[^+\-*/><]{5,1020}$", question_text)
 
 
 app = Flask (__name__)
@@ -163,12 +163,17 @@ def register():
 def add_question():
     replies = 0
     if request.method == "POST":
+        title = request.form.get("question_title") 
+        textarea = request.form.get("question_text")
+        # Check to see if the title and text comply with the regex
         if request.form.get("question_title") == "" or not validate_question(
            request.form.get("question_title")):
-           flash("Use only printable letters.")
+           flash("Use only printable letters and numbers. Mathematical operators are not possible.")
+           return render_template("add_question.html", title=title, text=textarea)
         if request.form.get("question_text") == "" or not validate_question_text(
             request.form.get("question_text")):
             flash("Use only printable letters.")
+            return render_template("add_question.html", title=title, text=textarea)
         is_friends = "on" if request.form.get("is_friends") else "off"
         question = {
             "question_title": request.form.get("question_title"),

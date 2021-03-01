@@ -1,7 +1,8 @@
 {% extends "base.html" %} {% block content %}
 
 <h3 class="blue-text text-darken-3 center-align">Add a question</h3>
-
+{{ text }}
+{{ title }}
 <div class="row card-panel grey lighten-5">
   <form class="col s12" method="POST" action="{{ url_for('add_question') }}">
     <div class="row">
@@ -16,6 +17,7 @@
           name="question_title"
           type="text"
           class="validate"
+          value="{{ title }}"
           required/>
         <label for="question_title">Question Title</label>
       </div>
@@ -31,7 +33,7 @@
           id="question_text"
           name="question_text"
           class="materialize-textarea validate"
-          required></textarea>
+          required>{{ text }}</textarea>
         <label for="question_text">Question Description</label>
       </div>
     </div>

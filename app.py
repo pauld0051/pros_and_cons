@@ -192,6 +192,79 @@ def add_question():
     return render_template("add_question.html")
 
 
+@app.route("/cons/<question_id>", methods=["POST"])
+def cons(question_id):
+    admin = "9dyhnxe8u4"
+    user = session["user"] or None
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
+    question_here = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+    created_by = question_here["created_by"]
+    if "user" in session:
+        profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
+        profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
+        friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
+        friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+        matched = [x for x in friend_list if x == created_by] # Look to see if any friends match to the created_by list
+        matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
+
+    if request.method == "POST":
+        # Check to see if the title and text comply with the regex
+        if request.form.get("con") == "" or not validate_question(
+           request.form.get("con")):
+           bad_con = request.form.get("con")
+           flash("Sorry, you can't use mathematical operators here.")
+           return render_template("view_question.html", bad_con=bad_con, question=question_here, matched=matched, admin=admin)
+
+        con = {
+                "con": request.form.get("con"),
+                "user": user 
+            }
+        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})        
+
+    return redirect(url_for("view_question", question_id=question_id))
+
+
+@app.route("/pros/<question_id>", methods=["POST"])
+def pros(question_id):
+    admin = "9dyhnxe8u4"
+    user = session["user"] or None
+    questions = list(mongo.db.questions.find().sort("added_on", -1))
+    question_here = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+    created_by = question_here["created_by"]
+    if "user" in session:
+        profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
+        profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile
+        friends = mongo.db.users.find({"_id": {"$in": profile_friends}}) # Insert each ObjectId to get the friend's user profile
+        friend_list = [friend['username'] for friend in friends] # For each of the ObjectId find the username associated
+        matched = [x for x in friend_list if x == created_by] # Look to see if any friends match to the created_by list
+        matched = list(dict.fromkeys(matched)) # Remove duplicates from the list
+
+    if request.method == "POST":
+        # Check to see if the title and text comply with the regex
+        if request.form.get("pro") == "" or not validate_question(
+           request.form.get("pro")):
+           bad_pro = request.form.get("pro")
+           flash("Sorry, you can't use mathematical operators here.")
+           return render_template("view_question.html", bad_pro=bad_pro, question=question_here, matched=matched, admin=admin)
+   
+    if request.method == "POST":
+        pro = {
+                "pro": request.form.get("pro"),
+                "user": user 
+            }
+        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
+
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
+        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})
+
+    return redirect(url_for("view_question", question_id=question_id))
+
+
 @app.route("/add_friend/<profile>", methods=["GET", "POST"])
 def add_friend(profile):
     user_profile = mongo.db.users.find_one({"username": profile})
@@ -232,44 +305,6 @@ def add_friend(profile):
             is_friends=already_friends, pending_request=pending_request))
 
 
-@app.route("/cons/<question_id>", methods=["POST"])
-def cons(question_id):
-    user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
-    
-    if request.method == "POST":
-        con = {
-                "con": request.form.get("con"),
-                "user": user 
-            }
-        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
-
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"cons": con}})
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})        
-
-    return redirect(url_for("view_question", question_id=question_id))
-
-
-@app.route("/pros/<question_id>", methods=["POST"])
-def pros(question_id):
-    user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
-   
-    if request.method == "POST":
-        pro = {
-                "pro": request.form.get("pro"),
-                "user": user 
-            }
-        find_one_q = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-        replies = len(find_one_q['pros']) + len(find_one_q['cons']) + 1
-
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$push":{"pros": pro}})
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)},{"$set":{"replies": replies}})
-
-    return redirect(url_for("view_question", question_id=question_id))
-
-
 #---------- Read ----------#
 
 @app.route("/view_question/<question_id>")
@@ -277,7 +312,6 @@ def view_question(question_id):
     questions = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     admin = "9dyhnxe8u4"
     created_by = questions["created_by"]
-
     if "user" in session:
         profile = mongo.db.users.find_one({"username": session["user"]}) # Get the session user for _id matching
         profile_friends = profile["friends"] # Get the list of ObjectId from the friends array under the session user's profile

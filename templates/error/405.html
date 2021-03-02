@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block content %}
+<br>
+<a href="{{ url_for('get_questions') }}"><img class="logo-size" src="{{ url_for ('static', filename='images/pros_and_cons_logo.png') }}" alt="Pros and Cons Logo"></a>
+<h1>Ouchies! - 4 0 5</h1>
+<p>The uh ohs... you were possibly trying something you shouldn't:</small>
+<p>You just got a 405 and that means that someone, somewhere probably wasn't aware of the place you were trying to get to when maybe you weren't meant to.</p>
+    <p>There's a couple of fine options from here.</p>
+<p>1) You can try again repeatedly, I think Einstein said something about trying the same thing over and over again, or....</p>
+<p>2) Maybe you're not logged in? You could try logging in, it would be nice to see who you really are, or...</p>
+<p>3) Hit the back button, depending on your browser, it's probably on the top left, it might be somewhere else, browser developers aren't always just thinking about you, or...</p>
+<p>4) You can always just go <a href="{{ url_for('get_questions') }}">home <i class="fas fa-home grey-text text-darken-4"></i></a></p>
+
+<p>Thank you for discovering this page, no one really discovers this page by accident, they probably get here through being a little malevolent... no, no, no, no one is accusing you 
+    of anything. You're reading into that a little too much. But, perhaps malevolence isn't a colour that you're wearing so well.</p>
+
+{% endblock %}

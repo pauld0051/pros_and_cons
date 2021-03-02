@@ -3,6 +3,7 @@ import ctypes
 import json
 import re
 import random
+import validate_funcs
 from flask import (
     Flask, flash, render_template, 
     redirect, request, session, url_for)
@@ -12,42 +13,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 if os.path.exists("env.py"):
     import env
-
-#------------------#
-# Validation rules #
-#----------------- #
-
-def validate_name(username):
-    # Validates usernames.
-    # Only allow letters, hyphens and underscores. No spaces.
-    return re.match("^[a-zA-Z0-9-_]{5,15}$", username)
-
-
-def validate_question(question):
-    # Validates question titles
-    # Only allow printable characters and spaces but not mathematical operators. Up to 255 characters.
-    # Allow the "-" sign as the only mathematical operator
-    return re.match(r"^[^\/\+\<\>\*]{5,255}$", question)
-
-
-def validate_question_text(question_text):
-    # Validates question text
-    # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
-    # Allow the "-" sign as the only mathematical operator
-    return re.match(r"^[^\/\+\<\>\*]{5,1020}$", question_text)
-
-
-def validate_message(message):
-    # Validates message text
-    # Only allow printable characters and spaces but not mathematical operators. Up to 5000 characters.
-    # Allow the "-" sign as the only mathematical operator
-    return re.match(r"^[^\/\+\<\>\*]{5,5000}$", message)
-
-
-def validate_fname(fname):
-    # Validates first and last names.
-    # Only allow letters and acceptable name symbols.
-    return re.match("^[a-zA-Z\s\,\.\'\-]{2,26}$", fname)
 
 
 app = Flask (__name__)
@@ -145,7 +110,7 @@ def register():
             flash("Username already exists")
             return redirect(url_for("register"))
         session["non_registered_user"] = request.form.get("username").lower()
-        if request.form.get("username") == "" or not validate_name(
+        if request.form.get("username") == "" or not validate_funcs.validate_name(
            request.form.get("username").lower()):
             flash("Use only letters, numbers, dashes and underscores")
             return redirect(url_for("register", store_user=session["non_registered_user"]))
@@ -186,11 +151,11 @@ def add_question():
             title = request.form.get("question_title") 
             textarea = request.form.get("question_text")
             # Check to see if the title and text comply with the regex
-            if request.form.get("question_title") == "" or not validate_question(
+            if request.form.get("question_title") == "" or not validate_funcs.validate_question(
             request.form.get("question_title")):
                 flash("Use only printable letters and numbers. Mathematical operators are not possible.")
                 return render_template("add_question.html", title=title, text=textarea)
-            if request.form.get("question_text") == "" or not validate_question_text(
+            if request.form.get("question_text") == "" or not validate_funcs.validate_question_text(
                 request.form.get("question_text")):
                 flash("Use only printable letters.")
                 return render_template("add_question.html", title=title, text=textarea)
@@ -233,7 +198,7 @@ def cons(question_id):
 
     if request.method == "POST":
         # Check to see if the title and text comply with the regex
-        if request.form.get("con") == "" or not validate_question(
+        if request.form.get("con") == "" or not validate_funcs.validate_question(
            request.form.get("con")):
            bad_con = request.form.get("con")
            flash("Sorry, you can't use mathematical operators here.")
@@ -271,7 +236,7 @@ def pros(question_id):
 
     if request.method == "POST":
         # Check to see if the title and text comply with the regex
-        if request.form.get("pro") == "" or not validate_question(
+        if request.form.get("pro") == "" or not validate_funcs.validate_question(
            request.form.get("pro")):
            bad_pro = request.form.get("pro")
            flash("Sorry, you can't use mathematical operators here.")
@@ -599,18 +564,18 @@ def edit_profile():
             except ValueError:
                 birthdate = False
             # Check first and last name do not contain mathematical operators
-            fname_validate = validate_fname(request.form.get("fname"))
+            fname_validate = validate_funcs.validate_fname(request.form.get("fname"))
             if fname_validate is None:
                 flash("Please use valid name characters excluding mathematical operators")
                 return render_template("edit_profile.html", profile=user_profile, countries=country)
-            lname_validate = validate_fname(request.form.get("lname"))
+            lname_validate = validate_funcs.validate_fname(request.form.get("lname"))
             if lname_validate is None:
                 flash("Please use valid name characters excluding mathematical operators")
                 return render_template("edit_profile.html", profile=user_profile, countries=country)
             if birthdate is False:
                 flash("Please use DD Month, YYYY format for birthdates")
                 return render_template("edit_profile.html", profile=user_profile, countries=country)
-            
+            # If sex = [something other than wanted] some array to see if a user import matches anywhere in the array
             else:
                 sex = request.form['sex']
                 submit = {
@@ -706,12 +671,12 @@ def edit_question(question_id):
         if finished is True:
             return redirect(url_for("get_questions"))
         if request.method == "POST":
-            if request.form.get("question_title") == "" or not validate_question(
+            if request.form.get("question_title") == "" or not validate_funcs.validate_question(
             request.form.get("question_title")):
                 question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
                 flash("Use only printable letters and numbers. Mathematical operators are not possible.")
                 return render_template("edit_question.html", question=question, admin=admin)
-            if request.form.get("question_text") == "" or not validate_question_text(
+            if request.form.get("question_text") == "" or not validate_funcs.validate_question_text(
                 request.form.get("question_text")):
                 question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
                 flash("Use only printable letters.")
@@ -826,7 +791,7 @@ def send_message():
     if "user" in session: 
         if request.method == "POST":
             full_message = request.form.get("message_text")
-            if request.form.get("message_text") == "" or not validate_message(
+            if request.form.get("message_text") == "" or not validate_funcs.validate_message(
            request.form.get("message_text")):
                 flash("Use only printable letters and numbers. Mathematical operators are not possible.")
                 return render_template("send_message.html", full_message=full_message)
@@ -875,6 +840,12 @@ def logout():
 def page_not_found(error):
 
     return render_template("error/page_not_found.html")
+
+
+@app.errorhandler(405)
+def page_not_found(error):
+
+    return render_template("error/405.html")
 
 
 if __name__ == "__main__":

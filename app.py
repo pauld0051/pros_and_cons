@@ -654,6 +654,16 @@ def edit_question(question_id):
     created_by = created_byId["created_by"]
     if user == created_by or user == admin:
         if request.method == "POST":
+            if request.form.get("question_title") == "" or not validate_question(
+            request.form.get("question_title")):
+                question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+                flash("Use only printable letters and numbers. Mathematical operators are not possible.")
+                return render_template("edit_question.html", question=question, admin=admin)
+            if request.form.get("question_text") == "" or not validate_question_text(
+                request.form.get("question_text")):
+                question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+                flash("Use only printable letters.")
+                return render_template("edit_question.html", question=question, admin=admin)
 
             is_friends = "on" if request.form.get("is_friends") else "off"
             submit = {
@@ -731,6 +741,7 @@ def remove_friend(profile):
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
 def delete_question(question_id):
+    admin = "9dyhnxe8u4"
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]

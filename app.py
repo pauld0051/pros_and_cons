@@ -34,7 +34,14 @@ def validate_question_text(question_text):
     # Validates question text
     # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
     # Allow the "-" sign as the only mathematical operator
-    return re.match(r"^[^\/\+\<\>\*]{5,255}$", question_text)
+    return re.match(r"^[^\/\+\<\>\*]{5,1020}$", question_text)
+
+
+def validate_message(message):
+    # Validates question text
+    # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
+    # Allow the "-" sign as the only mathematical operator
+    return re.match(r"^[^\/\+\<\>\*]{5,5000}$", message)
 
 
 def validate_fname(fname):
@@ -812,6 +819,11 @@ def help():
 def send_message():
     if "user" in session: 
         if request.method == "POST":
+            full_message = request.form.get("message_text")
+            if request.form.get("message_text") == "" or not validate_message(
+           request.form.get("message_text")):
+                flash("Use only printable letters and numbers. Mathematical operators are not possible.")
+                return render_template("send_message.html", full_message=full_message)
             message = request.form["message"]
             submit = {
                 "type": message,

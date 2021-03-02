@@ -38,8 +38,8 @@ def validate_question_text(question_text):
 
 
 def validate_message(message):
-    # Validates question text
-    # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
+    # Validates message text
+    # Only allow printable characters and spaces but not mathematical operators. Up to 5000 characters.
     # Allow the "-" sign as the only mathematical operator
     return re.match(r"^[^\/\+\<\>\*]{5,5000}$", message)
 
@@ -202,7 +202,8 @@ def add_question():
             "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
             "pros": [],
             "cons": [],
-            "replies": replies
+            "replies": replies,
+            "finished": False
         }
         mongo.db.questions.insert_one(question)
         flash("Question Successfully Added")
@@ -698,7 +699,10 @@ def edit_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
+    finished = created_byId["finished"]    
     if user == created_by or user == admin:
+        if finished is True:
+            return redirect(url_for("get_questions"))
         if request.method == "POST":
             if request.form.get("question_title") == "" or not validate_question(
             request.form.get("question_title")):

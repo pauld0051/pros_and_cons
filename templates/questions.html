@@ -48,7 +48,7 @@
                                     {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
                                     </a>{% endif %}</p>
                         {% endfor %}
-                        {% if session.user and q_o_t_d.finished is not defined %}
+                        {% if session.user and q_o_t_d.finished is false %}
                         <form method="POST" action="{{ url_for('pros', question_id=q_o_t_d._id) }}">
                         <i
                               class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -83,7 +83,7 @@
                         {% for con in q_o_t_d.cons %}
                         <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
                         {% endfor %}
-                        {% if session.user and q_o_t_d.finished is not defined %}
+                        {% if session.user and q_o_t_d.finished is false %}
                         <form method="POST" action="{{ url_for('cons', question_id=q_o_t_d._id) }}">
                         <i
                               class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -115,7 +115,7 @@
                 <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=q_o_t_d.created_by) }}">{{ q_o_t_d.created_by }}</a>
                     {% if q_o_t_d.edited_on is defined %} and was added on: {{ q_o_t_d.added_on }} then edited on: {{ q_o_t_d.edited_on }}
                     {% else %} and was added on: {{ q_o_t_d.added_on }} {% endif %}</em></span><br>
-                    {% if q_o_t_d.finished is defined %}
+                    {% if q_o_t_d.finished is true %}
                     <span><em>Question is closed for further comments</em></span>
                     {% endif %}
             </div>
@@ -127,7 +127,7 @@
                 {% endif %} 
                 {% if session.user|lower == q_o_t_d.created_by|lower or session.user == admin %}
                 <div class="right">
-                    {% if q_o_t_d.finished is not defined %}
+                    {% if q_o_t_d.finished is false %}
                     <form method="POST" action="{{ url_for('finish_question', question_id=q_o_t_d._id) }}">
                     <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                     Finish</button>
@@ -205,7 +205,7 @@
                                 {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
                                 </a>{% endif %}</p>
                     {% endfor %}
-                    {% if session.user and question.finished is not defined %}
+                    {% if session.user and question.finished is false %}
                     <form method="POST" action="{{ url_for('pros', question_id=question._id) }}">
                     <i
                           class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -240,7 +240,7 @@
                     {% for con in question.cons %}
                     <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
                     {% endfor %}
-                    {% if session.user and question.finished is not defined %}
+                    {% if session.user and question.finished is false %}
                     <form method="POST" action="{{ url_for('cons', question_id=question._id) }}">
                     <i
                           class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped"
@@ -272,7 +272,7 @@
             <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a>
                 {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
                 {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
-                {% if question.finished is defined %}
+                {% if question.finished is true %}
                 <span><em>Question is closed for further comments</em></span>
                 {% endif %}
         </div>
@@ -284,7 +284,7 @@
             {% endif %} 
             {% if session.user|lower == question.created_by|lower or session.user == admin %}
             <div class="right">
-                {% if question.finished is not defined %}
+                {% if question.finished is false %}
                 <form method="POST" action="{{ url_for('finish_question', question_id=question._id) }}">
                 <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                 Finish</button>

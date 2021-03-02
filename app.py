@@ -380,14 +380,27 @@ def filter_name():
     user = session["user"] or None
     sort = request.form.get("sort", "latest")
     questions = list(mongo.db.questions.find({"created_by": user}))
-    q_o_t_d = []
-    for qs in questions:
-        q_o_t_d.append(qs["_id"])
-    random_q = random.choice(q_o_t_d)
-    lead_question = mongo.db.questions.find_one({"_id": random_q})
-    what_is_friend = lead_question["is_friends"]
+    if len(questions) > 0:
+        q_o_t_d = []
+        for qs in questions:
+            q_o_t_d.append(qs["_id"])
+        random_q = random.choice(q_o_t_d)
+        lead_question = mongo.db.questions.find_one({"_id": random_q})
+        what_is_friend = lead_question["is_friends"]
+    else:
+        questions = list(mongo.db.questions.find())
+        q_o_t_d = []
+        for qs in questions:
+            q_o_t_d.append(qs["_id"])
+        random_q = random.choice(q_o_t_d)
+        lead_question = mongo.db.questions.find_one({"_id": random_q})
+        what_is_friend = lead_question["is_friends"]
     if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
-        return filter_name()       
+        return filter_name()
+    if len(questions) < 1:
+        questions = ""
+        flash("You have none of your own questions yet, consider starting one.")       
+        return render_template(filter_name.html, questions=questions, q_o_t_d=lead_question)
     if request.method == "POST":     
         if sort == "oldest":
             questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
@@ -635,8 +648,9 @@ def edit_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by or "9dyhnxe8u4":
-        if request.method == "POST":
+    if request.method == "POST":
+        if user == created_by or "9dyhnxe8u4":
+        
             is_friends = "on" if request.form.get("is_friends") else "off"
             submit = {
                 "$set": {

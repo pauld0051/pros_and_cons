@@ -18,7 +18,7 @@ if os.path.exists("env.py"):
 #----------------- #
 
 def validate_name(username):
-    # Validates usernames as well as first and last names.
+    # Validates usernames.
     # Only allow letters, hyphens and underscores. No spaces.
     return re.match("^[a-zA-Z0-9-_]{5,15}$", username)
 
@@ -27,14 +27,20 @@ def validate_question(question):
     # Validates question titles
     # Only allow printable characters and spaces but not mathematical operators. Up to 255 characters.
     # Allow the "-" sign as the only mathematical operator
-    return re.match(r"^[^+\*/><]{5,255}$", question)
+    return re.match(r"^[^\/\+\<\>\*]{5,255}$", question)
 
 
 def validate_question_text(question_text):
     # Validates question text
     # Only allow printable characters and spaces but not mathematical operators. Up to 1020 characters.
     # Allow the "-" sign as the only mathematical operator
-    return re.match(r"^[^+\*/><]{5,1020}$", question_text)
+    return re.match(r"^[^\/\+\<\>\*]{5,255}$", question_text)
+
+
+def validate_fname(fname):
+    # Validates first and last names.
+    # Only allow letters and acceptable name symbols.
+    return re.match("^[a-zA-Z\s\,\.\'\-]{2,26}$", fname)
 
 
 app = Flask (__name__)
@@ -571,24 +577,47 @@ def edit_profile():
     if user: 
         user_profile = mongo.db.users.find_one({"username": user})
         users_id = user_profile["_id"]
-
+        
         if request.method == "POST":
-            sex = request.form['sex']
-            submit = {
-                "$set": {
-                    "fname": request.form.get("fname"),
-                    "lname": request.form.get("lname"),
-                    "sex": sex,
-                    "state": request.form.get("state"),
-                    "country": request.form.get("country"),
-                    "bday": request.form.get("bday")
+            # Check that birthdates are based on the appropriate format
+            # Idea for datetime validation from https://www.tutorialspoint.com/How-to-do-date-validation-in-Python
+            date_string = request.form.get("bday")
+            format = "%d %B, %Y"
+            try:
+                date_obj = datetime.strptime(date_string, format)
+                birthdate = True
+            except ValueError:
+                birthdate = False
+            # Check first and last name do not contain mathematical operators
+            fname_validate = validate_fname(request.form.get("fname"))
+            if fname_validate is None:
+                flash("Please use valid name characters excluding mathematical operators")
+                return render_template("edit_profile.html", profile=user_profile, countries=country)
+            lname_validate = validate_fname(request.form.get("lname"))
+            if lname_validate is None:
+                flash("Please use valid name characters excluding mathematical operators")
+                return render_template("edit_profile.html", profile=user_profile, countries=country)
+            if birthdate is False:
+                flash("Please use DD Month, YYYY format for birthdates")
+                return render_template("edit_profile.html", profile=user_profile, countries=country)
+            
+            else:
+                sex = request.form['sex']
+                submit = {
+                    "$set": {
+                        "fname": request.form.get("fname"),
+                        "lname": request.form.get("lname"),
+                        "sex": sex,
+                        "state": request.form.get("state"),
+                        "country": request.form.get("country"),
+                        "bday": request.form.get("bday")
+                    }
                 }
-            }
 
-            mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
-            flash("Profile Successfully Edited")
-            user_profile = mongo.db.users.find_one({"_id": ObjectId(users_id)})
-            return render_template("edit_profile.html", profile=user_profile, countries=country)
+                mongo.db.users.update_one({"_id": ObjectId(users_id)}, submit)
+                flash("Profile Successfully Edited")
+                user_profile = mongo.db.users.find_one({"_id": ObjectId(users_id)})
+                return render_template("edit_profile.html", profile=user_profile, countries=country)
     
         else:
             return render_template("edit_profile.html", profile=user_profile, countries=country)

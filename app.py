@@ -45,6 +45,8 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
+#---------- Home ----------#
+
 @app.route("/")
 @app.route("/get_questions")
 def get_questions():
@@ -75,6 +77,8 @@ def get_questions():
     else: # If user is not logged in then no need to match for friendships
         return render_template("questions.html", questions=questions, admin=admin, q_o_t_d=lead_question)
 
+
+#---------- Login ----------#
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -648,9 +652,9 @@ def edit_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if request.method == "POST":
-        if user == created_by or "9dyhnxe8u4":
-        
+    if user == created_by or user == admin:
+        if request.method == "POST":
+
             is_friends = "on" if request.form.get("is_friends") else "off"
             submit = {
                 "$set": {

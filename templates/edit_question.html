@@ -8,7 +8,7 @@
             <!-- Add title -->
             <div class="input-field col s12">
                 <i class="fas fa-user-edit prefix blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Add a title to your question"></i>
-                <input id="question_title" name="question_title" minlength="5" maxlength="50" type="text" class="validate" value="{{ question.question_title }}" required />
+                <input id="question_title" name="question_title" minlength="5" maxlength="255" type="text" class="validate" value="{{ question.question_title }}" required />
                 <label for="question_title">Question Title</label>
             </div>
         </div>
@@ -16,7 +16,7 @@
             <!-- Add text -->
             <div class="input-field col s12">
                 <i class="fas fa-comment prefix blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Give your question a description"></i>
-                <textarea id="question_text" name="question_text" minlength="5" maxlength="1500" class="materialize-textarea validate" required>
+                <textarea id="question_text" name="question_text" minlength="5" maxlength="1020" class="materialize-textarea validate" required>
 {{- question.question_text -}}</textarea
         >
         <label for="question_text">Question Description</label>

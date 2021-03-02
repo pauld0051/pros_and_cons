@@ -681,7 +681,7 @@ def finish_question(question_id):
     questions = list(mongo.db.questions.find().sort("added_on", -1))
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by or "9dyhnxe8u4":
+    if user == created_by or user == admin:
         if request.method == "POST":
             finish = {
                 "$set": {
@@ -734,7 +734,7 @@ def delete_question(question_id):
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
-    if user == created_by or "9dyhnxe8u4":
+    if user == created_by or user == admin:
         if request.method == "POST":
             mongo.db.questions.delete_one({"_id": ObjectId(question_id)})
             flash("Question Successfully Deleted")

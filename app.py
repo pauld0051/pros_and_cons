@@ -18,7 +18,7 @@ if os.path.exists("env.py"):
 #----------------- #
 
 def validate_name(username):
-    # Validates usernames.
+    # Validates usernames as well as first and last names.
     # Only allow letters, hyphens and underscores. No spaces.
     return re.match("^[a-zA-Z0-9-_]{5,15}$", username)
 
@@ -201,6 +201,8 @@ def add_question():
 @app.route("/cons/<question_id>", methods=["POST"])
 def cons(question_id):
     admin = "9dyhnxe8u4"
+    if "user" not in session:
+        return redirect(url_for("login"))
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
     question_here = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
@@ -237,6 +239,8 @@ def cons(question_id):
 @app.route("/pros/<question_id>", methods=["POST"])
 def pros(question_id):
     admin = "9dyhnxe8u4"
+    if "user" not in session:
+        return redirect(url_for("login"))
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
     question_here = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
@@ -273,6 +277,8 @@ def pros(question_id):
 
 @app.route("/add_friend/<profile>", methods=["GET", "POST"])
 def add_friend(profile):
+    if "user" not in session:
+        return redirect(url_for("login"))
     user_profile = mongo.db.users.find_one({"username": profile})
     username = user_profile["username"]
     logged_in_user = session["user"]
@@ -559,6 +565,8 @@ def edit_profile():
     with open('countries.json', encoding="utf8") as f:
                country = json.load(f)
 
+    if "user" not in session:
+        return redirect(url_for("login"))
     user = session["user"] or None
     if user: 
         user_profile = mongo.db.users.find_one({"username": user})
@@ -649,6 +657,8 @@ def friend_requests(user, action):
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
 def edit_question(question_id):
     admin = "9dyhnxe8u4"
+    if "user" not in session:
+        return redirect(url_for("login"))
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
@@ -687,6 +697,8 @@ def edit_question(question_id):
 @app.route("/finish_question/<question_id>", methods=["GET", "POST"])
 def finish_question(question_id):
     admin = "9dyhnxe8u4"
+    if "user" not in session:
+        return redirect(url_for("login"))
     user = session["user"] or None
     questions = list(mongo.db.questions.find().sort("added_on", -1))
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
@@ -707,6 +719,8 @@ def finish_question(question_id):
 
 @app.route("/remove_friend/<profile>", methods=["GET", "POST"])
 def remove_friend(profile):
+    if "user" not in session:
+        return redirect(url_for("login"))
     user_profile = mongo.db.users.find_one({"username": profile}) # Find the profile of the user being looked at
     profile_id = user_profile["_id"] # Find the ID of the profile of the user being looked at
     username = user_profile["username"] # Find the username of the ID of the profile being looked at
@@ -742,6 +756,8 @@ def remove_friend(profile):
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
 def delete_question(question_id):
     admin = "9dyhnxe8u4"
+    if "user" not in session:
+        return redirect(url_for("login"))
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id" : ObjectId(question_id)})
     created_by = created_byId["created_by"]
@@ -806,7 +822,7 @@ def logout():
     return redirect(url_for("login"))
 
 
-#---------- Logout ----------#
+#---------- Error Pages ----------#
 
 @app.errorhandler(404)
 def page_not_found(error):

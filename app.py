@@ -386,11 +386,11 @@ def filters():
         if sort == "oldest":
             questions = list(mongo.db.questions.find().sort("_id", 1))
         if sort == "latest":
-            questions = list(mongo.db.questions.find().sort("added_on", -1))
+            questions = list(mongo.db.questions.find().sort("_id", -1))
         if sort == "names":
             questions = list(mongo.db.questions.find().sort("created_by", 1))
         if sort == "friends":
-            questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("added_on", -1))
+            questions = list(mongo.db.questions.find({"created_by": {"$in": friend_list}}).sort("_id", -1))
         if sort == "popular":
             questions = list(mongo.db.questions.find().sort("replies", -1))
         if sort == "unanswered":
@@ -429,7 +429,7 @@ def filter_name():
         if sort == "oldest":
             questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
         if sort == "latest":
-            questions = list(mongo.db.questions.find({"created_by": user}).sort("added_on", -1))
+            questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", -1))
         if sort == "popular":
             questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", -1))
         if sort == "unanswered":

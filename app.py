@@ -181,35 +181,37 @@ def register():
 @app.route("/add_question", methods=["GET", "POST"])
 def add_question():
     replies = 0
-    if request.method == "POST":
-        title = request.form.get("question_title") 
-        textarea = request.form.get("question_text")
-        # Check to see if the title and text comply with the regex
-        if request.form.get("question_title") == "" or not validate_question(
-           request.form.get("question_title")):
-           flash("Use only printable letters and numbers. Mathematical operators are not possible.")
-           return render_template("add_question.html", title=title, text=textarea)
-        if request.form.get("question_text") == "" or not validate_question_text(
-            request.form.get("question_text")):
-            flash("Use only printable letters.")
-            return render_template("add_question.html", title=title, text=textarea)
-        is_friends = "on" if request.form.get("is_friends") else "off"
-        question = {
-            "question_title": request.form.get("question_title"),
-            "question_text": request.form.get("question_text"),
-            "is_friends": is_friends,
-            "created_by": session["user"],
-            "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
-            "pros": [],
-            "cons": [],
-            "replies": replies,
-            "finished": False
-        }
-        mongo.db.questions.insert_one(question)
-        flash("Question Successfully Added")
-        return redirect(url_for("get_questions"))
+    if "user" in session:
+        if request.method == "POST":
+            title = request.form.get("question_title") 
+            textarea = request.form.get("question_text")
+            # Check to see if the title and text comply with the regex
+            if request.form.get("question_title") == "" or not validate_question(
+            request.form.get("question_title")):
+                flash("Use only printable letters and numbers. Mathematical operators are not possible.")
+                return render_template("add_question.html", title=title, text=textarea)
+            if request.form.get("question_text") == "" or not validate_question_text(
+                request.form.get("question_text")):
+                flash("Use only printable letters.")
+                return render_template("add_question.html", title=title, text=textarea)
+            is_friends = "on" if request.form.get("is_friends") else "off"
+            question = {
+                "question_title": request.form.get("question_title"),
+                "question_text": request.form.get("question_text"),
+                "is_friends": is_friends,
+                "created_by": session["user"],
+                "added_on": datetime.now().strftime("%d %b %Y %H:%M.%S"),
+                "pros": [],
+                "cons": [],
+                "replies": replies,
+                "finished": False
+            }
+            mongo.db.questions.insert_one(question)
+            flash("Question Successfully Added")
+            return redirect(url_for("get_questions"))
 
-    return render_template("add_question.html")
+        return render_template("add_question.html")
+    return redirect(url_for("login"))
 
 
 @app.route("/cons/<question_id>", methods=["POST"])

@@ -96,13 +96,15 @@
             <div class="input-field col s12 m8">
                 <i class="fas fa-search prefix blue-text text-darken-3"></i>
                 <input type="text" name="search_profiles" id="search_profiles" minlength="3" class="validate" required>
-                <label for="search_profiles">Search names, city, states or country</label>
+                <label class="hide-on-med-and-down" for="search_profiles">Search for your friends by names, city, states or country</label>
+                <label class="hide-on-large" for="search_profiles">Search</label>
             </div>
             <div class="col s12 m4">
-                <a href="#!" class="red btn">Reset</a>
-                <button type="submit" class="light-blue darken-1 btn">
-                                <i class="fas fa-search left"></i> Search
-                            </button>
+                <button type="submit" class="light-blue darken-1 btn hide-on-small-only">
+                    <i class="fas fa-search left"></i> Search
+                </button>
+                <button type="submit" class="light-blue darken-1 btn hide-on-med-and-up">
+                    <i class="fas fa-search left"></i></button>
             </div>
         </div>
     </form>

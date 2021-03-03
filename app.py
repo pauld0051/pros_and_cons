@@ -562,7 +562,7 @@ def edit_profile():
                 date_obj = datetime.strptime(date_string, format)
                 birthdate = True
             except ValueError:
-                birthdate = False
+                birthdate = True if date_string == '' else False
             # Check first and last name do not contain mathematical operators
             fname_validate = validate_funcs.validate_fname(request.form.get("fname"))
             if fname_validate is None:

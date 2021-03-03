@@ -203,6 +203,7 @@ Button colours were based on the following. All buttons contained white text or 
 
 - ![#e0f2f1](static/images/readme/e0f2f1.png) `#e0f2f1 - teal lighten-5`
 
+All colour palettes were downloaded from [ColorHexa](https://www.colorhexa.com/) and resized in [Windows Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?activetab=pivot:overviewtab).
 
 **Known bugs:**
 

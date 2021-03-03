@@ -108,7 +108,8 @@
     </form>
 </div>
 {% else %}
-<h3>No profiles found matching that description</h3>
+<h3 class="red-text text-darken-3 center-align hide-on-small-only">No profiles found matching that description</h3>
+<h5 class="red-text text-darken-3 center-align hide-on-med-and-up">No profiles found matching that description</h5>
 <p>Try again?</p>
 <div class="row card-panel grey lighten-5">
     <form action="{{ url_for('search_profiles') }}" method="POST" class="col s12">

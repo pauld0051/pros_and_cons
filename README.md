@@ -169,19 +169,39 @@ All headings using a heading tag were one of the following colours:
 - ![#01579b](static/images/readme/01579b.png) `#01579b - light-blue-text text-darken 4`
 - ![#c62828](static/images/readme/c62828.png) `#c62828 - red-text text-darken-3`
 
-Text colours use the standard Materialize and browser font colours as well as some minor changes for various text such as in the profile names.
+#### Text
+
+Text colours use the standard Materialize and browser font colours as well as some minor changes for various text such as in the profile names. All icons are from the [Fontawesome](https://fontawesome.com/) library. The following colours were used:
 
 - ![#607d8b](static/images/readme/607d8b.png) `#607d8b - blue-grey-text`
+- ![#01579b](static/images/readme/01579b.png) `#01579b - light-blue-text text-darken 4`
+- ![#212121](static/images/readme/212121.png) `#212121 - grey-text text-darken-4`
+- ![#1565c0](static/images/readme/1565c0.png) `#1565c0 - blue-text text-darken-3`
 
-Button colours were based on the following. All buttons contained white text to help overcome those with colour-blindness:
+#### Buttons
+
+Button colours were based on the following. All buttons contained white text or icons to help overcome those with colour-blindness:
 
 - ![#1565c0](static/images/readme/1565c0.png) `#1565c0 - blue darken-3`
+- ![#039be5](static/images/readme/039be5.png) `#039be5 - light-blue darken-1`
 - ![#1e88e5](static/images/readme/1e88e5.png) `#1e88e5 - blue darken-1`
 - ![#b71c1c](static/images/readme/b71c1c.png) `#b71c1c - red darken-4`
-- ![#4caf50](static/images/readme/4caf50.png) `#4caf50 green`
+- ![#4caf50](static/images/readme/4caf50.png) `#4caf50 - green`
+- ![#d32f2f](static/images/readme/d32f2f.png) `#d32f2f - red darken-2`
+- ![#cfd8dc](static/images/readme/cfd8dc.png) `#cfd8dc - blue-grey lighten-4`
+- ![#26a69a](static/images/readme/26a69a.png) `#26a69a - teal lighten-1`
+ 
+
+#### Cards and Panels
+
+- ![#fafafa](static/images/readme/fafafa.png) `#fafafa - grey lighten-5`
+- ![#e0f2f1](static/images/readme/e0f2f1.png) `#e0f2f1 - teal lighten-5`
+- ![#b2dfdb](static/images/readme/b2dfdb.png) `#b2dfdb - teal lighten-4`
 
 
+#### Navbar
 
+- ![#e0f2f1](static/images/readme/e0f2f1.png) `#e0f2f1 - teal lighten-5`
 
 
 **Known bugs:**

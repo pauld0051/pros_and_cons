@@ -125,15 +125,15 @@
                                   type="text"
                                   class="validate"
                                   required/>
-                                <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
-                                <div class="right-align">
-                                <button
-                                class="btn-small right blue darken-3 waves-effect waves-light"
-                                type="submit">
-                                Submit
-                                <i class="fas fa-paper-plane right"></i>
-                                </button>
-                                </div>
+                                  <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                                  <div class="right-align">
+                                  <button
+                                  class="btn-small blue darken-3 waves-effect waves-light"
+                                  type="submit">
+                                  Submit
+                                  <i class="fas fa-paper-plane right"></i>
+                                  </button>
+                                  </div>
                             </form>
                             {% else %}
                             {% endif %}
@@ -179,9 +179,9 @@
                 </div>
             </div>
             <div class="row"><!-- pros and cons end div -->
-                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a>
-                    {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
-                    {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
+                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
+                    {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em>
+                    {% else %}<em> and was added on: {{ question.added_on }} {% endif %}</em></span><br>
                     {% if question.finished is true %}
                     <span><em>Question is closed for further comments</em></span>
                     {% endif %}

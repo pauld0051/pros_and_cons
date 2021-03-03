@@ -62,15 +62,15 @@
                               type="text"
                               class="validate"
                               required/>
-                            <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
-                            <div class="right-align">
-                            <button
-                            class="btn-small right blue darken-3 waves-effect waves-light"
-                            type="submit">
-                            Submit
-                            <i class="fas fa-paper-plane right"></i>
-                            </button>
-                            </div>
+                              <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                              <div class="right-align">
+                              <button
+                              class="btn-small blue darken-3 waves-effect waves-light"
+                              type="submit">
+                              Submit
+                              <i class="fas fa-paper-plane right"></i>
+                              </button>
+                              </div>
                         </form>
                         {% else %}
                         {% endif %}
@@ -99,15 +99,15 @@
                               type="text"
                               class="validate"
                               required/>
-                            <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
-                            <div class="align-right">
-                            <button
-                            class="btn-small right blue darken-3 waves-effect waves-light"
-                            type="submit">
-                            Submit
-                            <i class="fas fa-paper-plane right"></i>
-                            </button>
-                            </div>
+                              <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
+                              <div class="right-align">
+                              <button
+                              class="btn-small blue darken-3 waves-effect waves-light"
+                              type="submit">
+                              Submit
+                              <i class="fas fa-paper-plane right"></i>
+                              </button>
+                              </div>
                         </form>
                         {% else %}
                         {% endif %}
@@ -116,9 +116,9 @@
             </div>
             </div><!-- pros and cons end div -->
             <div class="row">
-                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=q_o_t_d.created_by) }}">{{ q_o_t_d.created_by }}</a>
-                    {% if q_o_t_d.edited_on is defined %} and was added on: {{ q_o_t_d.added_on }} then edited on: {{ q_o_t_d.edited_on }}
-                    {% else %} and was added on: {{ q_o_t_d.added_on }} {% endif %}</em></span><br>
+                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=q_o_t_d.created_by) }}">{{ q_o_t_d.created_by }}</a></em>
+                    {% if q_o_t_d.edited_on is defined %}<em> and was added on: {{ q_o_t_d.added_on }} then edited on: {{ q_o_t_d.edited_on }}</em>
+                    {% else %}<em> and was added on: {{ q_o_t_d.added_on }}</em></span>{% endif %}<br>
                     {% if q_o_t_d.finished is true %}
                     <span><em>Question is closed for further comments</em></span>
                     {% endif %}
@@ -145,8 +145,7 @@
                 {% endif %}
                 </div>
         </div><!-- collapsible body end div -->
-        
-        </div>
+    </div>
     </li>
     {% endif %}
 </ul>
@@ -223,15 +222,15 @@
                           type="text"
                           class="validate"
                           required/>
-                        <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
-                        <div class="right-align">
-                        <button
-                        class="btn-small right blue darken-3 waves-effect waves-light"
-                        type="submit">
-                        Submit
-                        <i class="fas fa-paper-plane right"></i>
-                        </button>
-                        </div>
+                          <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                          <div class="right-align">
+                          <button
+                          class="btn-small blue darken-3 waves-effect waves-light"
+                          type="submit">
+                          Submit
+                          <i class="fas fa-paper-plane right"></i>
+                          </button>
+                          </div>
                     </form>
                     {% else %}
                     {% endif %}
@@ -260,15 +259,15 @@
                           type="text"
                           class="validate"
                           required/>
-                        <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
-                        <div class="align-right">
-                        <button
-                        class="btn-small right blue darken-3 waves-effect waves-light"
-                        type="submit">
-                        Submit
-                        <i class="fas fa-paper-plane right"></i>
-                        </button>
-                        </div>
+                          <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
+                          <div class="right-align">
+                          <button
+                          class="btn-small blue darken-3 waves-effect waves-light"
+                          type="submit">
+                          Submit
+                          <i class="fas fa-paper-plane right"></i>
+                          </button>
+                          </div>
                     </form>
                     {% else %}
                     {% endif %}
@@ -277,9 +276,9 @@
         </div>
         </div><!-- pros and cons end div -->
         <div class="row">
-            <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a>
-                {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
-                {% else %} and was added on: {{ question.added_on }} {% endif %}</em></span><br>
+            <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
+                {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em>
+                {% else %}<em> and was added on: {{ question.added_on }} {% endif %}</em></span><br>
                 {% if question.finished is true %}
                 <span><em>Question is closed for further comments</em></span>
                 {% endif %}

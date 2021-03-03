@@ -37,7 +37,7 @@
               <option value="popular">Popular</option>
               <option value="unanswered">Needs answers</option>
             </select>
-            <label>Sort</label>
+            <label class="hide-on-small-only">Sort</label>
             <button class="btn btn-small" type="submit">Sort Now</button>
         </div>
     </form>
@@ -90,13 +90,15 @@
                           type="text"
                           class="validate"
                           required/>
-                        <label for="question_title">Add a pro here</label>
+                        <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                        <div class="align-right">
                         <button
                         class="btn-small right blue darken-3 waves-effect waves-light"
                         type="submit">
                         Submit
                         <i class="fas fa-paper-plane right"></i>
                         </button>
+                        </div>
                     </form>
                     {% else %}
                     {% endif %}
@@ -125,13 +127,15 @@
                           type="text"
                           class="validate"
                           required/>
-                        <label for="question_title">Add a con here</label>
+                        <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
+                        <div class="align-right">
                         <button
                         class="btn-small right blue darken-3 waves-effect waves-light"
                         type="submit">
                         Submit
                         <i class="fas fa-paper-plane right"></i>
                         </button>
+                        </div>
                     </form>
                     {% else %}
                     {% endif %}

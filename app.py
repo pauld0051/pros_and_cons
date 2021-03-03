@@ -836,6 +836,12 @@ def logout():
 
 #---------- Error Pages ----------#
 
+@app.errorhandler(403)
+def page_not_found(error):
+
+    return render_template("403.html")
+
+
 @app.errorhandler(404)
 def page_not_found(error):
 
@@ -846,6 +852,12 @@ def page_not_found(error):
 def page_not_found(error):
 
     return render_template("error/405.html")
+
+
+@app.errorhandler(500)
+def page_not_found(error):
+
+    return render_template("500.html")
 
 
 if __name__ == "__main__":

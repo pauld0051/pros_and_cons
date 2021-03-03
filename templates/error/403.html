@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block content %}
+<br>
+<a href="{{ url_for('get_questions') }}"><img class="logo-size" src="{{ url_for ('static', filename='images/pros_and_cons_logo.png') }}" alt="Pros and Cons Logo"></a>
+<h1>Forbidden? Who are we to tell you what you can and can't do?  4 0 3</h1>
+<p>The boring bit:</small>
+<p>You just got a 403 and that means that you might have been trying something you really shouldn't be doing. When this site was made, it was made the way it was made because 
+    this is how someone who makes a website makes a website, just the way they like it. 
+</p>
+<p>1) You can make your own page and un-forbid whatever it was you were trying to do that was forbidden , or....</p>
+<p>2) You could try not doing whatever it was you were trying to do and instead let the developers develop and the users use, or...</p>
+<p>3) Hit the back button, depending on your browser, it's probably on the top left, it might be somewhere else, browser developers aren't always just thinking about you, or...</p>
+<p>4) You can always just go <a href="{{ url_for('get_questions') }}">home <i class="fas fa-home grey-text text-darken-4"></i></a></p>
+
+<p>Thank you for discovering that some things are just forbidden. It isn't like the Garden of Eden, no talking walking legged snake was telling you to do something you shouldn't. If 
+    they were, maybe we have other issues outside of the forbidden world of web development. </p>
+
+{% endblock %}

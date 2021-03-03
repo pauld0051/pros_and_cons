@@ -837,7 +837,7 @@ def logout():
 #---------- Error Pages ----------#
 
 @app.errorhandler(403)
-def page_not_found(error):
+def forbidden(error):
 
     return render_template("error/403.html")
 
@@ -849,13 +849,13 @@ def page_not_found(error):
 
 
 @app.errorhandler(405)
-def page_not_found(error):
+def no_method(error):
 
     return render_template("error/405.html")
 
 
 @app.errorhandler(500)
-def page_not_found(error):
+def server_error(error):
 
     return render_template("error/500.html")
 

@@ -27,6 +27,10 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
       - [Help](#help)
       - [Security](#security)
     - [Features Left to Implement](#features-left-to-implement)
+  - [Technologies Used](#technologies-used)
+  - [Tools Used](#tools-used)
+  - [Media](#media)
+  - [API](#api)
 
 - [Admin Responsibilities](#admin-responsibilities)
 
@@ -389,6 +393,52 @@ Notifications of incoming friend requests, new posts, new replies etc will be di
 - Profanity filter
 
 Users can choose to add a profanity filter to avoid seeing messages that are deemed inappropriate.
+
+- Report post
+
+A link directly at the bottom of each post will have a "report" button that sends the link directly to the administrator to check. Due to being only one administrator and working full time, this feature will not be included until such time as someone can monitor this. Currently, the message system suffices for this action.
+
+## TECHNOLOGIES USED
+
+- HTML
+- CSS
+- [Materialize](https://materializecss.com) as the framework for styling
+- JavaScript / JQuery
+- AJAX
+- Python
+- Flask
+- MongoDB
+- PyMongo
+- [Fontawesome](https://fontawesome.com/) for all the icons used throughout the site
+
+## TOOLS USED
+
+- [GIMP](https://www.gimp.org/): for editing the logo image
+- [Online PNG Tools](https://onlinepngtools.com/rotate-png): for rotating the question mark logo
+- [Windows Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?activetab=pivot:overviewtab): used to resize profile images and colour pallets used in this README
+- [Balsamiq](https://balsamiq.com/) to create the wireframes
+- [MongoDB](https://www.mongodb.com/)
+- [Git](https://git-scm.com/) for version control
+- [Heroku](https://heroku.com/) to deploy the application
+- [GitHub](https://github.com/pauld0051/pros_and_cons)
+- [VS Code](https://code.visualstudio.com/)
+- [terms of service generator](https://www.termsofservicegenerator.net/)
+- [privacy generator](https://www.gdprprivacypolicy.net/)
+- [Favicon Converter](https://favicon.io/favicon-converter/)
+
+## MEDIA
+
+- [Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Blue_question_mark_icon.svg/100px-Blue_question_mark_icon.svg.png) then edited in GIMP and Online PNG Tools and subsequently converted to an ico file for the favicon using the favicon converter
+- [Female Profile Picture](http://www.iemoji.com/view/emoji/1402/skin-tones/woman-tipping-hand-medium-dark-skin-tone)
+- [Male Profile Picture](http://www.iemoji.com/view/emoji/2157/skin-tones/man-tipping-hand-medium-dark-skin-tone)
+- [Non-Binary Profile Picture](http://www.iemoji.com/view/emoji/1862/animals-nature/unicorn-face)
+- [Prefer-Not-To-Say Profile Picture](https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/white-question-mark.png)
+
+## API
+
+- [Full Country and State list of our planet](https://github.com/stefanbinder/countries-states) subsequently downloaded and stored locally before being uploaded to GitHub
+- [Facebook SDK](https://developers.facebook.com/docs/plugins/share-button/)
+- [Twitter SDK](https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/overview)
 
 **Known bugs:**
 

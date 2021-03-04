@@ -86,7 +86,6 @@
             </div>
         </form>
     </div>
-    <!-- Search function if not returning results -->
 </div>
 
 <!-- Search function if returning results -->
@@ -115,7 +114,7 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Pros</span>
                             {% for pro in question.pros %}
-                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</a></span></p>
+                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</span></a></p>
                             {% endfor %}
                             {% if session.user and question.finished is false %}
                             <form method="POST" action="{{ url_for('pros', question_id=question._id) }}">
@@ -152,7 +151,7 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Cons</span>
                             {% for con in question.cons %}
-                            <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
+                            <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</span></a></p>
                             {% endfor %}
                             {% if session.user and question.finished is false %}
                             <form method="POST" action="{{ url_for('cons', question_id=question._id) }}">

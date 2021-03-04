@@ -31,6 +31,9 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
   - [Tools Used](#tools-used)
   - [Media](#media)
   - [API](#api)
+  - [Testing](#testing)
+  - [Deployment](#deployment)
+  - [Known Bugs](#known-bugs)
 
 - [Admin Responsibilities](#admin-responsibilities)
 
@@ -440,7 +443,128 @@ A link directly at the bottom of each post will have a "report" button that send
 - [Facebook SDK](https://developers.facebook.com/docs/plugins/share-button/)
 - [Twitter SDK](https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/overview)
 
-**Known bugs:**
+## TESTING
+
+Testing was completed throughout the development stages. Debug was set to "True" in the flask application and any errors that were thrown up during testing stages were captured, isolated and adjusted accordingly. An example of testing:
+
+Logging in as the user test4 and searching for "admin" a full range of friendships affiliations is available:
+
+1. test4 is friends with admin. The searched profile in the collapsible shows a "check" symbol.
+2. test4 has a pending friend request that was sent by test4 to admin2. The searched profile collapsible shows a "pause" symbol.
+3. test4 has a pending friend request from friend1 and can therefore accept or decline that request from withing the collapsible by clicking the appropriate button.
+4. test4 has no friendship affiliation at all or pending requests with admin11 therefore test4 can send a request to admin11 from the collapsible.
+
+**Python** based code was checked and tested using [PEP8 online validator](http://pep8online.com/) and found to be PEP8 compliant for the most part. Some syntax was unavoidably too long and could not be modified to fit within PEP8 compliance. Due to the nature of the site, PEP8 compliance made some of the code more difficult to read or impossible to operate with PEP8 compliance. Although utmost care was taken to be PEP8 compliant, not all circumstances warranted adjustment to PEP8 compliance.
+
+**JavaScript** and jQuery were tested using [JS Hint](https://jshint.com/) and found to be compliant.
+
+**CSS** was validated using W3C's [Jigsaw Validator](https://jigsaw.w3.org/css-validator/). The file is W3C compliant.
+
+**HTML** was validated using W3C's [Validator](https://validator.w3.org/#validate_by_input). There were numerous errors triggered by Jinja's framework embedded within the documents. The standard HTML is W3C compliant. Some of the errors noted are duplicate IDs, however, this is possible when using Jinja Templates.
+
+## Deployment
+
+Before deploying the application, ensure the following are installed:
+
+- [Python 3](https://www.python.org/) - Python version 3.8.6 was used in the production of Pros and Cons
+- [PIP](https://pypi.org/project/pip/)
+- [Git](https://git-scm.com/)
+- [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
+The application relies on the following services, and accounts will have to be created for them:
+
+- [MongoDB](https://www.mongodb.com/)
+
+These are the steps to deploy Pros and Cons locally.
+
+1. From the application's [repository](https://github.com/pauld0051/pros_and_cons), click the "code" button and download the zip of the repository.
+
+    Alternatively, you can clone the repository using the following line in your terminal:
+
+        git clone https://github.com/pauld0051/pros_and_cons.git
+
+2. Access the folder in your terminal window and install the application's required modules using the following command:
+
+        python -m pip -r requirements.txt
+
+3. In MongoDB, create a new project called "pros_and_cons", and in this project create a new database called "pros_and_cons".
+
+    This database will contain seven collections: `users`, `questions`, `pros`, `cons`, `friends`, `friend_requests`  and `messages`.
+
+4. Create a file containing your environmental variables called `env.py` at the root level of the application. It will need to contain the following lines and variables:
+
+    ```
+    import os
+
+    os.environ["HOSTNAME"] = ""127.0.0.1"
+    os.environ.setdefault("PORT", "5000")
+    os.environ.setdefault("SECRET_KEY", '[YOUR SECRET KEY]')
+    os.environ.setdefault("MONGO_URI", "mongodb+srv://root:[YOUR ROOT]@cluster0.0d2ie.mongodb.net/pros_and_cons?retryWrites=true&w=majority")
+    os.environ.setdefault("MONGO_DBNAME", "pros_and_cons")
+    ```
+
+    Please note that you will need to update the `SECRET_KEY` with your own secret key, as well as the `MONGO_URI` variables with those provided by those applications.
+
+    If you plan on pushing this application to a public repository, ensure that `env.py` is added to your `.gitignore` file.
+
+5. The application can now be run locally. In your terminal, type the command `python app.py`. The application will be available in your browser at the address `http://localhost:5000`.
+
+### Deployment to Heroku
+
+To deploy Pros and Cons to Heroku, use the following steps:
+
+1. Login to your Heroku account and create a new app.
+
+2. Ensure the Procfile and requirements.txt files exist are present in your local repository.
+
+    The Procfile should contain the following line:
+
+    ```
+    web: python app.py
+    ```
+
+    To ensure requirements.txt exists and is up to date, use the following line in your terminal:
+
+    ```
+    pip3 freeze --local > requirements.txt
+    ```
+
+3. Add heroku as a remote for your git repository by getting the heroku git URL for your application in its settings, and typing the following command:
+
+    ```
+    git remote add heroku https://git.heroku.com/[your-heroku-git-url]
+    ```
+
+4. Push Pros and Cons to Heroku with the following command:
+
+    ```
+    git push heroku master
+    ```
+
+5. In your terminal, enter the following line to prepare the application for launch once it is deployed
+
+    ```
+    heroku ps:scale web=5
+    ```
+
+6. In your app in Heroku, go to settings, reveal the config vars and enter the following variables:
+
+| Variable       | Value               |
+| -------------- | ------------------- |
+| HOSTNAME       | 0.0.0.0             |
+| PORT           | 5000                |
+| SECRET_KEY     | YOUR_SECRET_KEY     |
+| MONGO_URI      | YOUR_MONGO_URI      |
+
+Ensure to enter your own `SECRET_KEY` and `MONGO_URI` variables.
+
+1. Go to the deploy tab of your application, and click "Deploy Branch" under the manual deploy section.
+
+2. Pros and Cons is now deployed to Heroku. It can be accessed by clicking the "Open App" button on the top right.
+
+Note: You will need to rename Pros and Cons on Heroku as multiple same names can not exist. Each one must be unique.
+
+## KNOWN BUGS
 
 1. Materialize navbar links "flash" on click. This occurs in Firefox and appears to be due to either hardware acceleration or an extension installed on Firefox. During development Firefox was started in safemode which removed the issue completely. Some users may therefore experience the flashing when clicking links on the navigation pane at the top of the screen.
 
@@ -457,13 +581,6 @@ A link directly at the bottom of each post will have a "report" button that send
 6. User profile search requests to MongoDB are slightly limited in their capacity to search for usernames with digits. For example, if a username contains more than 1 digit in it then MongoDB's index function does not return that value. A username with just one digit in it at the end of the name is returned. For example admin1 will be returned if a search for "admin" was conducted. But admin12 will not be returned for the same search.
 
 ### NOTES
-
-Using the user test4 and searching for "admin" a full range of friendships affiliations is available:
-
-1. test4 is friends with admin. The searched profile in the collapsible shows a "check" symbol.
-2. test4 has a pending friend request that was sent by test4 to admin2. The searched profile collapsible shows a "pause" symbol.
-3. test4 has a pending friend request from admin1 and can therefore accept or decline that request from withing the collapsible by clicking the appropriate button.
-4. test4 has no friendship affiliation at all or pending requests with admin11 therefore test4 can send a request to admin11 from the collapsible.
 
 The difference in this technique compared with just viewing the profile is that there is a loop of profiles being presented to the screen. Viewing a profile has just one profile so all the same four variables can be tested without a loop. The final clause, where no friendship affiliation is found, is sorted with a tuple and then looped through in the frontend for the matches "True" or "False" against the username. 
 

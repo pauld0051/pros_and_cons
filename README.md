@@ -34,10 +34,9 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
   - [Testing](#testing)
   - [Deployment](#deployment)
   - [Known Bugs](#known-bugs)
-
-- [Admin Responsibilities](#admin-responsibilities)
-
-- [Known Bugs](#known-bugs)
+  - [Admin](#admin)
+    - [Admin Responsibilities](#admin-responsibilities)
+  - [Acknowledgements](#acknowledgements)
 
 ## DESCRIPTION
 
@@ -383,7 +382,7 @@ Other than profile images, images to enhance a question will also be added when 
 
 - Navbar searching
 
-Currently the search is not located in the navigation bar at the top of each page. Numerous attempts to style the searchbox and make an attractive, easy to use search from the navbar did not come to fruition. Searching is still available through the main pages and profile page. 
+Currently the search is not located in the navigation bar at the top of each page. Numerous attempts to style the searchbox and make an attractive, easy to use search from the navbar did not come to fruition. Searching is still available through the main pages and profile page.
 
 - Editing pros and cons
 
@@ -566,9 +565,9 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
 
 ## KNOWN BUGS
 
-1. Materialize navbar links "flash" on click. This occurs in Firefox and appears to be due to either hardware acceleration or an extension installed on Firefox. During development Firefox was started in safemode which removed the issue completely. Some users may therefore experience the flashing when clicking links on the navigation pane at the top of the screen.
+1. Materialize navbar links may "flash" on click. This occurs mostly in Firefox and appears to be due to either hardware acceleration or an extension installed on Firefox. During development Firefox was started in safemode which removed the issue completely. Some users may therefore experience the flashing when clicking links on the navigation pane at the top of the screen. It is not anticipated that this affects user experience.
 
-2. Materialize datepicker colouring: https://stackoverflow.com/a/59578282/13062685 special thanks to Kasia https://code-institute-room.slack.com/team/USVE7NATV
+2. Materialize datepicker colouring is not intuitive and requires overwriting styles in the [style.css](static/css/style.css) file The fix can be seen here: https://stackoverflow.com/a/59578282/13062685 special thanks to Kasia https://code-institute-room.slack.com/team/USVE7NATV
 
 3. Script tags need to be loaded within the template close to where they are being used or, at the top of the template loading with the page. This was experimented on with the edit_profile.html template. In order to add the countries.json file to be read in JavaScript, a new country.js file was added in static/scripts. This was called on using Jinja template formatting in the same method as previously employed on the base.html template. However, when located at the bottom of the page before the endblock tags, meant the script would not run and subsequently failed to provide the desired outcome. This was possibly caused by interference with other loading scripts from the base.html template. When the script call was placed at the top of the page just outside the block content tags meant the script loaded too early and therefore id-tags were not read by the script file. To overcome this a setTimeout function was employed. While this worked, it was not an acceptable workaround. Moving the script just below the select tags where it was being called meant there was no need for a setTimeout function and the script would run effectively without further intervention.
 
@@ -578,20 +577,25 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
   $(this).formSelect(); });```
   from here the remainder of the jQuery and JavaScript for-loop can be coded and input int the select element at the appropriate location. Two sections of this code will appear, one for when a country change is made by the user (eventListener "change") and one for when the page loads, this means the user can change state if they have already selected a country.
 
-6. User profile search requests to MongoDB are slightly limited in their capacity to search for usernames with digits. For example, if a username contains more than 1 digit in it then MongoDB's index function does not return that value. A username with just one digit in it at the end of the name is returned. For example admin1 will be returned if a search for "admin" was conducted. But admin12 will not be returned for the same search.
+6. User profile search requests to MongoDB are slightly limited in their capacity to search for usernames with digits. For example, if a username contains more than 1 digit in it then MongoDB's index function does not return that value. A username with just one digit in it at the end of the name is returned. For example admin1 will be returned if a search for "admin" was conducted. But admin12 or 1admin will not be returned for the same search.
 
-### NOTES
+## ADMIN
 
-The difference in this technique compared with just viewing the profile is that there is a loop of profiles being presented to the screen. Viewing a profile has just one profile so all the same four variables can be tested without a loop. The final clause, where no friendship affiliation is found, is sorted with a tuple and then looped through in the frontend for the matches "True" or "False" against the username. 
+An admin username was set up using a random key generator to prevent the possible forcing entry using the "admin" username and guessing the password. The repository at GitHub does contain this information. It is suggested that the admin username be held directly in a collection at MongoDB so it can not be accessed at GitHub.
 
-## SECURITY
+To prevent users from accessing certain areas of the page when they're not logged in Flask will check for session users. The homepage requires users to be logged in to check their friendships against those asking questions. However, an admin user has access to all posts.
 
-An admin user was set up using a random key generator to prevent the possible forcing entry using the "admin" username. 
+### ADMIN RESPONSIBILITIES
 
-To prevent users from accessing certain areas of the page when they're not logged in Flask will check for session users. The homepage requires users to be logged in to check their friendships against those asking questions.
+The admin role plays a very special part in Pros and Cons. The admin has unlimited access to all posts, profiles, questions, pros and cons as well as an ability to receive messages from users. An admin is the only user who can currently receive messages. For security reasons, these messages are only available to the admin user account and can only be available from manually accessing them in MongoDB. However, a count showing the number of messages is accessible on the admin user profile page. No other page has access to this count. Messages are deleted manually from MongoDB as they are actioned.
 
-## ADMIN RESPONSIBILITIES
+The admin user account can edit, delete or finish any questions that do not meet the standards accepted by Pros and Cons as a friendly and safe social media outlet. If users continually breach the site rules, their account may be removed from the MongoDB database. Currently this is done manually. At present, there is no method to prevent a user from signing back up with a new username.
 
-The admin role plays a very special part in Pros and Cons. The admin is given a secret username but has unlimited access to all posts, profiles, questions, pros and cons as well as an ability to receive messages from users. An admin is the only user who can currently receive messages. For security reasons, these messages are only available to the admin user account and can only be accessed with the admin user account. At present, these messages will only be available from manually accessing them in MongoDB, however, a count is accessible on the admin user profile page. No other page has access to this count. Messages are deleted manually from MongoDB as they are actioned.
+## ACKNOWLEDGEMENTS
 
-The admin user account can edit, delete or finish any questions that do not meet the standards accepted by Pros and Cons as a friendly and safe social media outlet. If users continually breach the site rules, their account may be removed from the MongoDB database. Currently this is done manually.
+- [Pallets Discord community](https://discord.gg/pallets) for continued support and handy adaptations for Flask and Jinja
+- [Felipe Alarcon](https://github.com/fandressouza) for continual support and availability throughout this project
+- [Ed Bradley](https://code-institute-room.slack.com/team/U0112RF2N79) for reaching out and helping solve some exceedingly difficult for loops and challenges, the extra set of eyes were priceless in picking out errors
+- [Kevin Loughrey](https://code-institute-room.slack.com/team/UQ5SGQMBN) for finding a fix in the Materialize select menus when populating from an API
+- Many thanks to the whole Code Institute tutor team, Tim, Cormac, Igor, Johann and Miklos for their help and support when reaching out
+- Thanks to the Slack Community for engaging and helping in times of need and for testing the site.

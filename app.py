@@ -554,7 +554,7 @@ def edit_profile():
         users_id = user_profile["_id"]
         
         if request.method == "POST":
-            # Check that birthdates are based on the appropriate format
+            # Check that birthdates are based on the appropriate format or left completely empty
             # Idea for datetime validation from https://www.tutorialspoint.com/How-to-do-date-validation-in-Python
             date_string = request.form.get("bday")
             format = "%d %B, %Y"
@@ -575,7 +575,14 @@ def edit_profile():
             if birthdate is False:
                 flash("Please use DD Month, YYYY format for birthdates")
                 return render_template("edit_profile.html", profile=user_profile, countries=country)
-            # If sex = [something other than wanted] some array to see if a user import matches anywhere in the array
+            countries_validate = validate_funcs.validate_fname(request.form.get("country"))
+            if countries_validate is None:
+                flash("Please use valid pre-selected countries")
+                return render_template("edit_profile.html", profile=user_profile, countries=country)
+            state_validate = validate_funcs.validate_fname(request.form.get("state"))
+            if state_validate is None:
+                flash("Please use valid pre-selected states")
+                return render_template("edit_profile.html", profile=user_profile, countries=country)
             else:
                 sex = request.form['sex']
                 submit = {

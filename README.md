@@ -42,6 +42,8 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
 
 **Pros and Cons** is a social media website aimed at bringing people from around the world together to answer user based questions on any topic imaginable. Users will have other users answer their question with the pros and cons of their upcoming decisions. The site will mimic similar social media sites and users can only answer questions when they are logged in. Users will be able to easily register and currently will not require any identification. All users will need to login to answer questions is a user name and password. Users will be able to allow public responses to their questions, or responses from their friends only.
 
+![Pros and Cons responsive displays](static/images/readme/responsive-pros-and-cons.jpg)
+
 ## UX
 
 ### SITE GOALS
@@ -488,7 +490,7 @@ These are the steps to deploy Pros and Cons locally.
 
 3. In MongoDB, create a new project called "pros_and_cons", and in this project create a new database called "pros_and_cons".
 
-    This database will contain seven collections: `users`, `questions`, `pros`, `cons`, `friends`, `friend_requests`  and `messages`.
+    This database will contain five collections: `users`, `questions`, `friends`, `friend_requests` and `messages`.
 
 4. Create a file containing your environmental variables called `env.py` at the root level of the application. It will need to contain the following lines and variables:
 

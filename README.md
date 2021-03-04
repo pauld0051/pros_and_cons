@@ -19,11 +19,11 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
     - [Existing Features](#existing-features)
       - [Account Registration](#account-registration)
       - [User Session](#user-session)
-      - [About Page](#about-page)
-      - [Create New Entries](#create-new-entries)
-      - [List and Search Entries](#list-and-search-entries)
-      - [View, Edit, and Delete Entries](#view-edit-and-delete-entries)
-      - [Profile and Account Management](#profile-and-account-management)
+      - [Questions Page](#questions-page)
+      - [Ask Questions](#ask-questions)
+      - [Search Questions](#search-questions)
+      - [Profile Page](#profile-page)
+      - [Friends](#friends)
       - [Send Feedback](#send-feedback)
       - [Security](#security)
     - [Features Left to Implement](#features-left-to-implement)
@@ -177,6 +177,8 @@ Text colours use the standard Materialize and browser font colours as well as so
 - ![#01579b](static/images/readme/01579b.png) `#01579b - light-blue-text text-darken 4`
 - ![#212121](static/images/readme/212121.png) `#212121 - grey-text text-darken-4`
 - ![#1565c0](static/images/readme/1565c0.png) `#1565c0 - blue-text text-darken-3`
+- ![#ef5350](static/images/readme/ef5350.png) `#ef5350 - red-text lighten-1`
+
 
 #### Buttons
 
@@ -188,9 +190,8 @@ Button colours were based on the following. All buttons contained white text or 
 - ![#b71c1c](static/images/readme/b71c1c.png) `#b71c1c - red darken-4`
 - ![#4caf50](static/images/readme/4caf50.png) `#4caf50 - green`
 - ![#d32f2f](static/images/readme/d32f2f.png) `#d32f2f - red darken-2`
-- ![#cfd8dc](static/images/readme/cfd8dc.png) `#cfd8dc - blue-grey lighten-4`
+- ![#cfd8dc](static/images/readme/cfd8dc.png) `#cfd8dc - blue-grey lighten-4` (navigation)
 - ![#26a69a](static/images/readme/26a69a.png) `#26a69a - teal lighten-1`
- 
 
 #### Cards and Panels
 
@@ -198,12 +199,132 @@ Button colours were based on the following. All buttons contained white text or 
 - ![#e0f2f1](static/images/readme/e0f2f1.png) `#e0f2f1 - teal lighten-5`
 - ![#b2dfdb](static/images/readme/b2dfdb.png) `#b2dfdb - teal lighten-4`
 
-
 #### Navbar
 
 - ![#e0f2f1](static/images/readme/e0f2f1.png) `#e0f2f1 - teal lighten-5`
 
 All colour palettes were downloaded from [ColorHexa](https://www.colorhexa.com/) and resized in [Windows Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?activetab=pivot:overviewtab).
+
+## FEATURES
+
+### EXISTING FEATURES
+
+#### Account Registration
+
+Users can register an account via the [registration](https://pros-and-cons-1.herokuapp.com/register) page.
+
+- New users can register their account using letters and numbers for a username. There is no need to include an email at this time.
+- The account name must pass validation and:
+  - not include anything other than letters, numbers, hyphens and underscores and contain no spaces
+  - not be the same as any previously registered name
+  - be between 5 and 15 characters in length
+  - have a validated password that is input twice for verification and be a minimum of 8 characters
+
+#### User Session
+
+- Existing users can log into their account using their chosen username and password
+- If the "Remember me..." checkbox is ticked, the session will persist after the browser is closed
+- Users can log out of their account and close the session
+- If a user tries accessing certain pages or features from the application while logged out, they will be redirected to [login](https://pros-and-cons-1.herokuapp.com/login)
+
+#### Questions Page
+
+Whether logged in or not, users can view the [questions page](https://pros-and-cons-1.herokuapp.com/get_questions). This is where users can view questions and if logged in, users can answer questions with pros and cons. Logged in users can also sort the questions by "friends" or see their own questions they have asked.
+
+Logged in users can sort questions by:
+
+- Latest / the most recent asked questions
+- Oldest / the oldest questions asked
+- Friends / see only questions friends have asked
+- Name / order posts created by users alphabetically
+- Popular / posts with the most replies are at the top
+- Needs answers / posts that have no replies are located at the top
+
+Users that are not logged in can sort by the same categories, except for "Friends".
+
+A separate button exists so logged in users can access their own questions only. From there they can sort their posts by:
+
+- Latest
+- Oldest
+- Popular
+- Needs answers
+
+All questions are in a collapsed form and only the question title and a down-pointing chevron are visible. Users can click on the chevron to view individual posts and see the question text and any replies from within the opened accordion style collapsible. Users can also click on the title to open that question in the browser tab only. This allows for entry of pros and cons to the same item without refreshing back to a collapsed accordion. The opened question displays as though it is still accordion style, however, the chevron is replaced with a question mark and the question title is no longer in hyperlink-blue.
+
+All questions have the same format:
+
+- Question title
+- Question text
+- Two cards, side by side, one for Pros (on the left) and Cons (on the right)
+- If users are logged in, they will see an input field for pros and cons with a submit button
+- Users who are not logged in do not see any place for input or any submit buttons
+- In italics, directly below the pros and cons cards shows who created the question, the date and time when the question was created and, if edited, the date and time of the latest edit
+- A globe icon is depicted for all public questions and a friends icon for questions that are for friends only. Users who are not friends with the post owner will only be able to see their public posts
+- Users that are logged in and are the post owner will see three buttons, Finish - Edit - Delete
+  - Finish - this closes a question for further commenting. Italic text below the created by text states the question is closed for further commenting. Users can no longer submit pros and cons to this post and the post owner can no longer edit the post. However, they can delete the post if they see fit
+  - Edit - users can edit their posts' title and text but are still bound by the rules of no mathematical operators in the text
+  - Delete - removes the post and all replies in the pros and cons section. Users who attempt to access a post that is no longer available will get the 404 page error
+- From the view question page, if a user had clicked on the title link from the questions page or a profile page, all users (logged in or not) can share the question to Facebook or to Twitter
+
+An example question is set up here: [http://pros-and-cons-1.herokuapp.com/view_question/6040989f61e7e8310f344aa0](http://pros-and-cons-1.herokuapp.com/view_question/6040989f61e7e8310f344aa0). This can be viewed by anyone.
+
+#### Ask Questions
+
+The [ask questions](http://127.0.0.1:5000/add_question) link is only available to logged in users. Here a session user can input a question title and text. This is also where users can choose whether to make the post public or for friends only.
+
+- Public posts / questions can be viewed by anyone and answered by logged in users
+- Friends only / questions can only be viewed by the user's friends and the site creator for protection of all users
+
+Users who are asking questions can use all characters except for mathematical operators as bound by a backend regex.
+
+#### Search Questions
+
+Users can search for keywords in question titles or text. The search is not case sensitive.
+
+#### Profile Page
+
+Only logged in users have access to their profile page. All users, logged in or otherwise, have access to view profiles by clicking on the "created by" link to the username on any question. Users who are logged in can also search for profiles from the profile page. A user can see if any friend requests have been received on their profile page. If a red "plus" symbol is flashing in the body of their profile page, a user can click on this to see all incoming friend requests. This is covered in detail in the [friends](#friends) section below.
+
+Profile pages contain some information about the user:
+
+- Profile picture / this is based on the chosen sex - female, male, non-binary or prefer-not-to-say
+- Name / includes both first and last name if entered
+- Country / includes the user's country if entered or remains blank or as not specified
+- State / only included if the user's country has been entered or this field remains blank
+- Birthday / only if the user is looking at their own profile, contains day-month-year
+- A list of all questions that the user has asked
+
+All information on the user is optional to add and can be done so by clicking the [edit profile](http://pros-and-cons-1.herokuapp.com/edit_profile/) link. Here users can add or edit:
+
+- Profile picture / based on a chosen sex
+- First name / can contain characters but not numbers or mathematical symbols and can be between 2 and 26 letters long
+- Last name / is bound by the same regex format as first name
+- Birthday / is set to the format %d %B, %Y or can be left blank
+- Country / is bound by the same regex format as first name but can be selected from a list of countries found in [countries.json](https://github.com/pauld0051/pros_and_cons/blob/master/countries.json). The original file was adapted from Stefan Binder's [Full Country and State list of our planet](https://github.com/stefanbinder/countries-states).
+- State / bound by the same rules as country and from the same [countries.json](https://github.com/pauld0051/pros_and_cons/blob/master/countries.json) file.
+
+Users can also view the profiles of other users. The same information exists, except birthdays are not visible to any user. A list of questions that user has asked is available directly below their profile information. 
+
+Logged in users can search for users by profile username, first name, last name, country or state. A list of users matching any of those descriptions is displayed on a page in collapsible accordion menus. Session users can view the profile from the accordion or click on the link in the title to visit the profile page. Users can send and accept friend requests from the accordion or view profile page.
+
+Users who are friends with a viewed profile page owner can also remove that friendship if they deem necessary.
+
+#### Friends
+
+One of the biggest draw cards for a social media platform is the ability to make new friends and foster existing, real-world friendships. Pros and Cons currently offers a simple friendship status that allows "friends" to view posts that are for friends-only.
+
+From any profile page, other than the logged in user's page, a series of icons may exist.
+
+- Add friend / a logged in user can send a friend request to the owner of that profile
+- If a pending friend request from the logged in user exists to the owner of a viewed profile, a "pause" icon will be displayed until that user responds to that friend request
+- If a pending friend request from the owner of a viewed profile exists then two icons will be present:
+  - Accept request / the logged in user and viewed profile owner are now friends
+  - Decline request / the logged in user and viewed profile owners did not become friends, but there is still an option to do so
+- If there are no pending friend requests or current friendships on a viewed profile, the logged in user can send a friend request by using the Add friend button
+
+Session users can access friend requests from their profile page. A red, flashing "plus" button exists if friend requests have been received. From there the user can choose to accept or decline the invitation for friendship. A user can view the profile of the requestor and make their choice from their profile.
+
+Session users can also remove friendships from a view-profile page if a friendship previously exists. This prevents that user from seeing questions that are set to "friends only".
 
 **Known bugs:**
 

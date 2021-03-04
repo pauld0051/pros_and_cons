@@ -106,6 +106,7 @@ def register():
         permanent = request.form.get("remember")
         password = request.form.get("password")
         confirm = request.form.get("confirm")
+        password_length = len(password)
         if existing_user:
             flash("Username already exists")
             return redirect(url_for("register"))
@@ -113,6 +114,9 @@ def register():
         if request.form.get("username") == "" or not validate_funcs.validate_name(
            request.form.get("username").lower()):
             flash("Use only letters, numbers, dashes and underscores")
+            return redirect(url_for("register", store_user=session["non_registered_user"]))
+        if password_length < 8:
+            flash("Passwords need to be a minimum of 8 characters long")
             return redirect(url_for("register", store_user=session["non_registered_user"]))
         if password == confirm:     
             register = {
@@ -368,41 +372,43 @@ def filters():
 
 @app.route("/filter_name", methods=["GET", "POST"])
 def filter_name():
-    user = session["user"] or None
-    sort = request.form.get("sort", "latest")
-    questions = list(mongo.db.questions.find({"created_by": user}))
-    if len(questions) > 0:
-        q_o_t_d = []
-        for qs in questions:
-            q_o_t_d.append(qs["_id"])
-        random_q = random.choice(q_o_t_d)
-        lead_question = mongo.db.questions.find_one({"_id": random_q})
-        what_is_friend = lead_question["is_friends"]
-    else:
-        questions = list(mongo.db.questions.find())
-        q_o_t_d = []
-        for qs in questions:
-            q_o_t_d.append(qs["_id"])
-        random_q = random.choice(q_o_t_d)
-        lead_question = mongo.db.questions.find_one({"_id": random_q})
-        what_is_friend = lead_question["is_friends"]
-    if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
-        return filter_name()
-    if len(questions) < 1:
-        questions = ""
-        flash("You have none of your own questions yet, consider starting one.")       
-        return render_template(filter_name.html, questions=questions, q_o_t_d=lead_question)
-    if request.method == "POST":     
-        if sort == "oldest":
-            questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
-        if sort == "latest":
-            questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", -1))
-        if sort == "popular":
-            questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", -1))
-        if sort == "unanswered":
-            questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", 1))
+    if "user" in session:
+        user = session["user"] or None
+        sort = request.form.get("sort", "latest")
+        questions = list(mongo.db.questions.find({"created_by": user}))
+        if len(questions) > 0:
+            q_o_t_d = []
+            for qs in questions:
+                q_o_t_d.append(qs["_id"])
+            random_q = random.choice(q_o_t_d)
+            lead_question = mongo.db.questions.find_one({"_id": random_q})
+            what_is_friend = lead_question["is_friends"]
+        else:
+            questions = list(mongo.db.questions.find())
+            q_o_t_d = []
+            for qs in questions:
+                q_o_t_d.append(qs["_id"])
+            random_q = random.choice(q_o_t_d)
+            lead_question = mongo.db.questions.find_one({"_id": random_q})
+            what_is_friend = lead_question["is_friends"]
+        if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
+            return filter_name()
+        if len(questions) < 1:
+            questions = ""
+            flash("You have none of your own questions yet, consider starting one.")       
+            return render_template(filter_name.html, questions=questions, q_o_t_d=lead_question)
+        if request.method == "POST":     
+            if sort == "oldest":
+                questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", 1))
+            if sort == "latest":
+                questions = list(mongo.db.questions.find({"created_by": user}).sort("_id", -1))
+            if sort == "popular":
+                questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", -1))
+            if sort == "unanswered":
+                questions = list(mongo.db.questions.find({"created_by": user}).sort("replies", 1))
 
-    return render_template("filter_name.html", questions=questions, q_o_t_d=lead_question)
+        return render_template("filter_name.html", questions=questions, q_o_t_d=lead_question)
+    return redirect(url_for("login"))
 
 
 @app.route("/search", methods=["GET", "POST"])

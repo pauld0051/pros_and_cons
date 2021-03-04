@@ -24,7 +24,7 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
       - [Search Questions](#search-questions)
       - [Profile Page](#profile-page)
       - [Friends](#friends)
-      - [Send Feedback](#send-feedback)
+      - [Help](#help)
       - [Security](#security)
     - [Features Left to Implement](#features-left-to-implement)
 
@@ -220,6 +220,8 @@ Users can register an account via the [registration](https://pros-and-cons-1.her
   - be between 5 and 15 characters in length
   - have a validated password that is input twice for verification and be a minimum of 8 characters
 
+Users can access the [terms and conditions](http://pros-and-cons-1.herokuapp.com/policies/terms) and subsequently the [privacy](http://pros-and-cons-1.herokuapp.com/policies/privacy) statements from the registration page.
+
 #### User Session
 
 - Existing users can log into their account using their chosen username and password
@@ -325,6 +327,68 @@ From any profile page, other than the logged in user's page, a series of icons m
 Session users can access friend requests from their profile page. A red, flashing "plus" button exists if friend requests have been received. From there the user can choose to accept or decline the invitation for friendship. A user can view the profile of the requestor and make their choice from their profile.
 
 Session users can also remove friendships from a view-profile page if a friendship previously exists. This prevents that user from seeing questions that are set to "friends only".
+
+#### Help
+
+The help page contains useful information for all users, logged in or otherwise. However, logged in users can send [messages](http://pros-and-cons-1.herokuapp.com/send_message) to the administrator. The form allows users to converse with the administrator. The administrator, when logged in, sees the number of messages received and can access them through the Collection at MongoDB. Users can choose from a series of message types including:
+
+- Harassment / if a user has received a form of bullying, threats or any form of harassment, a message can be sent outlining details
+- Hate speech / racism, sexism, or any hate speech is not tolerated on Pros and Cons and reports will result in the removal of offending posts. Removal is conducted at the database level
+- Spam / any spam, especially advertising, can be reported
+- Other / this could include lost passwords or even messages for improvements to the site
+
+The help page has access to the terms and conditions as well as the privacy statements set out at registration.
+
+All information on the help page is set out in collapsible accordions holding similar style to questions and searches throughout the page. Users can seek information on how to add questions, cancel an account, strict policies and no-nos etc.
+
+#### Security
+
+Very little information is kept on any user. All users can choose to add information about themselves if they felt comfortable doing so. Users are however somewhat responsible for keeping their passwords safe.
+
+- The user's password is hashed upon creation using the application's secret key. This ensures the password can never been seen, even in the database
+- Various pages and features such as friend requests can only be accessed by a user who is logged in. All other users are redirected to the login page
+
+### FEATURES LEFT TO IMPLEMENT
+
+- Password recovery system
+
+Currently, passwords are not recoverable. Users that have lost their passwords are encouraged to start a new account and message the administrator from that account.
+
+- Profile pictures to be user uploaded
+
+Due to current data restrictions at MongoDB, it was deemed that adding user photographs would be too data intensive. Until a paid version of the database, or other similar storage facilities are located for free of charge, this feature will not be implemented.
+
+- Blocking
+
+Some users could "stalk" or continually harass other users. Blocking will be implemented in exactly the same way friends are implemented into the database. Users who are blocked will see no content, global or otherwise, produced by the person who implemented the block. Conversely, the person who implemented the block will also not see any posts from that user. The main reason this feature has not been implemented as of yet is due to the nature of replies as pros and cons. A messaging system is not in place and there is far less chance of a user being harassed. Any users that are harassed can report this to the administrator and any pros and cons that are deemed harassing will be removed.
+
+- Messaging
+
+Due to current restrictions on data, messaging other users has not been implemented as of yet. A message page, with messages between the user and another user of choice will be implemented when data storage is increased.
+
+- Up-voting
+
+Currently pros and cons are in an array that can not be accessed as individual IDs, in the future, pros and cons will remain in the array but also in a separate collection where each pro or con as a reply can also receive up-votes. The pros and cons will then be sorted by number of votes and a tally will be counted in the heading of each pro and con. Conversely, down-votes will also be allowed as well.
+
+- Images
+
+Other than profile images, images to enhance a question will also be added when data storage does not become an issue. Pictures will be displayed below the pro and con replies and will be limited to a convenient and responsiveness.
+
+- Navbar searching
+
+Currently the search is not located in the navigation bar at the top of each page. Numerous attempts to style the searchbox and make an attractive, easy to use search from the navbar did not come to fruition. Searching is still available through the main pages and profile page. 
+
+- Editing pros and cons
+
+Pros and cons that are added to a question will be able to be edited, this will be implemented with the up-vote system. The current array does not allow for such.
+
+- Notifications
+
+Notifications of incoming friend requests, new posts, new replies etc will be displayed in the appropriate links on the navigation pane.
+
+- Profanity filter
+
+Users can choose to add a profanity filter to avoid seeing messages that are deemed inappropriate.
 
 **Known bugs:**
 

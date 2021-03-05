@@ -167,7 +167,7 @@ button.datepicker-day-button {
     display: block !important;
  }
 
-/* This gets social media sharing buttons inline */
+/* Line up social media buttons */
 /* Code idea from https://www.reinisfischer.com/how-align-facebook-google-and-twitter-buttons */
 .social-share iframe {
 	vertical-align: middle;
@@ -185,4 +185,8 @@ button.datepicker-day-button {
 
 .twitter {
     width: 100px;
+}
+
+.bottom-padding {
+    padding-bottom: 22px;
 }

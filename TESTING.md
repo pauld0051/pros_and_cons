@@ -35,7 +35,7 @@ If a user is already logged in, accessing the login page redirects to the questi
 
 ### Questions Page
 
-Non logged in users can view the questions page but can not access any of the controls, including submitting pros and cons to a question. If a user somehow forces a "pro" or a "con" a 405 error page is shown. Users can view a question collapsible, click the title to open the question, click on one of the usernames in either pros, cons or created by to view that user's profile. Users who are not logged in can not sort by "friends" and can not access the fliter_name.html page and are redirected to login. 
+Non logged in users can view the questions page but can not access any of the controls, including submitting pros and cons to a question. If a user somehow forces a "pro" or a "con" a 405 error page is shown. Users can view a question collapsible, click the title to open the question, click on one of the usernames in either pros, cons or created by to view that user's profile. Users who are not logged in can not sort by "friends" and can not access the fliter_name.html page and are redirected to login.
 
 Users that are currently in session are able to view questions and access controls such as:
 
@@ -190,11 +190,11 @@ To test this, set up four profiles:
 
 From *Profile_A*, send a friend request to *Profile_B* and to *Profile_C*
 
-From *Profile_B* - accept the friend request, these users are now friends. Now try to force the URL from *Profile_A*: http://[pros-and-cons-1.herokuapp.com/add_friend/profile_b](http://pros-and-cons-1.herokuapp.com/add_friend/profile_b). This can be attempted vice versa too. 
+From *Profile_B* - accept the friend request, these users are now friends. Now try to force the URL from *Profile_A*: [http://pros-and-cons-1.herokuapp.com/add_friend/profile_b](http://pros-and-cons-1.herokuapp.com/add_friend/profile_b). This can be attempted vice versa too.
 
 This will result in the redirection back to the *Profile_B* profile page.
 
-From *Profile_C* you can check both directions, you can force the URL from *Profile_C* [http://pros-and-cons-1.herokuapp.com/add_friend/profile_a](http://pros-and-cons-1.herokuapp.com/add_friend/profile_a) and from *Profile_A* [pros-and-cons-1.herokuapp.com/add_friend/profile_c](http://pros-and-cons-1.herokuapp.com/add_friend/profile_c). This covers a pending request to a profile and a pending request from a profile respectively. 
+From *Profile_C* you can check both directions, you can force the URL from *Profile_C* [http://pros-and-cons-1.herokuapp.com/add_friend/profile_a](http://pros-and-cons-1.herokuapp.com/add_friend/profile_a) and from *Profile_A* [pros-and-cons-1.herokuapp.com/add_friend/profile_c](http://pros-and-cons-1.herokuapp.com/add_friend/profile_c). This covers a pending request to a profile and a pending request from a profile respectively.
 
 Both will result in a redirection to the respective profile's page.
 
@@ -233,7 +233,6 @@ If a user is logged in and tries to force the search_profiles page through typin
 #### view_profile()
 
 Any user can view all profiles. Only the user logged in can edit their own profile. A non-logged in user that attempts to force the URL [http://pros-and-cons-1.herokuapp.com/edit_profile/](http://pros-and-cons-1.herokuapp.com/edit_profile/) is redirected back to the login page. Those that are logged in are directed straight to their edit profile page if they attempt to force the edit_profile route.
-
 
 #### profile()
 

@@ -180,9 +180,9 @@ button.datepicker-day-button {
 
 .facebook {
     width: 100px;
-    float: left;
+    margin-bottom: 4px;
 }
 
 .twitter {
-    width: 100px; 
+    width: 100px;
 }

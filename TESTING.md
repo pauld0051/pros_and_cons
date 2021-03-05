@@ -105,3 +105,19 @@ A 500 page is displayed if the server is not receiving requests at that time.
 ### 405 - Error
 
 If a user attempts to force "add" a pro or con, a 405 error is displayed.
+
+## RESPONSIVE TESTING
+
+Browsers used:
+
+- Firefox
+- Chrome
+- Chrome Android
+- Brave
+
+Testing was conducted on a Huawei P20, 15in laptop and 32in desktop.
+
+Multiple issues were discovered between mobile displays verses desktop displays. For instance:
+
+- placeholders in search boxes overlapped the container they were in. Shortened placeholders were included for mobile displays.
+- buttons to submit pros and cons overlapped their boxes. A new .right-align class was given to a div wrapping the submit buttons.

@@ -139,6 +139,12 @@ The design and layout was inspired by current social media giants as well as the
 
 To avoid excessive spamming or unsolicited messages, users must be logged in to add questions or pros and cons. Non-logged in users do not have a profile page, but can view registered users profiles, but can not add friendships.
 
+### WIREFRAMES
+
+Wireframes were originally developed using the [Pencil Project](https://pencil.evolus.vn/). Although original Wireframes, before development started were built using Balsamiq, very little change from the initial design were made. The Pencil Project wireframes are a basic layout and excluding any logos or images. See also: [Wireframes](github link here)
+
+![Pros and Cons Home Wireframe](static/images/wireframe/home.jpg)
+
 ### VIEWS AND DATA STRUCTURE
 
 Pros and Cons was a relatively ambitious project to use the likes of MongoDB to produce a social media platform. Although some details did exist of previous attempts, none of these were used in the design or data structure. Instead, as user stories were being met, advancements were made for the routes on whether the user was creating, reading, updating, or deleting.
@@ -420,7 +426,7 @@ A link directly at the bottom of each post will have a "report" button that send
 - [GIMP](https://www.gimp.org/): for editing the logo image
 - [Online PNG Tools](https://onlinepngtools.com/rotate-png): for rotating the question mark logo
 - [Windows Paint 3D](https://www.microsoft.com/en-us/p/paint-3d/9nblggh5fv99?activetab=pivot:overviewtab): used to resize profile images and colour pallets used in this README
-- [Balsamiq](https://balsamiq.com/) to create the wireframes
+- [Pencil Project](https://pencil.evolus.vn/) to create the wireframes
 - [MongoDB](https://www.mongodb.com/)
 - [Git](https://git-scm.com/) for version control
 - [Heroku](https://heroku.com/) to deploy the application

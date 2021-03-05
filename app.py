@@ -68,7 +68,8 @@ def get_questions():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
+    if "user" in session:
+        return redirect(url_for("get_questions"))
     if request.method == "POST":
         # check if username exists in db
         existing_user = mongo.db.users.find_one(
@@ -106,6 +107,8 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if "user" in session:
+        return redirect(url_for("get_questions"))
     if request.method == "POST":
         # check if username already exists in db
         existing_user = mongo.db.users.find_one(
@@ -343,6 +346,9 @@ def add_friend(profile):
         mongo.db.friend_requests.insert_one(friend_request)
         flash("Friend request sent")
         return redirect(url_for("view_profile", profile=username,
+                                is_friends=already_friends,
+                                pending_request=pending_request))
+    return redirect(url_for("view_profile", profile=username,
                                 is_friends=already_friends,
                                 pending_request=pending_request))
 
@@ -733,6 +739,8 @@ def edit_profile():
 
 @app.route("/friend_requests/<user>/<action>", methods=["GET", "POST"])
 def friend_requests(user, action):
+    if "user" not in session:
+        return redirect(url_for("login"))
     if user:
         logged_in_user = mongo.db.users.find_one({"_id": ObjectId(user)})
         logged_user = logged_in_user["username"]
@@ -746,7 +754,8 @@ def friend_requests(user, action):
         profiles = mongo.db.users.find({"username": {"$in": requests_from}})
         # transform list of requestors profiles into dict
         requestors = {profile['username']: profile for profile in profiles}
-
+        if logged_user != session["user"]:
+            return redirect(url_for("get_questions"))
         if request.method == "POST":
             if action == 'accept_friend':
                 user_name = mongo.db.users.find_one(

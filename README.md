@@ -11,6 +11,7 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
     - [Goals](#site-goals)
     - [User Stories](#user-stories)
     - [Wireframes](#wireframes)
+      - [Wireframe Images](#wireframe-images)
     - [Views and Data Structure](#views-and-data-structure)
     - [Design](#design)
       - [Typography](#typography)
@@ -141,9 +142,18 @@ To avoid excessive spamming or unsolicited messages, users must be logged in to 
 
 ### WIREFRAMES
 
-Wireframes were originally developed using the [Pencil Project](https://pencil.evolus.vn/). Although original Wireframes, before development started were built using Balsamiq, very little change from the initial design were made. The Pencil Project wireframes are a basic layout and excluding any logos or images. See also: [Wireframes](github link here)
+Wireframes were originally developed using the [Pencil Project](https://pencil.evolus.vn/). Although original Wireframes, before development started were built using Balsamiq, very little change from the initial design were made. The Pencil Project wireframes are a basic layout and excluding any logos or images. See also: [Wireframes](https://github.com/pauld0051/pros_and_cons/tree/master/static/images/wireframe)
 
 ![Pros and Cons Home Wireframe](static/images/wireframe/home.jpg)
+
+#### Wireframe Images
+
+- [login](static/images/wireframe/login.jpg)
+- [register](static/images/wireframe/register.jpg)
+- [ask questions](static/images/wireframe/ask.jpg)
+- [view question](static/images/wireframe/question.jpg)
+- [profile](static/images/wireframe/profile.jpg)
+- [help](static/images/wireframe/help.jpg)
 
 ### VIEWS AND DATA STRUCTURE
 

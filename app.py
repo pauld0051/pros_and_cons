@@ -207,6 +207,9 @@ def add_question():
 
 @app.route("/cons/<question_id>", methods=["POST"])
 def cons(question_id):
+    length_id = len(question_id)
+    if length_id != 24:
+        return redirect(url_for("get_questions"))
     admin = "9dyhnxe8u4"
     if "user" not in session:
         return redirect(url_for("login"))
@@ -257,6 +260,9 @@ def cons(question_id):
 
 @app.route("/pros/<question_id>", methods=["POST"])
 def pros(question_id):
+    length_id = len(question_id)
+    if length_id != 24:
+        return redirect(url_for("get_questions"))
     admin = "9dyhnxe8u4"
     if "user" not in session:
         return redirect(url_for("login"))
@@ -311,6 +317,8 @@ def add_friend(profile):
     if "user" not in session:
         return redirect(url_for("login"))
     user_profile = mongo.db.users.find_one({"username": profile})
+    if user_profile is None:
+        return redirect(url_for("get_questions"))
     username = user_profile["username"]
     logged_in_user = session["user"]
     pending_request = mongo.db.friend_requests.find_one({'$or':
@@ -357,6 +365,9 @@ def add_friend(profile):
 
 @app.route("/view_question/<question_id>")
 def view_question(question_id):
+    length_id = len(question_id)
+    if length_id != 24:
+        return redirect(url_for("get_questions"))
     questions = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     admin = "9dyhnxe8u4"
     created_by = questions["created_by"]
@@ -601,6 +612,8 @@ def search_profiles():
 def view_profile(profile):
     admin = "9dyhnxe8u4"
     user_profile = mongo.db.users.find_one({"username": profile})
+    if user_profile is None:
+        return redirect(url_for("get_questions"))
     username = user_profile["username"]
     questions = list(mongo.db.questions.find(
         {"created_by": username}))
@@ -758,6 +771,9 @@ def edit_profile():
 def friend_requests(user, action):
     if "user" not in session:
         return redirect(url_for("login"))
+    user_length = len(user)
+    if user_length != 24:
+        return redirect(url_for("get_questions"))
     if user:
         logged_in_user = mongo.db.users.find_one({"_id": ObjectId(user)})
         logged_user = logged_in_user["username"]
@@ -778,6 +794,9 @@ def friend_requests(user, action):
                 user_name = mongo.db.users.find_one(
                     {"username": session["user"]})
                 user_id = user_name["_id"]
+                length_user_id = len(user_id)
+                if length_user_id != 24:
+                    return redirect(url_for("get_questions"))
                 accept_friend = request.form.get("accept")
                 requestors_user = mongo.db.users.find_one(
                     {"username": accept_friend})
@@ -804,6 +823,9 @@ def friend_requests(user, action):
                 user_name = mongo.db.users.find_one(
                     {"username": session["user"]})
                 user_id = user_name["_id"]
+                length_user_id = len(user_id)
+                if length_user_id != 24:
+                    return redirect(url_for("get_questions"))
                 decline_friend = request.form.get("decline")
                 request_declined = {
                     "friend_request_from": decline_friend,
@@ -822,6 +844,9 @@ def friend_requests(user, action):
 
 @app.route("/edit_question/<question_id>", methods=["GET", "POST"])
 def edit_question(question_id):
+    length_id = len(question_id)
+    if length_id != 24:
+        return redirect(url_for("get_questions"))
     admin = "9dyhnxe8u4"
     if "user" not in session:
         return redirect(url_for("login"))
@@ -869,6 +894,9 @@ def edit_question(question_id):
 
 @app.route("/finish_question/<question_id>", methods=["GET", "POST"])
 def finish_question(question_id):
+    length_id = len(question_id)
+    if length_id != 24:
+        return redirect(url_for("get_questions"))
     admin = "9dyhnxe8u4"
     if "user" not in session:
         return redirect(url_for("login"))
@@ -900,6 +928,8 @@ def remove_friend(profile):
         return redirect(url_for("login"))
     # Find the profile of the user being looked at
     user_profile = mongo.db.users.find_one({"username": profile})
+    if user_profile is None:
+        return redirect(url_for("get_questions"))
     # Find the ID of the profile of the user being looked at
     profile_id = user_profile["_id"]
     # Find the username of the ID of the profile being looked at
@@ -947,6 +977,9 @@ def remove_friend(profile):
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
 def delete_question(question_id):
+    length_id = len(question_id)
+    if length_id != 24:
+        return redirect(url_for("get_questions"))
     admin = "9dyhnxe8u4"
     if "user" not in session:
         return redirect(url_for("login"))

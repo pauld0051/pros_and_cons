@@ -278,6 +278,10 @@ Only logged in users can send a message. The message must also be validated in e
 
 Users that are not logged in can not access the send message page. Those that are need to fill out the form in order to submit. But there can be no mathematical operators in the text. If a mathematical operator is used an error is returned but the user's text is not removed. The error states "Use only printable letters and numbers. Mathematical operators are not possible."
 
+#### Routes containing an ID or profile name
+
+Some routes could be altered manually and incorrectly. In doing so, this throws a PyMongo error rather than a 404, page not found error. To circumnavigate that the length of an ID must be 24 characters, so any ID that is less than or greater than 24 characters will then cause the user to be redirected. If a user inputs a name that is not in MongoDB when viewing profiles or making friend requests etc, if the name does not exist, the user is redirected to the questions page.
+
 ## RESPONSIVE TESTING
 
 Browsers used:

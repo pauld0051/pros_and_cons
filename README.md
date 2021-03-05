@@ -155,6 +155,9 @@ Wireframes were originally developed using the [Pencil Project](https://pencil.e
 - [profile](static/images/wireframe/profile.jpg)
 - [help](static/images/wireframe/help.jpg)
 
+All wireframes are located on a document here:
+
+- [wireframes](static/images/wireframe/wireframes_pros_and_cons.pdf)
 ### VIEWS AND DATA STRUCTURE
 
 Pros and Cons was a relatively ambitious project to use the likes of MongoDB to produce a social media platform. Although some details did exist of previous attempts, none of these were used in the design or data structure. Instead, as user stories were being met, advancements were made for the routes on whether the user was creating, reading, updating, or deleting.

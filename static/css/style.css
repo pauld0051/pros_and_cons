@@ -8,7 +8,6 @@
     box-shadow: none !important;
 }
 
-
 /* logo fixed size for mobile and desktop devices */
 
 @media only screen and (max-width: 768px) {
@@ -28,7 +27,6 @@
         width: auto;
     }
 }
-
 
 /* Profile Pic Size for mobile and desktop devices */
 
@@ -66,7 +64,6 @@
     display: inline;
 }
 
-
 /* Button growth */
 
 .grow {
@@ -76,7 +73,6 @@
 .grow:hover {
     transform: scale(1.07);
 }
-
 
 /* switch colour for question input */
 
@@ -172,7 +168,7 @@ button.datepicker-day-button {
  }
 
 /* This gets social media sharing buttons inline */
-/* Code idea fro, https://www.reinisfischer.com/how-align-facebook-google-and-twitter-buttons */
+/* Code idea from https://www.reinisfischer.com/how-align-facebook-google-and-twitter-buttons */
 .social-share iframe {
 	vertical-align: middle;
     margin-top: 10px;	
@@ -182,5 +178,13 @@ button.datepicker-day-button {
     margin-right: 20px;
 }
 
+.facebook {
+    width: 100px;
+    float: left;
+}
 
- 
+.twitter {
+    width: 100px;
+    float: left; 
+    margin-top: 2px;
+}

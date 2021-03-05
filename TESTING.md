@@ -71,7 +71,7 @@ Only users who have a current session are able to access the add question page. 
 
 - Contains mathematical operators
 - A title longer than 255 characters
-- Text longer than 1020 characters
+- Text longer than 1020 characters in the body of the question
 
 ### Adding a pro or a con to a question
 
@@ -82,6 +82,18 @@ Pros and cons have the same validation criteria. A pro or con will be rejected i
 - Contains mathematical operators
 - Is longer than 255 characters
 
+### Editing, Deleting and Finishing a question
+
+Only logged in users who are the "created_by" session user or the administrator can edit, delete or finish any questions. Users who try to force and edit, delete or finish will be redirected to either the questions page or login if they are not currently logged in. 
+
+Editing questions follows the same rules as adding a question. Edits will be rejected if they:
+
+- Contain mathematical operators
+- Have a title longer than 255 characters
+- Contain text longer than 1020 characters in the body of the question
+
+
+
 ### Adding a friendship
 
 Users who are logged in are able to accept, decline and send friend requests. Users that try to force a friend request are redirected to the profile of the user they're sending the request to. Users that try to accept or decline friendships that they are not receiving (ie, have a url for an accept or decline friendship) are redirected back to the questions page. Only users who received the friendship request can act on them.
@@ -89,6 +101,14 @@ Users who are logged in are able to accept, decline and send friend requests. Us
 ### Help Page
 
 All users can view the help page, but only users who are logged in are able to send the administrator messages.
+
+### Logout
+
+The application successfully removes a user from the "session".
+
+### Keep logged in
+
+Users have the choice at registration or login to keep their "session" active. A user can then close their browser and reopen it at another time and still be logged in.
 
 ### 404 - page not found
 

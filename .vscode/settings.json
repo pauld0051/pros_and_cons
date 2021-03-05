@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "Collapsibles",
         "Endpd",
         "Eventyret's",
         "FXNAQ",
@@ -14,6 +15,7 @@
         "pymongo",
         "ravlb",
         "tojson",
+        "uncollapsed",
         "werkzeug"
     ]
 }

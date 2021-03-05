@@ -179,7 +179,7 @@ Only logged in users are able to see the submission form for adding a pro or a c
 
 To add a friend a user must have first received a friend request. Two possibilities exist where a user logged in tries to force an add friend or a user not logged in attempts.
 
-For example, if a user is logged in and is not friends with another user and just types a URL into the browser as follows: [pros-and-cons-1.herokuapp.com/add_friend/test3](pros-and-cons-1.herokuapp.com/add_friend/test3) this will return the user to the profile of the page they are trying to add as a friend. If a user is already a friend, this will still go directly to that friend's profile. If a user is not logged in, they will be redirected to the login page. If the user has a pending friend request that was sent to that user they will be redirected to the user's profile page. If a user has a pending friend request from the user the same occurs, they are redirected to their profile page. From there the user can either accept or decline the friend request.
+For example, if a user is logged in and is not friends with another user and just types a URL into the browser as follows: [http://pros-and-cons-1.herokuapp.com/add_friend/test3](http://pros-and-cons-1.herokuapp.com/add_friend/test3) this will return the user to the profile of the page they are trying to add as a friend. If a user is already a friend, this will still go directly to that friend's profile. If a user is not logged in, they will be redirected to the login page. If the user has a pending friend request that was sent to that user they will be redirected to the user's profile page. If a user has a pending friend request from the user the same occurs, they are redirected to their profile page. From there the user can either accept or decline the friend request.
 
 To test this, set up four profiles:
 
@@ -190,15 +190,15 @@ To test this, set up four profiles:
 
 From *Profile_A*, send a friend request to *Profile_B* and to *Profile_C*
 
-From *Profile_B* - accept the friend request, these users are now friends. Now try to force the URL from *Profile_A*: [pros-and-cons-1.herokuapp.com/add_friend/profile_b](pros-and-cons-1.herokuapp.com/add_friend/profile_b). This can be attempted vice versa too. 
+From *Profile_B* - accept the friend request, these users are now friends. Now try to force the URL from *Profile_A*: http://[pros-and-cons-1.herokuapp.com/add_friend/profile_b](http://pros-and-cons-1.herokuapp.com/add_friend/profile_b). This can be attempted vice versa too. 
 
 This will result in the redirection back to the *Profile_B* profile page.
 
-From *Profile_C* you can check both directions, you can force the URL from *Profile_C* [pros-and-cons-1.herokuapp.com/add_friend/profile_a](pros-and-cons-1.herokuapp.com/add_friend/profile_a) and from *Profile_A* [pros-and-cons-1.herokuapp.com/add_friend/profile_c](pros-and-cons-1.herokuapp.com/add_friend/profile_c). This covers a pending request to a profile and a pending request from a profile respectively. 
+From *Profile_C* you can check both directions, you can force the URL from *Profile_C* [http://pros-and-cons-1.herokuapp.com/add_friend/profile_a](http://pros-and-cons-1.herokuapp.com/add_friend/profile_a) and from *Profile_A* [pros-and-cons-1.herokuapp.com/add_friend/profile_c](http://pros-and-cons-1.herokuapp.com/add_friend/profile_c). This covers a pending request to a profile and a pending request from a profile respectively. 
 
 Both will result in a redirection to the respective profile's page.
 
-From *Profile_A* you can check *Profile_D* by adding the URL: [pros-and-cons-1.herokuapp.com/add_friend/profile_d](pros-and-cons-1.herokuapp.com/add_friend/profile_d). These two users are not friends so the same will have occur in reverse as well. This will result in a redirection to the respective profile page.
+From *Profile_A* you can check *Profile_D* by adding the URL: [http://pros-and-cons-1.herokuapp.com/add_friend/profile_d](http://pros-and-cons-1.herokuapp.com/add_friend/profile_d). These two users are not friends so the same will have occur in reverse as well. This will result in a redirection to the respective profile page.
 
 #### view_question()
 
@@ -271,15 +271,13 @@ Only logged in users can access the remove friend button. If a user tries to for
 
 Only logged in users can access the delete question and only if they are an administrator or the user who created the post. Users that try to force the delete question link are redirected back to the login page if not logged in or back to the questions page if logged in and not the user who created the question or didn't use the post method.
 
-This can be tested by trying to force a delete: [pros-and-cons-1.herokuapp.com/delete_question/6029562b3df6eb72f90e6034](pros-and-cons-1.herokuapp.com/delete_question/6029562b3df6eb72f90e6034).
+This can be tested by trying to force a delete: [https://pros-and-cons-1.herokuapp.com/delete_question/6029562b3df6eb72f90e6034](https://pros-and-cons-1.herokuapp.com/delete_question/6029562b3df6eb72f90e6034).
 
 #### send_message()
 
 Only logged in users can send a message. The message must also be validated in exactly the same manner as a question text.
 
 Users that are not logged in can not access the send message page. Those that are need to fill out the form in order to submit. But there can be no mathematical operators in the text. If a mathematical operator is used an error is returned but the user's text is not removed. The error states "Use only printable letters and numbers. Mathematical operators are not possible."
-
-
 
 ## RESPONSIVE TESTING
 

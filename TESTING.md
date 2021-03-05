@@ -280,6 +280,8 @@ Users that are not logged in can not access the send message page. Those that ar
 
 #### Routes containing an ID or profile name
 
+During route by route testing URLs that don't exist were attempted. It was discovered that routes needed protection from users accidentally entering an incorrect ObjectId into a URL or by entering a username that does not exist for routes that require an ObjectId or correct username.
+
 Some routes could be altered manually and incorrectly. In doing so, this throws a PyMongo error rather than a 404, page not found error. To circumnavigate that the length of an ID must be 24 characters, so any ID that is less than or greater than 24 characters will then cause the user to be redirected. If a user inputs a name that is not in MongoDB when viewing profiles or making friend requests etc, if the name does not exist, the user is redirected to the questions page.
 
 ## RESPONSIVE TESTING

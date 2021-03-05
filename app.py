@@ -794,9 +794,6 @@ def friend_requests(user, action):
                 user_name = mongo.db.users.find_one(
                     {"username": session["user"]})
                 user_id = user_name["_id"]
-                length_user_id = len(user_id)
-                if length_user_id != 24:
-                    return redirect(url_for("get_questions"))
                 accept_friend = request.form.get("accept")
                 requestors_user = mongo.db.users.find_one(
                     {"username": accept_friend})
@@ -823,9 +820,6 @@ def friend_requests(user, action):
                 user_name = mongo.db.users.find_one(
                     {"username": session["user"]})
                 user_id = user_name["_id"]
-                length_user_id = len(user_id)
-                if length_user_id != 24:
-                    return redirect(url_for("get_questions"))
                 decline_friend = request.form.get("decline")
                 request_declined = {
                     "friend_request_from": decline_friend,

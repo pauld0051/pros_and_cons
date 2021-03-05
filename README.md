@@ -35,6 +35,7 @@ Site: <https://pros-and-cons-1.herokuapp.com/>
   - [Testing](#testing)
   - [Deployment](#deployment)
   - [Known Bugs](#known-bugs)
+  - [Version Control](#version-control)
   - [Admin](#admin)
     - [Admin Responsibilities](#admin-responsibilities)
   - [Acknowledgements](#acknowledgements)
@@ -158,6 +159,7 @@ Wireframes were originally developed using the [Pencil Project](https://pencil.e
 All wireframes are located on a document here:
 
 - [wireframes](static/images/wireframe/wireframes_pros_and_cons.pdf)
+
 ### VIEWS AND DATA STRUCTURE
 
 Pros and Cons was a relatively ambitious project to use the likes of MongoDB to produce a social media platform. Although some details did exist of previous attempts, none of these were used in the design or data structure. Instead, as user stories were being met, advancements were made for the routes on whether the user was creating, reading, updating, or deleting.
@@ -599,6 +601,12 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
   from here the remainder of the jQuery and JavaScript for-loop can be coded and input int the select element at the appropriate location. Two sections of this code will appear, one for when a country change is made by the user (eventListener "change") and one for when the page loads, this means the user can change state if they have already selected a country.
 
 6. User profile search requests to MongoDB are slightly limited in their capacity to search for usernames with digits. For example, if a username contains more than 1 digit in it then MongoDB's index function does not return that value. A username with just one digit in it at the end of the name is returned. For example admin1 will be returned if a search for "admin" was conducted. But admin12 or 1admin will not be returned for the same search.
+
+## VERSION CONTROL
+
+Regular commits for updates to the app were conducted and logged. You can view the full list of updates and current version here:
+
+[Version Control](static/images/readme/version-control-pros_and_cons.pdf)
 
 ## ADMIN
 

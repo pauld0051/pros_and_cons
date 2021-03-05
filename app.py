@@ -360,6 +360,7 @@ def view_question(question_id):
     questions = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     admin = "9dyhnxe8u4"
     created_by = questions["created_by"]
+    friends_on = questions["is_friends"]
     if "user" in session:
         # Get the session user for _id matching
         profile = mongo.db.users.find_one({"username": session["user"]})
@@ -374,11 +375,22 @@ def view_question(question_id):
         matched = [x for x in friend_list if x == created_by]
         # Remove duplicates from the list
         matched = list(dict.fromkeys(matched))
-
+        if session["user"] == admin:
+            return render_template("view_question.html", question=questions,
+                                   matched=matched, admin=admin)
+        if friends_on == "on":
+            if session["user"] == created_by:
+                return render_template("view_question.html", question=questions,
+                                   matched=matched, admin=admin)
+            if matched == []:
+                return redirect(url_for("get_questions"))
         return render_template("view_question.html", question=questions,
                                matched=matched, admin=admin)
-    else:
+    if "user" not in session:
         matched = []
+        if friends_on == "on":
+            return redirect(url_for("get_questions"))
+
         return render_template("view_question.html", question=questions,
                                matched=matched, admin=admin)
 
@@ -519,65 +531,68 @@ def search():
 @app.route("/search_profiles", methods=["GET", "POST"])
 def search_profiles():
     if "user" in session:
-        user = session["user"] or None
-        user_profile = mongo.db.users.find_one({"username": user})
-        search_profiles = request.form.get("search_profiles")
-        profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
+        if request.method == "POST":
+            user = session["user"] or None
+            user_profile = mongo.db.users.find_one({"username": user})
+            search_profiles = request.form.get("search_profiles")
+            profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
 
-        # Check if the logged in user is friends with any of the found profiles
-        # Check all the profiles that are found against current friends
+            # Check if the logged in user is friends with any of the found profiles
+            # Check all the profiles that are found against current friends
 
-        searched_profiles = list(mongo.db.users.find(
-            {"$text": {"$search": search_profiles}}))
-        profile_usernames = []
+            searched_profiles = list(mongo.db.users.find(
+                {"$text": {"$search": search_profiles}}))
+            profile_usernames = []
 
-        for username in searched_profiles:
-            # Find a list of all the names that came up in the search
-            profile_usernames.append(username["username"])
-        # Get the list of ObjectId from the friends
-        # array under the session user's profile
-        profile_friends = user_profile["friends"]
-        # Insert each ObjectId to get the friend's user profile
-        friends = mongo.db.users.find({"_id": {"$in": profile_friends}})
-        # For each of the ObjectId find the username associated
-        friend_list = [friend['username'] for friend in friends]
-        # Look to see if any friends match to the created_by list
-        matched = [
-            matched for matched in profile_usernames if matched in friend_list]
-        # Remove duplicates from the list
-        matched = list(dict.fromkeys(matched))
-        # Check if there is a pending friends request from the logged in user (display pause)
-        from_user = list(mongo.db.friend_requests.find(
-            {"friend_request_from": user_profile["username"]}))
-        request_from = []
-        for profile in from_user:
-            # For each request to a profile
-            request_from.append(profile["friend_request_to"])
-        requested = [
-            requested for requested in profile_usernames if requested in request_from]
-        # Check if there is a pending friends request from the found profiles (allow accept or decline)
-        to_user = list(mongo.db.friend_requests.find(
-            {"friend_request_to": user_profile["username"]}))
-        request_to = []
-        for profile in to_user:
-            # For each request from a profile
-            request_to.append(profile["friend_request_from"])
-        requested_to = [
-            requested_to for requested_to in profile_usernames if requested_to in request_to]
-        # For everything else allow logged in user to send a friend request
-        result_list = []
-        send_request = False  # Default state
-        for one_profile in profile_usernames:
-            if (one_profile in matched) or (one_profile in requested) or (one_profile in requested_to):
-                result_list.append((one_profile, True))
-            else:
-                result_list.append((one_profile, False))
+            for username in searched_profiles:
+                # Find a list of all the names that came up in the search
+                profile_usernames.append(username["username"])
+            # Get the list of ObjectId from the friends
+            # array under the session user's profile
+            profile_friends = user_profile["friends"]
+            # Insert each ObjectId to get the friend's user profile
+            friends = mongo.db.users.find({"_id": {"$in": profile_friends}})
+            # For each of the ObjectId find the username associated
+            friend_list = [friend['username'] for friend in friends]
+            # Look to see if any friends match to the created_by list
+            matched = [
+                matched for matched in profile_usernames if matched in friend_list]
+            # Remove duplicates from the list
+            matched = list(dict.fromkeys(matched))
+            # Check if there is a pending friends request from the logged in user (display pause)
+            from_user = list(mongo.db.friend_requests.find(
+                {"friend_request_from": user_profile["username"]}))
+            request_from = []
+            for profile in from_user:
+                # For each request to a profile
+                request_from.append(profile["friend_request_to"])
+            requested = [
+                requested for requested in profile_usernames if requested in request_from]
+            # Check if there is a pending friends request from the found profiles (allow accept or decline)
+            to_user = list(mongo.db.friend_requests.find(
+                {"friend_request_to": user_profile["username"]}))
+            request_to = []
+            for profile in to_user:
+                # For each request from a profile
+                request_to.append(profile["friend_request_from"])
+            requested_to = [
+                requested_to for requested_to in profile_usernames if requested_to in request_to]
+            # For everything else allow logged in user to send a friend request
+            result_list = []
+            send_request = False  # Default state
+            for one_profile in profile_usernames:
+                if (one_profile in matched) or (one_profile in requested) or (one_profile in requested_to):
+                    result_list.append((one_profile, True))
+                else:
+                    result_list.append((one_profile, False))
 
-        return render_template("search_profiles.html",
-                               profiles=profiles, user=user_profile,
-                               friends=matched, requested=requested,
-                               requested_to=requested_to,
-                               result_list=result_list)
+            return render_template("search_profiles.html",
+                                profiles=profiles, user=user_profile,
+                                friends=matched, requested=requested,
+                                requested_to=requested_to,
+                                result_list=result_list)
+        else:
+            return redirect(url_for("get_questions"))
     else:
         return redirect(url_for("login"))
 
@@ -626,10 +641,12 @@ def view_profile(profile):
 @app.route("/profile/<username>", methods=["GET", "POST"])
 def profile(username):
     admin = "9dyhnxe8u4"
+    if "user" not in session:
+        return redirect(url_for("login"))
+    user = session["user"] or None
     # Get questions that the user has input themselves
     questions = mongo.db.questions.find(
-        {"created_by": session["user"]})
-    user = session["user"] or None
+        {"created_by": user})
     # grab the session user's username from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]
@@ -855,21 +872,24 @@ def finish_question(question_id):
     admin = "9dyhnxe8u4"
     if "user" not in session:
         return redirect(url_for("login"))
-    user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
-    created_byId = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-    created_by = created_byId["created_by"]
-    if user == created_by or user == admin:
-        if request.method == "POST":
-            finish = {
-                "$set": {
-                    "finished": request.form.get("finish")
+    if request.method == "POST":
+        user = session["user"] or None
+        questions = list(mongo.db.questions.find().sort("added_on", -1))
+        created_byId = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        created_by = created_byId["created_by"]
+        if user == created_by or user == admin:
+            if request.method == "POST":
+                finish = {
+                    "$set": {
+                        "finished": request.form.get("finish")
+                    }
                 }
-            }
 
-        mongo.db.questions.update_one({"_id": ObjectId(question_id)}, {
-                                      "$set": {"finished": True}})
-    return redirect(url_for("get_questions"))
+            mongo.db.questions.update_one({"_id": ObjectId(question_id)}, {
+                                        "$set": {"finished": True}})
+        return redirect(url_for("get_questions"))
+    else: 
+        return redirect(url_for("get_questions"))
 
 
 # ---------- Delete ---------- #
@@ -918,8 +938,11 @@ def remove_friend(profile):
             {"$pull": {"friends": profile_id}})  # Removes the profile that is being looked at
         mongo.db.friends.remove(already_friends)
 
-    flash("Successfully removed friend")
+        flash("Successfully removed friend")
+        return redirect(url_for("profile", username=logged_in_user))
+    
     return redirect(url_for("profile", username=logged_in_user))
+    
 
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])

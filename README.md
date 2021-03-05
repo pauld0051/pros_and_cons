@@ -602,6 +602,8 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
 
 6. User profile search requests to MongoDB are slightly limited in their capacity to search for usernames with digits. For example, if a username contains more than 1 digit in it then MongoDB's index function does not return that value. A username with just one digit in it at the end of the name is returned. For example admin1 will be returned if a search for "admin" was conducted. But admin12 or 1admin will not be returned for the same search.
 
+7. Although the app was tested on multiple screens, including mobile, it was only possible to test mobile once the code has been pushed to Heroku. The social media share buttons had lined up correctly on desktop and in the browser inspect. However, once on mobile via Heroku, the share buttons were no long in line with each other. To attempt to solve for this multiple tests were attempted, however, each test required a new "push" to Heroku.
+
 ## VERSION CONTROL
 
 Regular commits for updates to the app were conducted and logged. You can view the full list of updates and current version here:

@@ -616,7 +616,7 @@ def view_profile(profile):
         return redirect(url_for("get_questions"))
     username = user_profile["username"]
     questions = list(mongo.db.questions.find(
-        {"created_by": username}).limit(100))
+        {"created_by": username}).sort("_id", -1).limit(100))
     if "user" not in session:
         return render_template("view_profile.html",
                                profile=user_profile, questions=questions)
@@ -659,7 +659,7 @@ def profile(username):
     user = session["user"] or None
     # Get questions that the user has input themselves
     questions = mongo.db.questions.find(
-        {"created_by": user}).limit(100)
+        {"created_by": user}).sort("_id", -1).limit(100)
     # grab the session user's username from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]

@@ -284,6 +284,26 @@ During route by route testing URLs that don't exist were attempted. It was disco
 
 Some routes could be altered manually and incorrectly. In doing so, this throws a PyMongo error rather than a 404, page not found error. To circumnavigate that the length of an ID must be 24 characters, so any ID that is less than or greater than 24 characters will then cause the user to be redirected. If a user inputs a name that is not in MongoDB when viewing profiles or making friend requests etc, if the name does not exist, the user is redirected to the questions page.
 
+#### Routes that were tested
+
+Each route was tested with the following links. All links also had ID lengths varied or usernames made up to a name that is not in the database.
+
+- [http://pros-and-cons-1.herokuapp.com/finish_question/6042885cf4e9219426d379a1](http://pros-and-cons-1.herokuapp.com/finish_question/6042885cf4e9219426d379a1)
+- [http://pros-and-cons-1.herokuapp.com/edit_question/604328ca04ff75a9757b3978](http://pros-and-cons-1.herokuapp.com/edit_question/604328ca04ff75a9757b3978)
+- [http://pros-and-cons-1.herokuapp.com/delete_question/6042885cf4e9219426d379a1](http://pros-and-cons-1.herokuapp.com/delete_question/6042885cf4e9219426d379a1)
+- [http://pros-and-cons-1.herokuapp.com/pros/6042885cf4e9219426d379a1](http://pros-and-cons-1.herokuapp.com/pros/6042885cf4e9219426d379a1)
+- [http://pros-and-cons-1.herokuapp.com/cons/6042885cf4e9219426d379a1](http://pros-and-cons-1.herokuapp.com/cons/6042885cf4e9219426d379a1)
+- [http://pros-and-cons-1.herokuapp.com/filter_name](http://pros-and-cons-1.herokuapp.com/filter_name)
+- [http://pros-and-cons-1.herokuapp.com/filters](http://pros-and-cons-1.herokuapp.com/filters)
+- [http://pros-and-cons-1.herokuapp.com/add_friend/test3](http://pros-and-cons-1.herokuapp.com/add_friend/test3)
+- [http://pros-and-cons-1.herokuapp.com/add_friend/nosuchusernameexists](http://pros-and-cons-1.herokuapp.com/add_friend/nosuchusernameexists)
+- [http://pros-and-cons-1.herokuapp.com/add_friend/test16](http://pros-and-cons-1.herokuapp.com/add_friend/test16)
+- [http://pros-and-cons-1.herokuapp.com/friend_requests/60294e0910e2d69484e2dbf5/none](http://pros-and-cons-1.herokuapp.com/friend_requests/60294e0910e2d69484e2dbf5/none)
+- [http://pros-and-cons-1.herokuapp.com/friend_requests/60294e0910e2d69484e2dbf5/accept_friend](http://pros-and-cons-1.herokuapp.com/friend_requests/60294e0910e2d69484e2dbf5/accept_friend)
+- [http://pros-and-cons-1.herokuapp.com/friend_requests/60294e0910e2d69484e2dbf5/decline_friend](http://pros-and-cons-1.herokuapp.com/friend_requests/60294e0910e2d69484e2dbf5/decline_friend)
+- [http://pros-and-cons-1.herokuapp.com/remove_friend/test16](http://pros-and-cons-1.herokuapp.com/remove_friend/test16)
+- [https://pros-and-cons-1.herokuapp.com/send_message](https://pros-and-cons-1.herokuapp.com/send_message)
+
 ## RESPONSIVE TESTING
 
 Browsers used:

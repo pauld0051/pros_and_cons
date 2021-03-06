@@ -846,6 +846,8 @@ def edit_question(question_id):
         return redirect(url_for("login"))
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+    if created_byId is None:
+        return redirect(url_for("get_questions"))
     created_by = created_byId["created_by"]
     finished = created_byId["finished"]
     if user == created_by or user == admin:

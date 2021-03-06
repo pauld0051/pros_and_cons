@@ -30,7 +30,7 @@ mongo = PyMongo(app)
 @app.route("/get_questions")
 def get_questions():
     admin = "9dyhnxe8u4"
-    questions = list(mongo.db.questions.find().sort("_id", -1))
+    questions = list(mongo.db.questions.find().sort("_id", -1).limit(100))
     created_by = [created_by['created_by'] for created_by in questions]
     is_friends = [is_friends['is_friends'] for is_friends in questions]
     # Find a random "question of the day" to head the home page
@@ -412,7 +412,7 @@ def view_question(question_id):
 def filters():
     sort = request.form.get("sort", "latest")
     admin = "9dyhnxe8u4"
-    questions = list(mongo.db.questions.find().sort("_id", -1))
+    questions = list(mongo.db.questions.find().sort("_id", -1).limit(100))
     created_by = [created_by['created_by'] for created_by in questions]
     # Find the question of the day - a random open
     # question that appears at the top of the list, changes on refresh
@@ -443,18 +443,18 @@ def filters():
         if "user" not in session:
             matched = []
         if sort == "oldest":
-            questions = list(mongo.db.questions.find().sort("_id", 1))
+            questions = list(mongo.db.questions.find().sort("_id", 1).limit(100))
         if sort == "latest":
-            questions = list(mongo.db.questions.find().sort("_id", -1))
+            questions = list(mongo.db.questions.find().sort("_id", -1).limit(100))
         if sort == "names":
-            questions = list(mongo.db.questions.find().sort("created_by", 1))
+            questions = list(mongo.db.questions.find().sort("created_by", 1).limit(100))
         if sort == "friends":
             questions = list(mongo.db.questions.find(
-                {"created_by": {"$in": friend_list}}).sort("_id", -1))
+                {"created_by": {"$in": friend_list}}).sort("_id", -1).limit(100))
         if sort == "popular":
-            questions = list(mongo.db.questions.find().sort("replies", -1))
+            questions = list(mongo.db.questions.find().sort("replies", -1).limit(100))
         if sort == "unanswered":
-            questions = list(mongo.db.questions.find().sort("replies", 1))
+            questions = list(mongo.db.questions.find().sort("replies", 1).limit(100))
 
     return render_template("questions.html", questions=questions,
                            matched=matched, admin=admin,
@@ -466,7 +466,7 @@ def filter_name():
     if "user" in session:
         user = session["user"] or None
         sort = request.form.get("sort", "latest")
-        questions = list(mongo.db.questions.find({"created_by": user}))
+        questions = list(mongo.db.questions.find({"created_by": user}).limit(100))
         if len(questions) > 0:
             q_o_t_d = []
             for qs in questions:
@@ -492,16 +492,16 @@ def filter_name():
         if request.method == "POST":
             if sort == "oldest":
                 questions = list(mongo.db.questions.find(
-                    {"created_by": user}).sort("_id", 1))
+                    {"created_by": user}).sort("_id", 1).limit(100))
             if sort == "latest":
                 questions = list(mongo.db.questions.find(
-                    {"created_by": user}).sort("_id", -1))
+                    {"created_by": user}).sort("_id", -1).limit(100))
             if sort == "popular":
                 questions = list(mongo.db.questions.find(
-                    {"created_by": user}).sort("replies", -1))
+                    {"created_by": user}).sort("replies", -1).limit(100))
             if sort == "unanswered":
                 questions = list(mongo.db.questions.find(
-                    {"created_by": user}).sort("replies", 1))
+                    {"created_by": user}).sort("replies", 1).limit(100))
 
         return render_template("filter_name.html",
                                questions=questions, q_o_t_d=lead_question)
@@ -616,7 +616,7 @@ def view_profile(profile):
         return redirect(url_for("get_questions"))
     username = user_profile["username"]
     questions = list(mongo.db.questions.find(
-        {"created_by": username}))
+        {"created_by": username}).limit(100))
     if "user" not in session:
         return render_template("view_profile.html",
                                profile=user_profile, questions=questions)
@@ -659,7 +659,7 @@ def profile(username):
     user = session["user"] or None
     # Get questions that the user has input themselves
     questions = mongo.db.questions.find(
-        {"created_by": user})
+        {"created_by": user}).limit(100)
     # grab the session user's username from db
     username = mongo.db.users.find_one(
         {"username": session["user"]})["username"]

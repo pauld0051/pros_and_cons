@@ -900,6 +900,8 @@ def finish_question(question_id):
         user = session["user"] or None
         questions = list(mongo.db.questions.find().sort("added_on", -1))
         created_byId = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        if created_byId is None:
+            return redirect(url_for("get_questions"))
         created_by = created_byId["created_by"]
         if user == created_by or user == admin:
             if request.method == "POST":
@@ -981,6 +983,8 @@ def delete_question(question_id):
         return redirect(url_for("login"))
     user = session["user"] or None
     created_byId = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+    if created_byId is None:
+        return redirect(url_for("get_questions"))
     created_by = created_byId["created_by"]
     if user == created_by or user == admin:
         if request.method == "POST":
@@ -1078,4 +1082,4 @@ def server_error(error):
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
-            debug=True)
+            debug=False)

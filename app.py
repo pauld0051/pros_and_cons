@@ -32,14 +32,12 @@ def get_questions():
     admin = "9dyhnxe8u4"
     questions = list(mongo.db.questions.find().sort("_id", -1).limit(100))
     created_by = [created_by['created_by'] for created_by in questions]
-    is_friends = [is_friends['is_friends'] for is_friends in questions]
     # Find a random "question of the day" to head the home page
     q_o_t_d = []
     for qs in questions:
         q_o_t_d.append(qs["_id"])
     random_q = random.choice(q_o_t_d)
     lead_question = mongo.db.questions.find_one({"_id": random_q})
-    what_is_friend = lead_question["is_friends"]
     if lead_question["is_friends"] == "on":
         return get_questions()
     if "user" in session:
@@ -179,9 +177,10 @@ def add_question():
                 flash("Mathematical operators are not possible inputs.")
                 return render_template("add_question.html", title=title,
                                        text=textarea)
+            v_funcs = validate_funcs.validate_question_text
             if request.form.get("question_text"
-                                ) == "" or not validate_funcs.validate_question_text(
-                                request.form.get("question_text")):
+                                ) == "" or not v_funcs(
+                    request.form.get("question_text")):
                 flash("Use only printable letters.")
                 return render_template("add_question.html", title=title,
                                        text=textarea)
@@ -214,7 +213,6 @@ def cons(question_id):
     if "user" not in session:
         return redirect(url_for("login"))
     user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
     question_here = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     created_by = question_here["created_by"]
     if "user" in session:
@@ -234,7 +232,8 @@ def cons(question_id):
 
     if request.method == "POST":
         # Check to see if the title and text comply with the regex
-        if request.form.get("con") == "" or not validate_funcs.validate_question(
+        v_funcs = validate_funcs.validate_question
+        if request.form.get("con") == "" or not v_funcs(
            request.form.get("con")):
             bad_con = request.form.get("con")
             flash("Sorry, you can't use mathematical operators here.")
@@ -267,7 +266,6 @@ def pros(question_id):
     if "user" not in session:
         return redirect(url_for("login"))
     user = session["user"] or None
-    questions = list(mongo.db.questions.find().sort("added_on", -1))
     question_here = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
     created_by = question_here["created_by"]
     if "user" in session:
@@ -287,7 +285,8 @@ def pros(question_id):
 
     if request.method == "POST":
         # Check to see if the title and text comply with the regex
-        if request.form.get("pro") == "" or not validate_funcs.validate_question(
+        v_funcs = validate_funcs.validate_question
+        if request.form.get("pro") == "" or not v_funcs(
            request.form.get("pro")):
             bad_pro = request.form.get("pro")
             flash("Sorry, you can't use mathematical operators here.")
@@ -321,26 +320,30 @@ def add_friend(profile):
         return redirect(url_for("get_questions"))
     username = user_profile["username"]
     logged_in_user = session["user"]
-    pending_request = mongo.db.friend_requests.find_one({'$or':
-                                                         [
-                                                             {'$and': [{"friend_request_from": logged_in_user},
-                                                                       {"friend_request_to": username}]},
-                                                             {'$and': [{"friend_request_from": username},
-                                                                       {"friend_request_to": logged_in_user}]}
-                                                         ]})
-    already_friends = mongo.db.friends.find_one({'$or':
-                                                 [
-                                                     {'$and': [{"is_friends_1": logged_in_user},
-                                                               {"is_friends_2": username}]},
-                                                     {'$and': [{"is_friends_1": username},
-                                                               {"is_friends_2": logged_in_user}]}
-                                                 ]})
+    find_one = mongo.db.friend_requests.find_one
+    friend_from = "friend_request_from"
+    friend_to = "friend_request_to"
+    pending_request = find_one({'$or':
+                               [
+                                {'$and': [{friend_from: logged_in_user},
+                                          {friend_to: username}]},
+                                {'$and': [{friend_from: username},
+                                          {friend_to: logged_in_user}]}
+                                ]})
+    already_friends = find_one({'$or':
+                                [
+                                 {'$and': [{"is_friends_1": logged_in_user},
+                                           {"is_friends_2": username}]},
+                                 {'$and': [{"is_friends_1": username},
+                                           {"is_friends_2": logged_in_user}]}
+                                ]})
     if request.method == "POST":
         # check if the user is already friends or has a friend request pending
         if pending_request:
             flash("Friend request pending")
             return render_template("view_profile.html", profile=username,
-                                   is_friends=already_friends, pending_request=pending_request)
+                                   is_friends=already_friends,
+                                   pending_request=pending_request)
         if already_friends:
             flash("You're already friends!")
             return render_template("view_profile.html", profile=username,
@@ -357,8 +360,8 @@ def add_friend(profile):
                                 is_friends=already_friends,
                                 pending_request=pending_request))
     return redirect(url_for("view_profile", profile=username,
-                                is_friends=already_friends,
-                                pending_request=pending_request))
+                            is_friends=already_friends,
+                            pending_request=pending_request))
 
 
 # ---------- Read ---------- #
@@ -391,8 +394,10 @@ def view_question(question_id):
                                    matched=matched, admin=admin)
         if friends_on == "on":
             if session["user"] == created_by:
-                return render_template("view_question.html", question=questions,
-                                   matched=matched, admin=admin)
+                return render_template("view_question.html",
+                                       question=questions,
+                                       matched=matched,
+                                       admin=admin)
             if matched == []:
                 return redirect(url_for("get_questions"))
         return render_template("view_question.html", question=questions,
@@ -422,8 +427,8 @@ def filters():
     random_q = random.choice(q_o_t_d)
     lead_question = mongo.db.questions.find_one({"_id": random_q})
     # Avoid questions that have "is_friends" set to "on"
-    what_is_friend = lead_question["is_friends"]
-    if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
+    l_q = lead_question
+    if l_q["is_friends"] == "on" and l_q["created_by"] != session["user"]:
         return filters()
 
     if "user" in session:
@@ -443,18 +448,24 @@ def filters():
         if "user" not in session:
             matched = []
         if sort == "oldest":
-            questions = list(mongo.db.questions.find().sort("_id", 1).limit(100))
+            questions = list(
+                mongo.db.questions.find().sort("_id", 1).limit(100))
         if sort == "latest":
-            questions = list(mongo.db.questions.find().sort("_id", -1).limit(100))
+            questions = list(
+                mongo.db.questions.find().sort("_id", -1).limit(100))
         if sort == "names":
-            questions = list(mongo.db.questions.find().sort("created_by", 1).limit(100))
+            questions = list(mongo.db.questions.find().sort(
+                "created_by", 1).limit(100))
         if sort == "friends":
+            f_l = friend_list
             questions = list(mongo.db.questions.find(
-                {"created_by": {"$in": friend_list}}).sort("_id", -1).limit(100))
+                {"created_by": {"$in": f_l}}).sort("_id", -1).limit(100))
         if sort == "popular":
-            questions = list(mongo.db.questions.find().sort("replies", -1).limit(100))
+            questions = list(mongo.db.questions.find().sort(
+                "replies", -1).limit(100))
         if sort == "unanswered":
-            questions = list(mongo.db.questions.find().sort("replies", 1).limit(100))
+            questions = list(mongo.db.questions.find().sort(
+                "replies", 1).limit(100))
 
     return render_template("questions.html", questions=questions,
                            matched=matched, admin=admin,
@@ -466,14 +477,14 @@ def filter_name():
     if "user" in session:
         user = session["user"] or None
         sort = request.form.get("sort", "latest")
-        questions = list(mongo.db.questions.find({"created_by": user}).limit(100))
+        questions = list(mongo.db.questions.find(
+            {"created_by": user}).limit(100))
         if len(questions) > 0:
             q_o_t_d = []
             for qs in questions:
                 q_o_t_d.append(qs["_id"])
             random_q = random.choice(q_o_t_d)
             lead_question = mongo.db.questions.find_one({"_id": random_q})
-            what_is_friend = lead_question["is_friends"]
         else:
             questions = list(mongo.db.questions.find())
             q_o_t_d = []
@@ -481,12 +492,12 @@ def filter_name():
                 q_o_t_d.append(qs["_id"])
             random_q = random.choice(q_o_t_d)
             lead_question = mongo.db.questions.find_one({"_id": random_q})
-            what_is_friend = lead_question["is_friends"]
-        if lead_question["is_friends"] == "on" and lead_question["created_by"] != session["user"]:
+        l_q = lead_question
+        if l_q["is_friends"] == "on" and l_q["created_by"] != session["user"]:
             return filter_name()
         if len(questions) < 1:
             questions = ""
-            flash("You have none of your own questions yet, consider starting one.")
+            flash("Consider starting questions.")
             return render_template(filter_name.html,
                                    questions=questions, q_o_t_d=lead_question)
         if request.method == "POST":
@@ -514,7 +525,6 @@ def search():
     query = request.form.get("query")
     questions = list(mongo.db.questions.find({"$text": {"$search": query}}))
     created_by = [created_by['created_by'] for created_by in questions]
-    is_friends = [is_friends['is_friends'] for is_friends in questions]
 
     if "user" in session:
         # Get the session user for _id matching
@@ -546,9 +556,11 @@ def search_profiles():
             user = session["user"] or None
             user_profile = mongo.db.users.find_one({"username": user})
             search_profiles = request.form.get("search_profiles")
-            profiles = mongo.db.users.find({"$text": {"$search": search_profiles}})
+            profiles = mongo.db.users.find(
+                {"$text": {"$search": search_profiles}})
 
-            # Check if the logged in user is friends with any of the found profiles
+            # Check if the logged in user is friends with
+            # any of the found profiles
             # Check all the profiles that are found against current friends
 
             searched_profiles = list(mongo.db.users.find(
@@ -566,11 +578,13 @@ def search_profiles():
             # For each of the ObjectId find the username associated
             friend_list = [friend['username'] for friend in friends]
             # Look to see if any friends match to the created_by list
+            p_u = profile_usernames
             matched = [
-                matched for matched in profile_usernames if matched in friend_list]
+                matched for matched in p_u if matched in friend_list]
             # Remove duplicates from the list
             matched = list(dict.fromkeys(matched))
-            # Check if there is a pending friends request from the logged in user (display pause)
+            # Check if there is a pending friends
+            # request from the logged in user (display pause)
             from_user = list(mongo.db.friend_requests.find(
                 {"friend_request_from": user_profile["username"]}))
             request_from = []
@@ -578,8 +592,9 @@ def search_profiles():
                 # For each request to a profile
                 request_from.append(profile["friend_request_to"])
             requested = [
-                requested for requested in profile_usernames if requested in request_from]
-            # Check if there is a pending friends request from the found profiles (allow accept or decline)
+                requested for requested in p_u if requested in request_from]
+            # Check if there is a pending friends request from the found
+            # profiles (allow accept or decline)
             to_user = list(mongo.db.friend_requests.find(
                 {"friend_request_to": user_profile["username"]}))
             request_to = []
@@ -587,21 +602,23 @@ def search_profiles():
                 # For each request from a profile
                 request_to.append(profile["friend_request_from"])
             requested_to = [
-                requested_to for requested_to in profile_usernames if requested_to in request_to]
+                requested_to for requested_to in profile_usernames if
+                requested_to in request_to]
             # For everything else allow logged in user to send a friend request
             result_list = []
             send_request = False  # Default state
             for one_profile in profile_usernames:
-                if (one_profile in matched) or (one_profile in requested) or (one_profile in requested_to):
+                if (one_profile in matched) or (one_profile in requested) \
+                     or (one_profile in requested_to):
                     result_list.append((one_profile, True))
                 else:
                     result_list.append((one_profile, False))
 
             return render_template("search_profiles.html",
-                                profiles=profiles, user=user_profile,
-                                friends=matched, requested=requested,
-                                requested_to=requested_to,
-                                result_list=result_list)
+                                   profiles=profiles, user=user_profile,
+                                   friends=matched, requested=requested,
+                                   requested_to=requested_to,
+                                   result_list=result_list)
         else:
             return redirect(url_for("get_questions"))
     else:
@@ -625,27 +642,35 @@ def view_profile(profile):
     if logged_in_user != user_profile["username"]:
         # If user is logged in, they can add friends etc
         # check to see if users are already friends with this profile
-        already_friends = mongo.db.friends.find_one({'$or':
-                                                     [
-                                                         {'$and': [{"is_friends_1": current_user["username"]},
-                                                                   {"is_friends_2": username}]},
-                                                         {'$and': [{"is_friends_1": username},
-                                                                   {"is_friends_2": current_user["username"]}]}
-                                                     ]})
+        f_o = mongo.db.friends.find_one
+        c_u = current_user
+        already_friends = f_o({'$or':
+                              [
+                               {'$and': [{"is_friends_1": c_u["username"]},
+                                         {"is_friends_2": username}]},
+                               {'$and': [{"is_friends_1": username},
+                                         {"is_friends_2": c_u["username"]}]}
+                               ]})
         # check to see if user has sent a friend request to this profile
-        pending_request = mongo.db.friend_requests.find_one({'$or':
-                                                             [
-                                                                 {'$and': [{"friend_request_from": current_user["username"]},
-                                                                           {"friend_request_to": username}]},
-                                                                 {'$and': [{"friend_request_from": username},
-                                                                           {"friend_request_to": current_user["username"]}]}
-                                                             ]})
-        # Check to see if logged in user is trying to "view" their profile and redirect them to "profile"
+        f_one = mongo.db.friend_requests.find_one
+        f_to = "friend_request_to"
+        f_from = "friend_request_from"
+        pending_request = f_one({'$or':
+                                [
+                                 {'$and': [{f_from: c_u["username"]},
+                                           {f_to: username}]},
+                                 {'$and': [{f_from: username},
+                                           {f_to: c_u["username"]}]}
+                                 ]})
+        # Check to see if logged in user is trying to
+        # "view" their profile and redirect them to "profile"
         return render_template("view_profile.html", profile=user_profile,
                                friends=already_friends,
-                               pending_request=pending_request, user=current_user[
+                               pending_request=pending_request,
+                               user=current_user[
                                    "username"],
-                               questions=questions, admin=admin, user_id=current_user)
+                               questions=questions, admin=admin,
+                               user_id=current_user)
     #  If user is logged in, they get to see their own profile
     else:
         return redirect(url_for("profile", username=logged_in_user))
@@ -669,14 +694,17 @@ def profile(username):
 
     if session["user"] == admin:
         messages = mongo.db.messages.find()
-        return render_template("profile.html", username=username, profile=user_profile,
+        return render_template("profile.html",
+                               username=username,
+                               profile=user_profile,
                                friend_request=friend_request,
                                questions=questions, admin=admin,
                                messages=messages)
 
     if session["user"]:
         messages = None
-        return render_template("profile.html", username=username, profile=user_profile,
+        return render_template("profile.html", username=username,
+                               profile=user_profile,
                                friend_request=friend_request,
                                questions=questions, admin=admin,
                                messages=messages)
@@ -699,7 +727,8 @@ def edit_profile():
         users_id = user_profile["_id"]
 
         if request.method == "POST":
-            # Check that birthdates are based on the appropriate format or left completely empty
+            # Check that birthdates are based on
+            # the appropriate format or left completely empty
             # Idea for datetime validation from
             # https://www.tutorialspoint.com/How-to-do-date-validation-in-Python
             date_string = request.form.get("bday")
@@ -708,20 +737,21 @@ def edit_profile():
                 date_obj = datetime.strptime(date_string, format)
                 birthdate = True
             except ValueError:
-                birthdate = True if date_string == '' or date_string == "None" else False
+                birthdate = True if date_string == '' or \
+                    date_string == "None" else False
             # Check first and last name do not contain mathematical operators
             fname_validate = validate_funcs.validate_fname(
                 request.form.get("fname"))
             if fname_validate is None:
                 flash(
-                    "Please use valid name characters excluding mathematical operators")
+                    "Use valid name characters no mathematical operators")
                 return render_template("edit_profile.html",
                                        profile=user_profile, countries=country)
             lname_validate = validate_funcs.validate_fname(
                 request.form.get("lname"))
             if lname_validate is None:
                 flash(
-                    "Please use valid name characters excluding mathematical operators")
+                    "Use valid name characters no mathematical operators")
                 return render_template("edit_profile.html",
                                        profile=user_profile, countries=country)
             if birthdate is False:
@@ -808,13 +838,16 @@ def friend_requests(user, action):
                 }
                 mongo.db.friend_requests.delete_one(request_accepted)
                 mongo.db.friends.insert_one(friendship)
-                mongo.db.users.find_one_and_update({"_id": user_id},
-                                                   {"$push": {"friends": requestors_id}})
-                mongo.db.users.find_one_and_update({"_id": requestors_id},
-                                                   {"$push": {"friends": user_id}})
+                f_one_u = mongo.db.users.find_one_and_update
+                f_one_u({"_id": user_id},
+                        {"$push": {"friends": requestors_id}})
+                f_one_u({"_id": requestors_id},
+                        {"$push": {"friends": user_id}})
                 flash("Friend request accepted")
 
-                return redirect(url_for("friend_requests", user=user_id, action=action))
+                return redirect(url_for("friend_requests",
+                                        user=user_id,
+                                        action=action))
 
             if action == 'decline_friend':
                 user_name = mongo.db.users.find_one(
@@ -827,7 +860,9 @@ def friend_requests(user, action):
                 }
                 mongo.db.friend_requests.delete_one(request_declined)
                 flash("Friend request declined")
-                return redirect(url_for("friend_requests", user=user_id, action=action))
+                return redirect(url_for("friend_requests",
+                                        user=user_id,
+                                        action=action))
 
         return render_template("friend_requests.html",
                                requests=requests, requestors=requestors,
@@ -854,19 +889,25 @@ def edit_question(question_id):
         if finished is True:
             return redirect(url_for("get_questions"))
         if request.method == "POST":
-            if request.form.get("question_title") == "" or not validate_funcs.validate_question(
+            v_func = validate_funcs.validate_question
+            if request.form.get("question_title") == "" or not v_func(
                     request.form.get("question_title")):
                 question = mongo.db.questions.find_one(
                     {"_id": ObjectId(question_id)})
                 flash(
-                    "Use only printable letters and numbers. Mathematical operators are not possible.")
-                return render_template("edit_question.html", question=question, admin=admin)
-            if request.form.get("question_text") == "" or not validate_funcs.validate_question_text(
+                    "Use only printable letters and numbers.")
+                return render_template("edit_question.html",
+                                       question=question,
+                                       admin=admin)
+            v_func2 = validate_funcs.validate_question_text
+            if request.form.get("question_text") == "" or not v_func2(
                     request.form.get("question_text")):
                 question = mongo.db.questions.find_one(
                     {"_id": ObjectId(question_id)})
                 flash("Use only printable letters.")
-                return render_template("edit_question.html", question=question, admin=admin)
+                return render_template("edit_question.html",
+                                       question=question,
+                                       admin=admin)
 
             is_friends = "on" if request.form.get("is_friends") else "off"
             submit = {
@@ -885,7 +926,9 @@ def edit_question(question_id):
         return redirect(url_for("get_questions"))
 
     question = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
-    return render_template("edit_question.html", question=question, admin=admin)
+    return render_template("edit_question.html",
+                           question=question,
+                           admin=admin)
 
 
 @app.route("/finish_question/<question_id>", methods=["GET", "POST"])
@@ -898,8 +941,8 @@ def finish_question(question_id):
         return redirect(url_for("login"))
     if request.method == "POST":
         user = session["user"] or None
-        questions = list(mongo.db.questions.find().sort("added_on", -1))
-        created_byId = mongo.db.questions.find_one({"_id": ObjectId(question_id)})
+        created_byId = mongo.db.questions.find_one(
+            {"_id": ObjectId(question_id)})
         if created_byId is None:
             return redirect(url_for("get_questions"))
         created_by = created_byId["created_by"]
@@ -912,9 +955,9 @@ def finish_question(question_id):
                 }
 
             mongo.db.questions.update_one({"_id": ObjectId(question_id)}, {
-                                        "$set": {"finished": True}})
+                "$set": {"finished": True}})
         return redirect(url_for("get_questions"))
-    else: 
+    else:
         return redirect(url_for("get_questions"))
 
 
@@ -932,45 +975,39 @@ def remove_friend(profile):
     profile_id = user_profile["_id"]
     # Find the username of the ID of the profile being looked at
     username = user_profile["username"]
-    # Finds the profile of the logged in user
-    remove_friend_profile = mongo.db.users.find_one(
-        {"friends": ObjectId(profile_id)})
-    # Find the list of friends of the profile being looked at
-    friends_of_user = user_profile["friends"]
     # Name of the logged in user
     logged_in_user = session["user"]
     # Profile of the logged in user
     logged_in = mongo.db.users.find_one({"username": logged_in_user})
     # ID of the logged in user
     logged_id = logged_in["_id"]
-    # List of friends of the logged in user
-    friends_of_logged_in = logged_in["friends"]
-    # Find the friend in the array with this ID
-    remove_friend_user = mongo.db.users.find_one(
-        {"friends": ObjectId(logged_id)})
     # Find the friendship in the collection Friends
-    already_friends = mongo.db.friends.find_one({'$or':
-                                                 [
-                                                     {'$and': [{"is_friends_1": logged_in_user},  # Logged in username
-                                                               {"is_friends_2": username}]},  # The profile being looked at
-                                                     {'$and': [{"is_friends_1": username},  # The inverse of the first statement
-                                                               {"is_friends_2": logged_in_user}]}
-                                                 ]})
+    f_one = mongo.db.friends.find_one
+    already_friends = f_one({'$or':
+                             [
+                              {'$and': [{"is_friends_1": logged_in_user},
+                                        {"is_friends_2": username}]},
+                              {'$and': [{"is_friends_1": username},
+                                        {"is_friends_2": logged_in_user}]}
+                               ]})
 
     if request.method == "POST":
         mongo.db.users.find_one_and_update(
-            {"_id": profile_id},  # The ID of the profile being looked at
-            {"$pull": {"friends": logged_id}})  # Removes this friend (user that is logged in)
+            # The ID of the profile being looked at
+            {"_id": profile_id},
+            # Removes this friend (user that is logged in)
+            {"$pull": {"friends": logged_id}})
         mongo.db.users.find_one_and_update(
-            {"_id": logged_id},  # The ID of the logged in user
-            {"$pull": {"friends": profile_id}})  # Removes the profile that is being looked at
-        mongo.db.friends.remove(already_friends)
+            # The ID of the logged in user
+            {"_id": logged_id},
+            # Removes the profile that is being looked at
+            {"$pull": {"friends": profile_id}})
+        mongo.db.friends.delete_one(already_friends)
 
         flash("Successfully removed friend")
         return redirect(url_for("profile", username=logged_in_user))
-    
+
     return redirect(url_for("profile", username=logged_in_user))
-    
 
 
 @app.route("/delete_question/<question_id>", methods=["GET", "POST"])
@@ -1009,11 +1046,13 @@ def send_message():
     if "user" in session:
         if request.method == "POST":
             full_message = request.form.get("message_text")
-            if request.form.get("message_text") == "" or not validate_funcs.validate_message(
+            v_func = validate_funcs.validate_message
+            if request.form.get("message_text") == "" or not v_func(
                     request.form.get("message_text")):
                 flash(
-                    "Use only printable letters and numbers. Mathematical operators are not possible.")
-                return render_template("send_message.html", full_message=full_message)
+                    "Use only printable letters and numbers.")
+                return render_template("send_message.html",
+                                       full_message=full_message)
             message = request.form["message"]
             submit = {
                 "type": message,

@@ -20,9 +20,9 @@
     </form>
 </div>
 
-<ul class="collapsible">
+<div class="collapsible">
     {% if q_o_t_d.created_by in matched or q_o_t_d.is_friends == "off" or q_o_t_d.created_by == session.user or session.user == admin %}
-    <li>
+    <div>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -61,7 +61,7 @@
                               type="text"
                               class="validate"
                               required/>
-                              <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                              <label class="hide-on-med-and-down">Add a pro here</label>
                               <div class="right-align">
                               <button
                               class="btn-small blue darken-3 waves-effect waves-light"
@@ -97,7 +97,7 @@
                               type="text"
                               class="validate"
                               required/>
-                              <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
+                              <label class="hide-on-med-and-down">Add a con here</label>
                               <div class="right-align">
                               <button
                               class="btn-small blue darken-3 waves-effect waves-light"
@@ -145,9 +145,9 @@
                 </div>
         </div><!-- collapsible body end div -->
     </div>
-    </li>
+</div>
     {% endif %}
-</ul>
+</div>
 
 <!-- Show only user's questions on click -->
 <div class="row">
@@ -179,9 +179,9 @@
 </div>
 
 {% if questions|length > 0 %}
-<ul class="collapsible">
+<div class="collapsible">
     {% for question in questions if question.created_by in matched or question.is_friends == "off" or question.created_by == session.user or session.user == admin %}
-    <li>
+    <div>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -220,7 +220,7 @@
                           type="text"
                           class="validate"
                           required/>
-                          <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                          <label class="hide-on-med-and-down">Add a pro here</label>
                           <div class="right-align">
                           <button
                           class="btn-small blue darken-3 waves-effect waves-light"
@@ -256,7 +256,7 @@
                           type="text"
                           class="validate"
                           required/>
-                          <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
+                          <label class="hide-on-med-and-down">Add a con here</label>
                           <div class="right-align">
                           <button
                           class="btn-small blue darken-3 waves-effect waves-light"
@@ -305,7 +305,7 @@
             </div>
     </div><!-- collapsible body end div -->
     </div>
-    </li>
+</div>
 
     <!-- Modal for Deleting Questions -->
     <div id="{{ question._id }}" class="modal">
@@ -322,7 +322,7 @@
     </div>
 
     {% endfor %}
-</ul>
+</div>
 {% else %}
 <h3 class="red-text text-darken-3 center-align hide-on-small-only">No questions match that criteria</h3>
 <h5 class="red-text text-darken-3 center-align hide-on-med-and-up">No questions match that criteria</h5>

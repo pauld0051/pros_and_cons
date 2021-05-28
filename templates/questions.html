@@ -214,7 +214,6 @@
                           data-position="bottom"
                           data-tooltip="Add a pro to this discussion"></i>
                         <input
-                          id="pro"
                           name="pro"
                           minlength="5"
                           maxlength="255"
@@ -251,7 +250,6 @@
                           data-position="bottom"
                           data-tooltip="Add a con to this discussion"></i>
                         <input
-                          id="con"
                           name="con"
                           minlength="5"
                           maxlength="255"
@@ -318,7 +316,7 @@
         <div class="modal-footer">
             <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
                 <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
-            <button id="delete" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+            <button type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
             </form>
         </div>
     </div>

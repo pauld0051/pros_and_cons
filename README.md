@@ -604,6 +604,8 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
 
 7. Although the app was tested on multiple screens, including mobile, it was only possible to test mobile once the code has been pushed to Heroku. The social media share buttons had lined up correctly on desktop and in the browser inspect. However, once on mobile via Heroku, the share buttons were no long in line with each other. To attempt to solve for this multiple tests were attempted, however, each test required a new "push" to Heroku.
 
+8. Due to Materialize's collapsible headers, a "ul" and "li" tag system was required. This meant that the modal needed to be within the ul tag and will throw an error at the W3C validator despite being correct as per Materialize code.
+
 ## VERSION CONTROL
 
 Regular commits for updates to the app were conducted and logged. You can view the full list of updates and current version here:

@@ -20,9 +20,9 @@
     </form>
 </div>
 
-<div class="collapsible">
+<ul class="collapsible">
     {% if q_o_t_d.created_by in matched or q_o_t_d.is_friends == "off" or q_o_t_d.created_by == session.user or session.user == admin %}
-    <div>
+    <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -145,9 +145,9 @@
                 </div>
         </div><!-- collapsible body end div -->
     </div>
-</div>
+    </li>
     {% endif %}
-</div>
+</ul>
 
 <!-- Show only user's questions on click -->
 <div class="row">
@@ -179,9 +179,9 @@
 </div>
 
 {% if questions|length > 0 %}
-<div class="collapsible">
+<ul class="collapsible">
     {% for question in questions if question.created_by in matched or question.is_friends == "off" or question.created_by == session.user or session.user == admin %}
-    <div>
+    <li>
         <div class="collapsible-header teal lighten-5">
             <!-- Question Title-->
             <i class="fas fa-chevron-circle-down blue-text text-darken-3"></i>
@@ -305,7 +305,7 @@
             </div>
     </div><!-- collapsible body end div -->
     </div>
-</div>
+    </li>
 
     <!-- Modal for Deleting Questions -->
     <div id="{{ question._id }}" class="modal">
@@ -322,7 +322,7 @@
     </div>
 
     {% endfor %}
-</div>
+</ul>
 {% else %}
 <h3 class="red-text text-darken-3 center-align hide-on-small-only">No questions match that criteria</h3>
 <h5 class="red-text text-darken-3 center-align hide-on-med-and-up">No questions match that criteria</h5>

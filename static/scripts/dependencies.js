@@ -14,6 +14,6 @@ $(document).ready(function() {
         minDate: new Date(1920, 1, 1),
         i18n: {
             done: "Select"
-        }           
+        }
         });
 });

@@ -9,6 +9,7 @@
         "browsehappy",
         "bson",
         "ctypes",
+        "dyhnxe",
         "fname",
         "lname",
         "objectid",

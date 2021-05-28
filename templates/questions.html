@@ -83,7 +83,7 @@
                     <div class="card-content grey-text text-darken-4">
                         <span class="card-title center-align">Cons</span>
                         {% for con in q_o_t_d.cons %}
-                        <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
+                        <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></p>
                         {% endfor %}
                         {% if session.user and q_o_t_d.finished is false %}
                         <form method="POST" action="{{ url_for('cons', question_id=q_o_t_d._id) }}">
@@ -118,17 +118,18 @@
             <div class="row">
                 <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=q_o_t_d.created_by) }}">{{ q_o_t_d.created_by }}</a></em>
                     {% if q_o_t_d.edited_on is defined %}<em> and was added on: {{ q_o_t_d.added_on }} then edited on: {{ q_o_t_d.edited_on }}</em>
-                    {% else %}<em> and was added on: {{ q_o_t_d.added_on }}</em></span>{% endif %}<br>
+                    {% else %}<em> and was added on: {{ q_o_t_d.added_on }}</em></span>
+                    {% endif %}<br>
                     {% if q_o_t_d.finished is true %}
                     <span><em>Question is closed for further comments</em></span>
                     {% endif %}
             </div>
             <div class="row">
                 {% if q_o_t_d.is_friends == "on" %}
-                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i> 
+                <i class="fas fa-user-friends blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Only your friends can view this"></i>
                 {% else %}
-                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i> 
-                {% endif %} 
+                <i class="fas fa-globe-americas blue-text text-darken-3 tooltipped" data-position="bottom" data-tooltip="Anyone can view this"></i>
+                {% endif %}
                 {% if session.user|lower == q_o_t_d.created_by|lower or session.user == admin %}
                 <div class="right">
                     {% if q_o_t_d.finished is false %}

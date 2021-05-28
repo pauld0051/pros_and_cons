@@ -55,7 +55,6 @@
                               data-position="bottom"
                               data-tooltip="Add a pro to this discussion"></i>
                             <input
-                              
                               name="pro"
                               minlength="4"
                               maxlength="250"
@@ -92,7 +91,6 @@
                               data-position="bottom"
                               data-tooltip="Add a con to this discussion"></i>
                             <input
-                              id="con"
                               name="con"
                               minlength="4"
                               maxlength="250"
@@ -134,7 +132,7 @@
                 <div class="right">
                     {% if q_o_t_d.finished is false %}
                     <form method="POST" action="{{ url_for('finish_question', question_id=q_o_t_d._id) }}">
-                    <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
+                    <button type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                     Finish</button>
                     <a href="{{ url_for('edit_question', question_id=q_o_t_d._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
                     Edit</a>
@@ -296,7 +294,7 @@
             <div class="right">
                 {% if question.finished is false %}
                 <form method="POST" action="{{ url_for('finish_question', question_id=question._id) }}">
-                <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
+                <button type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                 Finish</button>
                 <a href="{{ url_for('edit_question', question_id=question._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
                 Edit</a>

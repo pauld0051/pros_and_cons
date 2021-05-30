@@ -42,10 +42,11 @@
                     <span class="card-title center-align">Pros</span>
                         {% for pro in question.pros %}
                     <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - 
-                        <a href="{{ url_for('view_profile', profile=pro.user) }}">
-                            <span>{{ pro.user }}</a>
-                                {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
-                                </a>{% endif %}</p>
+                        <a href="{{ url_for('view_profile', profile=pro.user) }}">{{ pro.user }}</a>
+                        {% if session.user == pro.user or admin %}
+                        <a data-target="edit" class="modal-trigger"> </a>
+                        {% endif %}
+                    </p>
                     {% endfor %}
                     {% if session.user and question.finished is false %}
                     <form method="POST" action="{{ url_for('pros', question_id=question._id) }}">
@@ -54,7 +55,6 @@
                           data-position="bottom"
                           data-tooltip="Add a pro to this discussion"></i>
                         <input
-                          id="pro"
                           name="pro"
                           minlength="5"
                           maxlength="255"
@@ -62,7 +62,7 @@
                           class="validate"
                           value="{{ bad_pro }}"
                           required/>
-                          <label class="hide-on-med-and-down" for="question_title">Add a pro here</label>
+                          <label class="hide-on-med-and-down">Add a pro here</label>
                           <div class="right-align">
                           <button
                           class="btn-small blue darken-3 waves-effect waves-light"
@@ -83,7 +83,7 @@
                 <div class="card-content grey-text text-darken-4">
                     <span class="card-title center-align">Cons</span>
                     {% for con in question.cons %}
-                    <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
+                    <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}">{{ con.user }}</a></p>
                     {% endfor %}
                     {% if session.user and question.finished is false %}
                     <form method="POST" action="{{ url_for('cons', question_id=question._id) }}">
@@ -92,7 +92,6 @@
                           data-position="bottom"
                           data-tooltip="Add a con to this discussion"></i>
                         <input
-                          id="con"
                           name="con"
                           minlength="5"
                           maxlength="255"
@@ -100,7 +99,7 @@
                           class="validate"
                           value="{{ bad_con }}"
                           required/>
-                          <label class="hide-on-med-and-down" for="question_title">Add a con here</label>
+                          <label class="hide-on-med-and-down">Add a con here</label>
                           <div class="right-align">
                           <button
                           class="btn-small blue darken-3 waves-effect waves-light"
@@ -118,8 +117,8 @@
         </div><!-- pros and cons end div -->
         <div class="row">
             <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
-                {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em>
-                {% else %}<em> and was added on: {{ question.added_on }} {% endif %}</em></span><br>
+                {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em></span>
+                {% else %}<span><em> and was added on: {{ question.added_on }} {% endif %}</em></span><br>
                 {% if question.finished is true %}
                 <span><em>Question is closed for further comments</em></span>
                 {% endif %}

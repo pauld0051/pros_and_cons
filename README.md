@@ -606,6 +606,8 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
 
 8. Due to Materialize's collapsible headers, a "ul" and "li" tag system was required. This meant that the modal needed to be within the ul tag and will throw an error at the W3C validator despite being correct as per Materialize code.
 
+9. Subsequently, also due to the use of Materialize's collapsible headers, a break tag was added to space the headers on the help page. This also contradicts the W3C validation checker's algorithms too. The breaks remain for aesthetic purposes and do not appear to pose an error risk for browsers.
+
 ## VERSION CONTROL
 
 Regular commits for updates to the app were conducted and logged. You can view the full list of updates and current version here:

@@ -48,7 +48,7 @@
                             <form method="POST" action="{{ url_for('remove_friend', profile=profile.username) }}">
                                 <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
                                 <button id="remove" name="remove" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Unfriend this user">Remove</button>
-                                </button>        
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <!-- Search function if returning results -->
 {% if user is defined %}
 {% if questions|length > 0 %}
@@ -109,7 +109,7 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Pros</span>
                             {% for pro in question.pros %}
-                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}"><span>{{ pro.user }}</a></span></p>
+                            <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - <a href="{{ url_for('view_profile', profile=pro.user) }}">{{ pro.user }}</a></p>
                             {% endfor %}
                             {% if session.user and question.finished is false %}
                             <form method="POST" action="{{ url_for('pros', question_id=question._id) }}">
@@ -146,7 +146,7 @@
                         <div class="card-content grey-text text-darken-4">
                             <span class="card-title center-align">Cons</span>
                             {% for con in question.cons %}
-                            <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}"><span>{{ con.user }}</a></span></p>
+                            <p><i class="fas fa-circle point-size "></i> {{ con.con }} - <a href="{{ url_for('view_profile', profile=con.user) }}">{{ con.user }}</a></p>
                             {% endfor %}
                             {% if session.user and question.finished is false %}
                             <form method="POST" action="{{ url_for('cons', question_id=question._id) }}">
@@ -200,6 +200,7 @@
                 </div>
                 {% endif %}
             </div>
+        </div>
     </li>
 
     <!-- Modal for Deleting Questions -->
@@ -223,5 +224,5 @@
 <h3 class="red-text text-darken-3 center-align hide-on-small-only">No questions available from this user at the moment</h3>
 <h5 class="red-text text-darken-3 center-align hide-on-med-and-up">No questions available from this user at the moment</h5>
 {% endif %}
-{% endif %} 
+{% endif %}
 {% endblock %}

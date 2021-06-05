@@ -149,6 +149,9 @@
         </li>
     
         <!-- Modal for Deleting Questions -->
+        <!-- Will show as error on W3C validator - can only locate modal in this position within the for loop -->
+        <!-- Error will read: "Element div not allowed as child of element ul in this context." -->
+        <!-- Due to the way Materialize is set up the modal needs to be within the for loop -->
         <div id="{{ question._id }}" class="modal">
             <div class="modal-content">
                 <h4>Warning - You're about to delete your question!</h4>

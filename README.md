@@ -208,7 +208,6 @@ Text colours use the standard Materialize and browser font colours as well as so
 - ![#1565c0](static/images/readme/1565c0.png) `#1565c0 - blue-text text-darken-3`
 - ![#ef5350](static/images/readme/ef5350.png) `#ef5350 - red-text lighten-1`
 
-
 #### Buttons
 
 Button colours were based on the following. All buttons contained white text or icons to help overcome those with colour-blindness:
@@ -334,7 +333,7 @@ All information on the user is optional to add and can be done so by clicking th
 - Country / is bound by the same regex format as first name but can be selected from a list of countries found in [countries.json](https://github.com/pauld0051/pros_and_cons/blob/master/countries.json). The original file was adapted from Stefan Binder's [Full Country and State list of our planet](https://github.com/stefanbinder/countries-states).
 - State / bound by the same rules as country and from the same [countries.json](https://github.com/pauld0051/pros_and_cons/blob/master/countries.json) file.
 
-Users can also view the profiles of other users. The same information exists, except birthdays are not visible to any user. A list of questions that user has asked is available directly below their profile information. 
+Users can also view the profiles of other users. The same information exists, except birthdays are not visible to any user. A list of questions that user has asked is available directly below their profile information.
 
 Logged in users can search for users by profile username, first name, last name, country or state. A list of users matching any of those descriptions is displayed on a page in collapsible accordion menus. Session users can view the profile from the accordion or click on the link in the title to visit the profile page. Users can send and accept friend requests from the accordion or view profile page.
 
@@ -590,11 +589,11 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
 
 1. Materialize navbar links may "flash" on click. This occurs mostly in Firefox and appears to be due to either hardware acceleration or an extension installed on Firefox. During development Firefox was started in safemode which removed the issue completely. Some users may therefore experience the flashing when clicking links on the navigation pane at the top of the screen. It is not anticipated that this affects user experience.
 
-2. Materialize datepicker colouring is not intuitive and requires overwriting styles in the [style.css](static/css/style.css) file The fix can be seen here: https://stackoverflow.com/a/59578282/13062685 special thanks to Kasia https://code-institute-room.slack.com/team/USVE7NATV
+2. Materialize datepicker colouring is not intuitive and requires overwriting styles in the [style.css](static/css/style.css) file The fix can be seen here: <https://stackoverflow.com/a/59578282/13062685> special thanks to Kasia <https://code-institute-room.slack.com/team/USVE7NATV>
 
 3. Script tags need to be loaded within the template close to where they are being used or, at the top of the template loading with the page. This was experimented on with the edit_profile.html template. In order to add the countries.json file to be read in JavaScript, a new country.js file was added in static/scripts. This was called on using Jinja template formatting in the same method as previously employed on the base.html template. However, when located at the bottom of the page before the endblock tags, meant the script would not run and subsequently failed to provide the desired outcome. This was possibly caused by interference with other loading scripts from the base.html template. When the script call was placed at the top of the page just outside the block content tags meant the script loaded too early and therefore id-tags were not read by the script file. To overcome this a setTimeout function was employed. While this worked, it was not an acceptable workaround. Moving the script just below the select tags where it was being called meant there was no need for a setTimeout function and the script would run effectively without further intervention.
 
-4. A world-country picker and state was to be used from https://geodata.solutions/, however, due to templating issues the scripts would not load correctly rendering the dropdown boxes inoperable. A local JSON file was employed to replace this method. This has the upper advantage of being unlimited in use as well as not relying on external API for reliability.
+4. A world-country picker and state was to be used from <https://geodata.solutions/>, however, due to templating issues the scripts would not load correctly rendering the dropdown boxes inoperable. A local JSON file was employed to replace this method. This has the upper advantage of being unlimited in use as well as not relying on external API for reliability.
 
 5. Select tags using Materialize built in styling makes adding JavaScript DOM manipulation more difficult. This is because Materialize converts any new select element into a ul element, so it can apply custom styling to it. When using a document.createElement('option') command, instead of creating a new option, Materialize will create the styled dropdown option instead. To overcome this, jQuery is loaded in the base.html file at the top, along with Materialize CDN. This allows jQuery to be used on the edit_profile page without loading another instance of jQuery. From here, jQuery commands that Materialize use can be employed such as: ```$('#state').on('contentChanged', function () {
   $(this).formSelect(); });```

@@ -116,11 +116,11 @@
         </div>
         </div><!-- pros and cons end div -->
         <div class="row">
-            <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em></span>
-                {% if question.edited_on is defined %}<span><em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em></span>
-                {% else %}<span><em> and was added on: {{ question.added_on }} {% endif %}</em></span><br>
+            <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
+                {% if question.edited_on is defined %} and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em>
+                {% else %}<em> and was added on: {{ question.added_on }} {% endif %}</em>
                 {% if question.finished is true %}
-                <span><em>Question is closed for further comments</em></span>
+                <em>Question is closed for further comments</em></span>
                 {% endif %}
         </div>
         <div class="row">
@@ -141,7 +141,6 @@
                 {% endif %}
                 <button data-target="{{ question._id }}" class="btn-small button-size red darken-4 tooltipped modal-trigger" data-position="bottom" data-tooltip="Delete your question">
                 Delete</button>
-                </form>
             {% endif %}
             </div>
         </div>
@@ -163,8 +162,6 @@
         Tweet</a></span>
         </div>
     </div>
-    <br>
-    <br>
     <!-- Modal for Deleting Questions -->
     <!-- Will show as error on W3C validator - can only locate modal in this position within the for loop -->
     <!-- Error will read: "Element div not allowed as child of element ul in this context." -->

@@ -608,6 +608,8 @@ Note: You will need to rename Pros and Cons on Heroku as multiple same names can
 
 9. Subsequently, also due to the use of Materialize's collapsible headers, a break tag was added to space the headers on the help page. This also contradicts the W3C validation checker's algorithms too. The breaks remain for aesthetic purposes and do not appear to pose an error risk for browsers.
 
+10. A warning exists on multiple pages suggesting a the section element needs to be headed with an h1-h6 header. However, this section is set aside for Flask messages which act as that heading.
+
 ## VERSION CONTROL
 
 Regular commits for updates to the app were conducted and logged. You can view the full list of updates and current version here:

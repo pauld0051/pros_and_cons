@@ -272,13 +272,13 @@
         </div>
         </div><!-- pros and cons end div -->
         <div class="row">
-            <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
+            <em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
                 {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em>
                 {% else %}<em> and was added on: {{ question.added_on }}</em>
-                {% endif %}</span>
+                {% endif %}
                 <br>
                 {% if question.finished is true %}
-                <span><em>Question is closed for further comments</em></span>
+                <em>Question is closed for further comments</em>
                 {% endif %}
         </div>
         <div class="row">

@@ -67,17 +67,17 @@
                             {% endfor %}
                             <p class="blue-grey-text"><i class="fas fa-user prefix blue-grey-text text-darken-2"> Name: </i> 
                                 {% if profiles.fname != None %} {{ profiles.fname }} 
-                                {% else %}  
-                                {% endif %} 
-                                {% if profiles.lname != None %} 
-                                {{ profiles.lname }} 
-                                {% else %}  
+                                {% else %}
+                                {% endif %}
+                                {% if profiles.lname != None %}
+                                {{ profiles.lname }}
+                                {% else %}
                                 {% endif %} </p>
                             <p class="blue-grey-text"><i class="fas fa-globe-asia prefix blue-grey-text text-darken-2"> Country: </i> {% if profiles.country != None %} {{ profiles.country }} 
-                                {% else %}  
+                                {% else %}
                                 {% endif %}</p>
                             <p class="blue-grey-text"><i class="fas fa-thumbtack prefix blue-grey-text text-darken-2"> State: </i> {% if profiles.state != None %} {{ profiles.state }} 
-                                {% else %}  
+                                {% else %}
                                 {% endif %} </p>
                         </div>
                     </div>

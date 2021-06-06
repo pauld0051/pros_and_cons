@@ -159,10 +159,10 @@
             <div class="right">
                 {% if question.finished is false %}
                 <form method="POST" action="{{ url_for('finish_question', question_id=question._id) }}">
-                <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting"></button>
-                </form>
-                    <!-- W3C will see this as a duplicate ID -->
+                <button id="finish" type="submit" class="btn-small button-size green accent-4 tooltipped" data-position="bottom" data-tooltip="Close question for any more commenting">
                 Finish</button>
+                </form>
+                <!-- W3C will see this as a duplicate ID -->
                 <a href="{{ url_for('edit_question', question_id=question._id) }}" class="btn-small button-size light-blue lighten-1 tooltipped" data-position="bottom" data-tooltip="Edit your question">
                 Edit</a>
                 {% else %}
@@ -188,8 +188,8 @@
             <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
                 <a href="#!" class="modal-close waves-effect waves-green btn-small button-size">Cancel</a>
             <button id="delete" type="submit" class="modal-close btn-small button-size red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
-        <!-- W3C will see this as a duplicate ID -->
         </form>
+        <!-- W3C will see this as a duplicate ID -->
         </div>
     </div>
     {% endfor %}

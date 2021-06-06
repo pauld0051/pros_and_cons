@@ -45,8 +45,8 @@
                             {% for pro in question.pros %}
                         <p><i class="fas fa-circle point-size "></i> {{ pro.pro }} - 
                             <a href="{{ url_for('view_profile', profile=pro.user) }}">
-                                <span>{{ pro.user }}</a>
-                                    {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger"></span> 
+                                {{ pro.user }}</a>
+                                    {% if session.user == pro.user or admin %}<a data-target="edit" class="modal-trigger">
                                     </a>{% endif %}</p>
                         {% endfor %}
                         {% if session.user and question.finished is false %}

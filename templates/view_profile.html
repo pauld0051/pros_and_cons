@@ -48,7 +48,6 @@
                             <form method="POST" action="{{ url_for('remove_friend', profile=profile.username) }}">
                                 <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
                                 <button id="remove" name="remove" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Unfriend this user">Remove</button>
-                                </button>
                             </form>
                         </div>
                     </div>
@@ -177,11 +176,11 @@
                 </div>
             </div>
             <div class="row"><!-- pros and cons end div -->
-                <span><em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
-                    {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}</em>
-                    {% else %}<em> and was added on: {{ question.added_on }} {% endif %}</em>
+                <em>Question asked by: <a href="{{ url_for('view_profile', profile=question.created_by) }}">{{ question.created_by }}</a></em>
+                    {% if question.edited_on is defined %}<em> and was added on: {{ question.added_on }} then edited on: {{ question.edited_on }}
+                    {% else %} and was added on: {{ question.added_on }} {% endif %}
                     {% if question.finished is true %}
-                    <em>Question is closed for further comments</em></span>
+                    Question is closed for further comments
                     {% endif %}
             </div>
             <div class="row">
@@ -214,6 +213,7 @@
             <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
                 <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
             <button id="delete" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
+            <!-- W3C will see this as a duplicate ID -->
             </form>
         </div>
     </div>

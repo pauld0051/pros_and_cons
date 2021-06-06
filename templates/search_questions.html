@@ -158,10 +158,10 @@
                 <form method="POST" action="{{ url_for('delete_question', question_id=question._id) }}">
                     <a href="#!" class="modal-close waves-effect waves-green btn-small">Cancel</a>
                 <button id="delete" type="submit" class="modal-close btn-small red darken-4 tooltipped" data-position="bottom" data-tooltip="Delete your question">Delete</button>
-                </form>
+            <!-- W3C will see this ID as a duplicate -->    
+            </form>
             </div>
         </div>
-    
         {% endfor %}
     </ul>
     {% else %}
